@@ -29,8 +29,8 @@ export default class Wardrobe {
     this._currency = 0;
     this._currentSkin = null;
     this._currentEyes = null;
-    this._currentHair = null;
     this._currentClothing = null;
+    this._currentHair = null;
     this._currentAccessory = null;
     this._inventory = new Map<ItemCategory, WardrobeItem[]>();
     this.inventory.set('skin', []);
@@ -40,8 +40,8 @@ export default class Wardrobe {
     this.inventory.set('accessory', []);
     this.addWardrobeItem(this.currentSkin);
     this.addWardrobeItem(this.currentEyes);
-    this.addWardrobeItem(this.currentHair);
     this.addWardrobeItem(this.currentClothing);
+    this.addWardrobeItem(this.currentHair);
     this.addWardrobeItem(this.currentAccessory);
   }
 
@@ -52,7 +52,11 @@ export default class Wardrobe {
 
   // Sets the currency in the wardrobe to a new value.
   set currency(value: number) {
-    this._currency = value;
+    if (value >= 0) {
+      this._currency = value;
+    } else {
+      throw new Error('Currency cannot be negative.');
+    }
   }
 
   // Returns the current skin item of the player this wardrobe corresponds to.
@@ -60,9 +64,11 @@ export default class Wardrobe {
     return this._currentSkin;
   }
 
-  // Sets the skin item of the player to the given WardrobeItem.
+  // Sets the skin item of the player to the given WardrobeItem if it is in the inventory.
   set currentSkin(skin: WardrobeItem) {
-    this._currentSkin = skin;
+    if (this._itemIsInInventory(skin)) {
+      this._currentSkin = skin;
+    }
   }
 
   // Returns the current eye item of the player this wardrobe corresponds to.
@@ -70,9 +76,11 @@ export default class Wardrobe {
     return this._currentEyes;
   }
 
-  // Sets the eye item of the player to the given WardrobeItem.
+  // Sets the eye item of the player to the given WardrobeItem if it is in the inventory.
   set currentEyes(eyes: WardrobeItem) {
-    this._currentEyes = eyes;
+    if (this._itemIsInInventory(eyes)) {
+      this._currentEyes = eyes;
+    }
   }
 
   // Returns the current hair item of the player this wardrobe corresponds to.
@@ -80,9 +88,11 @@ export default class Wardrobe {
     return this._currentHair;
   }
 
-  // Sets the hair item of the player to the given WardrobeItem.
+  // Sets the hair item of the player to the given WardrobeItem if it is in the inventory.
   set currentHair(hair: WardrobeItem) {
-    this._currentHair = hair;
+    if (this._itemIsInInventory(hair)) {
+      this._currentHair = hair;
+    }
   }
 
   // Returns the current clothing item of the player this wardrobe corresponds to.
@@ -90,9 +100,11 @@ export default class Wardrobe {
     return this._currentClothing;
   }
 
-  // Sets the clothing of the player to the given WardrobeItem.
+  // Sets the clothing of the player to the given WardrobeItem if it is in the inventory.
   set currentClothing(clothing: WardrobeItem) {
-    this._currentClothing = clothing;
+    if (this._itemIsInInventory(clothing)) {
+      this._currentClothing = clothing;
+    }
   }
 
   // Returns the current accessory of the player this wardrobe corresponds to.
@@ -100,9 +112,11 @@ export default class Wardrobe {
     return this._currentAccessory;
   }
 
-  // Sets the accessory of the player to the given WardrobeItem.
+  // Sets the accessory of the player to the given WardrobeItem if it is in the inventory.
   set currentAccessory(accessory: WardrobeItem) {
-    this._currentAccessory = accessory;
+    if (this._itemIsInInventory(accessory)) {
+      this._currentAccessory = accessory;
+    }
   }
 
   // Returns the inventory of the player this wardrobe corresponds to.
@@ -115,17 +129,29 @@ export default class Wardrobe {
    * @param newItem The item to be added.
    * @returns True if the item is not already in the wardrobe, false otherwise.
    */
-  public addWardrobeItem(newItem: WardrobeItem): boolean {
+  public addWardrobeItem(newItem: WardrobeItem) {
+    // If the item is not already in the inventory, add the item
+    if (!this._itemIsInInventory(newItem)) {
+      // Get the array of WardrobeItems corresponding to the category of the newItem.
+      const itemArray: WardrobeItem[] | undefined = this.inventory.get(newItem.category);
+      if (itemArray !== undefined) {
+        itemArray.push(newItem);
+      }
+      throw new Error('Item category not found');
+    }
+  }
+
+  /** Checks if the given item is currently in the wardrobe inventory */
+  private _itemIsInInventory(item: WardrobeItem): boolean {
     // Get the array of WardrobeItems corresponding to the category of the newItem.
-    const itemArray: WardrobeItem[] | undefined = this.inventory.get(newItem.category);
+    const itemArray: WardrobeItem[] | undefined = this.inventory.get(item.category);
 
     if (itemArray !== undefined) {
       // Check if the newItem is already in the array, if not, push it to the array and return true.
-      if (itemArray.find(i => i.name === newItem.name) === undefined) {
-        itemArray.push(newItem);
-        return true;
+      if (itemArray.find(i => i.name === item.name) === undefined) {
+        return false;
       }
-      return false;
+      return true;
     }
     throw new Error('Item category not found');
   }
