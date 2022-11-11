@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid';
 import { Player as PlayerModel, PlayerLocation, TownEmitter } from '../types/CoveyTownSocket';
+import Wardrobe from './Wardrobe';
 
 /**
  * Each user who is connected to a town is represented by a Player object
@@ -23,6 +24,10 @@ export default class Player {
   /** A special town emitter that will emit events to the entire town BUT NOT to this player */
   public readonly townEmitter: TownEmitter;
 
+  /** The Player's wardrobe, containing their currency, each item they currently have equipped, 
+   * and a map of all their unlocked items. */
+  private _wardrobe: Wardrobe;
+
   constructor(userName: string, townEmitter: TownEmitter) {
     this.location = {
       x: 0,
@@ -34,6 +39,7 @@ export default class Player {
     this._id = nanoid();
     this._sessionToken = nanoid();
     this.townEmitter = townEmitter;
+    this._wardrobe = new Wardrobe();
   }
 
   get userName(): string {
@@ -54,6 +60,11 @@ export default class Player {
 
   get sessionToken(): string {
     return this._sessionToken;
+  }
+
+  // Gets the player's current wardrobe.
+  get wardrobe(): Wardrobe {
+    return this._wardrobe;
   }
 
   toPlayerModel(): PlayerModel {
