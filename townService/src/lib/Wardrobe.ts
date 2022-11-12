@@ -68,6 +68,8 @@ export default class Wardrobe {
   set currentSkin(skin: WardrobeItem) {
     if (this._itemIsInInventory(skin)) {
       this._currentSkin = skin;
+    } else {
+      throw new Error('Item not in inventory');
     }
   }
 
@@ -80,6 +82,8 @@ export default class Wardrobe {
   set currentEyes(eyes: WardrobeItem) {
     if (this._itemIsInInventory(eyes)) {
       this._currentEyes = eyes;
+    } else {
+      throw new Error('Item not in inventory');
     }
   }
 
@@ -92,6 +96,8 @@ export default class Wardrobe {
   set currentHair(hair: WardrobeItem) {
     if (this._itemIsInInventory(hair)) {
       this._currentHair = hair;
+    } else {
+      throw new Error('Item not in inventory');
     }
   }
 
@@ -104,6 +110,8 @@ export default class Wardrobe {
   set currentClothing(clothing: WardrobeItem) {
     if (this._itemIsInInventory(clothing)) {
       this._currentClothing = clothing;
+    } else {
+      throw new Error('Item not in inventory');
     }
   }
 
@@ -116,6 +124,8 @@ export default class Wardrobe {
   set currentAccessory(accessory: WardrobeItem) {
     if (this._itemIsInInventory(accessory)) {
       this._currentAccessory = accessory;
+    } else {
+      throw new Error('Item not in inventory');
     }
   }
 
@@ -129,15 +139,18 @@ export default class Wardrobe {
    * @param newItem The item to be added.
    * @returns True if the item is not already in the wardrobe, false otherwise.
    */
-  public addWardrobeItem(newItem: WardrobeItem) {
+  public addWardrobeItem(newItem: WardrobeItem): boolean {
     // If the item is not already in the inventory, add the item
     if (!this._itemIsInInventory(newItem)) {
       // Get the array of WardrobeItems corresponding to the category of the newItem.
       const itemArray: WardrobeItem[] | undefined = this.inventory.get(newItem.category);
       if (itemArray !== undefined) {
         itemArray.push(newItem);
+        return true;
       }
       throw new Error('Item category not found');
+    } else {
+      return false;
     }
   }
 
