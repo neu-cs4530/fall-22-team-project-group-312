@@ -1,4 +1,4 @@
-import WardrobeItem, { ItemCategory } from './WardrobeItem';
+import { WardrobeItem, ItemCategory, DEFAULT_ITEMS } from './WardrobeItem';
 /**
  * Serves as an inventory for a Player that contains their current currency, any WardrobeItems they
  * have acquired, and the information for the WardrobeItems they are currently wearing.
@@ -27,22 +27,24 @@ export default class Wardrobe {
 
   constructor() {
     this._currency = 0;
-    this._currentSkin = null;
-    this._currentEyes = null;
-    this._currentClothing = null;
-    this._currentHair = null;
-    this._currentAccessory = null;
     this._inventory = new Map<ItemCategory, WardrobeItem[]>();
     this.inventory.set('skin', []);
     this.inventory.set('eyes', []);
     this.inventory.set('hair', []);
     this.inventory.set('clothing', []);
     this.inventory.set('accessory', []);
-    this.addWardrobeItem(this.currentSkin);
-    this.addWardrobeItem(this.currentEyes);
-    this.addWardrobeItem(this.currentClothing);
-    this.addWardrobeItem(this.currentHair);
-    this.addWardrobeItem(this.currentAccessory);
+    // Add all default items to wardrobe.
+    DEFAULT_ITEMS.forEach((item: WardrobeItem) => this.addWardrobeItem(item));
+    // Set the default items to the currently worn items in the wardrobe.
+    this._currentSkin = DEFAULT_ITEMS.find((item: WardrobeItem) => item.name === '0');
+    this._currentEyes = DEFAULT_ITEMS.find((item: WardrobeItem) => item.name === 'defualt eyes');
+    this._currentClothing = DEFAULT_ITEMS.find(
+      (item: WardrobeItem) => item.name === 'default clothing',
+    );
+    this._currentHair = DEFAULT_ITEMS.find((item: WardrobeItem) => item.name === 'default hair');
+    this._currentAccessory = DEFAULT_ITEMS.find(
+      (item: WardrobeItem) => item.name === 'no accessory',
+    );
   }
 
   // Returns the currency in the wardrobe.

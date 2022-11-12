@@ -12,7 +12,7 @@ export type WardrobeItem = {
   spriteLocation: string;
 };
 
-const DEFAULT_ITEMS: WardrobeItem[] = [
+export const DEFAULT_ITEMS: WardrobeItem[] = [
   { name: 'defualt hair', category: 'hair', spriteLocation: '' },
   { name: 'defualt eyes', category: 'eyes', spriteLocation: '' },
   { name: 'defualt clothing', category: 'clothing', spriteLocation: '' },
@@ -24,7 +24,7 @@ const DEFAULT_ITEMS: WardrobeItem[] = [
   { name: '4', category: 'skin', spriteLocation: '' },
 ];
 
-const UNLOCKABLE_ITEMS: WardrobeItem[] = [
+export const UNLOCKABLE_ITEMS: WardrobeItem[] = [
   { name: 'bald', category: 'hair', spriteLocation: '' },
   { name: 'keqing', category: 'hair', spriteLocation: '' },
 ];
