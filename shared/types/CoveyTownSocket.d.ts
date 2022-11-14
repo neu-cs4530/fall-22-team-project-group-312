@@ -29,7 +29,38 @@ export interface Player {
   id: string;
   userName: string;
   location: PlayerLocation;
+  wardrobe: Wardrobe;
 };
+
+/**
+ * Represents the location of a WardrobeItem on the player's body.
+ */
+ export type ItemCategory = 'skin' | 'eyes' | 'hair' | 'clothing' | 'accessory';
+
+ /**
+  * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
+  */
+ export type WardrobeItem = {
+   name: string;
+   category: ItemCategory;
+   spriteLocation: string;
+ };
+export interface Wardrobe {
+  /** The amount of currency a wardrobe currently has to be spent on WardrobeItems. */
+  currency: number;
+  /** The current skin color set in the wardrobe. */
+  currentSkin: WardrobeItem;
+  /** The current eye color set in the wardrobe. */
+  currentEyes: WardrobeItem;
+  /** The current hairstlye set in the wardrobe. */
+  currentHair: WardrobeItem;
+  /** The current clothing item set in the wardrobe. */
+  currentClothing: WardrobeItem;
+  /** The current accessory item set in the wardrobe. */
+  currentAccessory: WardrobeItem;
+  /** A map of each item category available to the player and the wardrobe items in that cateogry they currently have unlocked.  */
+  inventory: Map<ItemCategory, WardrobeItem[]>;
+}
 
 export type XY = { x: number, y: number };
 

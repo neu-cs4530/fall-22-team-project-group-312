@@ -1,17 +1,6 @@
-/**
- * Represents the location of a WardrobeItem on the player's body.
- */
-export type ItemCategory = 'skin' | 'eyes' | 'hair' | 'clothing' | 'accessory';
+import { WardrobeItem } from '../types/CoveyTownSocket';
 
-/**
- * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
- */
-export type WardrobeItem = {
-  name: string;
-  category: ItemCategory;
-  spriteLocation: string;
-};
-
+// Represents the default items every player has in their wardrobe upon initialization.
 export const DEFAULT_ITEMS: WardrobeItem[] = [
   { name: 'defualt hair', category: 'hair', spriteLocation: '' },
   { name: 'defualt eyes', category: 'eyes', spriteLocation: '' },
@@ -24,6 +13,7 @@ export const DEFAULT_ITEMS: WardrobeItem[] = [
   { name: '4', category: 'skin', spriteLocation: '' },
 ];
 
+// Represents all other items players can unlock.
 export const UNLOCKABLE_ITEMS: WardrobeItem[] = [
   { name: 'bald', category: 'hair', spriteLocation: '' },
   { name: 'keqing', category: 'hair', spriteLocation: '' },

@@ -24,7 +24,7 @@ export default class Player {
   /** A special town emitter that will emit events to the entire town BUT NOT to this player */
   public readonly townEmitter: TownEmitter;
 
-  /** The Player's wardrobe, containing their currency, each item they currently have equipped, 
+  /** The Player's wardrobe, containing their currency, each item they currently have equipped,
    * and a map of all their unlocked items. */
   private _wardrobe: Wardrobe;
 
@@ -72,6 +72,7 @@ export default class Player {
       id: this._id,
       location: this.location,
       userName: this._userName,
+      wardrobe: this._wardrobe,
     };
   }
 }

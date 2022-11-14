@@ -1,9 +1,12 @@
 import EventEmitter from 'events';
 import TypedEmitter from 'typed-emitter';
 import { Player as PlayerModel, PlayerLocation } from '../types/CoveyTownSocket';
+import { Wardrobe } from '../types/CoveyTownSocket';
 
 export type PlayerEvents = {
   movement: (newLocation: PlayerLocation) => void;
+  // Event that signals an update in the player's wardrobe object
+  wardrobeUpdate: (newWardobe: Wardrobe) => void;
 };
 
 export type PlayerGameObjects = {
@@ -14,17 +17,20 @@ export type PlayerGameObjects = {
 export default class PlayerController extends (EventEmitter as new () => TypedEmitter<PlayerEvents>) {
   private _location: PlayerLocation;
 
+  private _wardrobe: Wardrobe;
+
   private readonly _id: string;
 
   private readonly _userName: string;
 
   public gameObjects?: PlayerGameObjects;
 
-  constructor(id: string, userName: string, location: PlayerLocation) {
+  constructor(id: string, userName: string, location: PlayerLocation, wardrobe: Wardrobe) {
     super();
     this._id = id;
     this._userName = userName;
     this._location = location;
+    this._wardrobe = wardrobe;
   }
 
   set location(newLocation: PlayerLocation) {
@@ -45,8 +51,24 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
     return this._id;
   }
 
+  // Returns the player's current wardrobe.
+  get wardrobe(): Wardrobe {
+    return this._wardrobe;
+  }
+
+  // Change the player's wardrobe. Emit an update signaling this change.
+  set wardrobe(newWardrobe: Wardrobe) {
+    this._wardrobe = newWardrobe;
+    this.emit('wardrobeUpdate', newWardrobe);
+  }
+
   toPlayerModel(): PlayerModel {
-    return { id: this.id, userName: this.userName, location: this.location };
+    return {
+      id: this.id,
+      userName: this.userName,
+      location: this.location,
+      wardrobe: this._wardrobe,
+    };
   }
 
   private _updateGameComponentLocation() {
@@ -67,6 +89,11 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
   }
 
   static fromPlayerModel(modelPlayer: PlayerModel): PlayerController {
-    return new PlayerController(modelPlayer.id, modelPlayer.userName, modelPlayer.location);
+    return new PlayerController(
+      modelPlayer.id,
+      modelPlayer.userName,
+      modelPlayer.location,
+      modelPlayer.wardrobe,
+    );
   }
 }
