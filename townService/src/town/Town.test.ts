@@ -3,6 +3,7 @@ import { DeepMockProxy, mockClear, mockDeep, mockReset } from 'jest-mock-extende
 import { nanoid } from 'nanoid';
 import Player from '../lib/Player';
 import TwilioVideo from '../lib/TwilioVideo';
+import { CURRENCY_GAIN_FROM_CHAT } from '../lib/Wardrobe';
 import {
   ClientEventTypes,
   expectArraysToContainSameMembers,
@@ -579,6 +580,18 @@ describe('Town', () => {
 
       const emittedMessage = getLastEmittedEvent(townEmitter, 'chatMessage');
       expect(emittedMessage).toEqual(chatMessage);
+    });
+    it('Currency is added when a chat message is forwared to all players in the same town', async () => {
+      const chatHandler = getEventListener(playerTestData.socket, 'chatMessage');
+      const chatMessage: ChatMessage = {
+        author: player.id,
+        body: 'Test message',
+        dateCreated: new Date(),
+        sid: 'test message id',
+      };
+      const currentCurrency = player.wardrobe.currency;
+      chatHandler(chatMessage);
+      expect(player.wardrobe.currency).toEqual(currentCurrency + CURRENCY_GAIN_FROM_CHAT);
     });
   });
   describe('addConversationArea', () => {
