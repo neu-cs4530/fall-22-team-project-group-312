@@ -1,8 +1,11 @@
 import Player from '../lib/Player';
+import { CURRENCY_GAIN_RATE_FROM_INTERACTABLE_AREA } from '../lib/Wardrobe';
 import { BoundingBox, Interactable, PlayerLocation, TownEmitter } from '../types/CoveyTownSocket';
 
 export const PLAYER_SPRITE_WIDTH = 32;
 export const PLAYER_SPRITE_HEIGHT = 64;
+
+export type Timestamp = number;
 
 export default abstract class InteractableArea {
   /* The unique ID of this area */
@@ -25,6 +28,9 @@ export default abstract class InteractableArea {
 
   /* An emitter that can be used to broadcast messages to all players in this town */
   private _townEmitter: TownEmitter;
+
+  /* The timestamp of the last occurance of the InteracableArea occupants being updated */
+  private _prevTimestampChange: Timestamp;
 
   public get id() {
     return this._id;
@@ -55,6 +61,24 @@ export default abstract class InteractableArea {
     this._width = width;
     this._height = height;
     this._townEmitter = townEmitter;
+    this._prevTimestampChange = new Date().valueOf();
+  }
+
+  /**
+   * Updates the currency of all players in the interactable area based on the number of occupants and time since last update
+   */
+  private _updatePlayerCurrency(): void {
+    const newTimestamp = new Date().valueOf();
+    if (this._occupants.length >= 2) {
+      this._occupants.forEach(occupant => {
+        occupant.wardrobe.currency +=
+          this._occupants.length *
+          // get the time difference in seconds
+          ((newTimestamp - this._prevTimestampChange) / 1000) *
+          CURRENCY_GAIN_RATE_FROM_INTERACTABLE_AREA;
+      });
+    }
+    this._prevTimestampChange = newTimestamp;
   }
 
   /**
@@ -68,6 +92,7 @@ export default abstract class InteractableArea {
    * @param player Player to add
    */
   public add(player: Player): void {
+    this._updatePlayerCurrency();
     this._occupants.push(player);
     player.location.interactableID = this.id;
     this._townEmitter.emit('playerMoved', player.toPlayerModel());
@@ -85,6 +110,7 @@ export default abstract class InteractableArea {
    * @param player Player to remove
    */
   public remove(player: Player): void {
+    this._updatePlayerCurrency();
     this._occupants = this._occupants.filter(eachPlayer => eachPlayer !== player);
     player.location.interactableID = undefined;
     this._townEmitter.emit('playerMoved', player.toPlayerModel());

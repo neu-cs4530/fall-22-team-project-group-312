@@ -1,6 +1,8 @@
+import exp from 'constants';
 import { mock, mockClear } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import Player from '../lib/Player';
+import { CURRENCY_GAIN_RATE_FROM_INTERACTABLE_AREA } from '../lib/Wardrobe';
 import { defaultLocation, getLastEmittedEvent } from '../TestUtils';
 import { BoundingBox, Interactable, TownEmitter, XY } from '../types/CoveyTownSocket';
 import ConversationArea from './ConversationArea';
@@ -251,6 +253,61 @@ describe('InteractableArea', () => {
           ),
         ),
       ).toBe(false);
+    });
+  });
+  describe('player currency update', () => {
+    it('No currency is gained when alone in an interactable area', () => {
+      // remove player from area so testPlayer is alone :(
+      testArea.remove(newPlayer);
+      jest.useFakeTimers();
+      jest.setSystemTime(new Date('0'));
+      const testPlayer = new Player(nanoid(), mock<TownEmitter>());
+      const currentCurrency = testPlayer.wardrobe.currency;
+      testArea.add(testPlayer);
+      // set player to be in interactable area for 60 seconds
+      jest.setSystemTime(new Date('60000'));
+      testArea.remove(testPlayer);
+      // check that currency did not change
+      expect(testPlayer.wardrobe.currency).toEqual(currentCurrency);
+    });
+    it('Currency is gained equally between all players when in an interactable area with 2 people', () => {
+      jest.useFakeTimers();
+      jest.setSystemTime(new Date(0));
+      const currentNewPlayerCurrency = newPlayer.wardrobe.currency;
+      const testPlayer = new Player(nanoid(), mock<TownEmitter>());
+      const currentTestPlayerCurrency = testPlayer.wardrobe.currency;
+      const expectedCurrencyGainWith2 = 2 * 60 * CURRENCY_GAIN_RATE_FROM_INTERACTABLE_AREA;
+      testArea.add(testPlayer);
+      // set players to be in interactable area for 60 seconds
+      jest.setSystemTime(new Date(60000));
+      testArea.remove(testPlayer);
+      // check currency gained is the correct amount
+      expect(newPlayer.wardrobe.currency).toEqual(
+        currentNewPlayerCurrency + expectedCurrencyGainWith2,
+      );
+      expect(testPlayer.wardrobe.currency).toEqual(
+        currentTestPlayerCurrency + expectedCurrencyGainWith2,
+      );
+      // check all players gained the same amount
+      expect(
+        testPlayer.wardrobe.currency - currentTestPlayerCurrency ===
+          newPlayer.wardrobe.currency - currentNewPlayerCurrency,
+      ).toBe(true);
+    });
+    it('Currency is gained scales up with more people in a conversation area', () => {
+      jest.useFakeTimers();
+      jest.setSystemTime(new Date(0));
+      const currentNewPlayerCurrency = newPlayer.wardrobe.currency;
+      const testPlayer1 = new Player(nanoid(), mock<TownEmitter>());
+      const testPlayer2 = new Player(nanoid(), mock<TownEmitter>());
+      const expectedCurrencyGainWith2 = 2 * 60 * CURRENCY_GAIN_RATE_FROM_INTERACTABLE_AREA;
+      testArea.add(testPlayer1);
+      testArea.add(testPlayer2);
+      // set players to be in interactable area for 60 seconds
+      jest.setSystemTime(new Date(60000));
+      testArea.remove(newPlayer);
+      // check that currency gained with 3 members is greater than currency gained with 2 membrs
+      expect(newPlayer.wardrobe.currency > currentNewPlayerCurrency + expectedCurrencyGainWith2);
     });
   });
 });
