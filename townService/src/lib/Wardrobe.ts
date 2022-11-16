@@ -81,10 +81,10 @@ export default class Wardrobe {
 
   // Sets the skin item of the player to the given WardrobeItem if it is in the inventory.
   set currentSkin(skin: WardrobeItem) {
-    if (this._itemIsInInventory(skin)) {
+    if (this._itemIsInInventory(skin) && skin.category === 'skin') {
       this._currentSkin = skin;
     } else {
-      throw new Error('Item not in inventory');
+      throw new Error('Item not in inventory  or invalid');
     }
   }
 
@@ -95,10 +95,10 @@ export default class Wardrobe {
 
   // Sets the eye item of the player to the given WardrobeItem if it is in the inventory.
   set currentEyes(eyes: WardrobeItem) {
-    if (this._itemIsInInventory(eyes)) {
+    if (this._itemIsInInventory(eyes) && eyes.category === 'eyes') {
       this._currentEyes = eyes;
     } else {
-      throw new Error('Item not in inventory');
+      throw new Error('Item not in inventory or invalid');
     }
   }
 
@@ -109,10 +109,10 @@ export default class Wardrobe {
 
   // Sets the hair item of the player to the given WardrobeItem if it is in the inventory.
   set currentHair(hair: WardrobeItem) {
-    if (this._itemIsInInventory(hair)) {
+    if (this._itemIsInInventory(hair) && hair.category === 'hair') {
       this._currentHair = hair;
     } else {
-      throw new Error('Item not in inventory');
+      throw new Error('Item not in inventory or invalid');
     }
   }
 
@@ -123,10 +123,10 @@ export default class Wardrobe {
 
   // Sets the clothing of the player to the given WardrobeItem if it is in the inventory.
   set currentClothing(clothing: WardrobeItem) {
-    if (this._itemIsInInventory(clothing)) {
+    if (this._itemIsInInventory(clothing) && clothing.category === 'clothing') {
       this._currentClothing = clothing;
     } else {
-      throw new Error('Item not in inventory');
+      throw new Error('Item not in inventory or invalid');
     }
   }
 
@@ -137,10 +137,10 @@ export default class Wardrobe {
 
   // Sets the accessory of the player to the given WardrobeItem if it is in the inventory.
   set currentAccessory(accessory: WardrobeItem) {
-    if (this._itemIsInInventory(accessory)) {
+    if (this._itemIsInInventory(accessory) && accessory.category === 'accessory') {
       this._currentAccessory = accessory;
     } else {
-      throw new Error('Item not in inventory');
+      throw new Error('Item not in inventory or invalid');
     }
   }
 
