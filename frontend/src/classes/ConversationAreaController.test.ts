@@ -1,6 +1,7 @@
 import { mock, mockClear } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
-import { PlayerLocation } from '../types/CoveyTownSocket';
+import Wardrobe from '../components/VideoCall/VideoFrontend/components/Buttons/OpenWardrobeButton/WardrobePanel';
+import { PlayerLocation, WardrobeItem } from '../types/CoveyTownSocket';
 import ConversationAreaController, { ConversationAreaEvents } from './ConversationAreaController';
 import PlayerController from './PlayerController';
 
@@ -8,6 +9,11 @@ describe('[T2] ConversationAreaController', () => {
   // A valid ConversationAreaController to be reused within the tests
   let testArea: ConversationAreaController;
   const mockListeners = mock<ConversationAreaEvents>();
+  let testHair: WardrobeItem;
+  let testSkin: WardrobeItem;
+  let testClothing: WardrobeItem;
+  let testAccessory: WardrobeItem;
+  let testEyes: WardrobeItem;
   beforeEach(() => {
     const playerLocation: PlayerLocation = {
       moving: false,
@@ -15,11 +21,46 @@ describe('[T2] ConversationAreaController', () => {
       y: 0,
       rotation: 'front',
     };
+    testHair = {
+      name: 'other hair',
+      category: 'hair',
+      spriteLocation: '',
+    };
+    testSkin = {
+      name: '2',
+      category: 'skin',
+      spriteLocation: '',
+    };
+    testClothing = {
+      name: 'other clothing',
+      category: 'clothing',
+      spriteLocation: '',
+    };
+    testAccessory = {
+      name: 'other accessory',
+      category: 'accessory',
+      spriteLocation: '',
+    };
+    testEyes = {
+      name: 'other eyes',
+      category: 'eyes',
+      spriteLocation: '',
+    };
+    const playerWardrobe = new Wardrobe();
+    Wardrobe = {
+      currency: 0,
+      currentSkin: testSkin,
+      currentEyes: testEyes,
+      currentHair: testHair,
+      currentClothing: testClothing,
+      currentAccessory: testAccessory,
+      inventory: null,
+    };
     testArea = new ConversationAreaController(nanoid(), nanoid());
     testArea.occupants = [
-      new PlayerController(nanoid(), nanoid(), playerLocation),
-      new PlayerController(nanoid(), nanoid(), playerLocation),
-      new PlayerController(nanoid(), nanoid(), playerLocation),
+      new PlayerController(nanoid(), nanoid(), playerLocation, playerWardrobe),
+      new PlayerController(nanoid(), nanoid(), playerLocation, playerWardrobe),
+      new PlayerController(nanoid(), nanoid(), playerLocation, playerWardrobe),
     ];
     mockClear(mockListeners.occupantsChange);
     mockClear(mockListeners.topicChange);
