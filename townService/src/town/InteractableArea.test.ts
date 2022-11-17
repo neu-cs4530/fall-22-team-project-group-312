@@ -294,6 +294,27 @@ describe('InteractableArea', () => {
           newPlayer.wardrobe.currency - currentNewPlayerCurrency,
       ).toBe(true);
     });
+    it('Currency is gained only when interactable area has 2 people', () => {
+      jest.useFakeTimers();
+      jest.setSystemTime(new Date(0));
+      const currentNewPlayerCurrency = newPlayer.wardrobe.currency;
+      const testPlayer = new Player(nanoid(), mock<TownEmitter>());
+      const currentTestPlayerCurrency = testPlayer.wardrobe.currency;
+      const expectedCurrencyGainWith2 = 2 * 30 * CURRENCY_GAIN_RATE_FROM_INTERACTABLE_AREA;
+      // adds 2nd player after 30 seconds
+      jest.setSystemTime(new Date(30000));
+      testArea.add(testPlayer);
+      // removes player after another 30 seconds
+      jest.setSystemTime(new Date(60000));
+      testArea.remove(testPlayer);
+      // check currency gained is the correct amount for being in the area for 30 seconds and not 60
+      expect(newPlayer.wardrobe.currency).toEqual(
+        currentNewPlayerCurrency + expectedCurrencyGainWith2,
+      );
+      expect(testPlayer.wardrobe.currency).toEqual(
+        currentTestPlayerCurrency + expectedCurrencyGainWith2,
+      );
+    });
     it('Currency is gained scales up with more people in a conversation area', () => {
       jest.useFakeTimers();
       jest.setSystemTime(new Date(0));
