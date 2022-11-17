@@ -89,6 +89,7 @@ export default function MenuBar() {
               <Hidden smDown>
                 <Menu />
                 <TownSettings />
+                {/* TODO: put 'Change Outfit' button here */}
               </Hidden>
             </Grid>
           </Grid>
