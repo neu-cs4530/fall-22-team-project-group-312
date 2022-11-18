@@ -1,4 +1,3 @@
-import exp from 'constants';
 import { mock, mockClear } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import Player from '../lib/Player';
