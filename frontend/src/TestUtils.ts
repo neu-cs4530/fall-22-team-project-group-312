@@ -1,6 +1,7 @@
 import { ReservedOrUserListener } from '@socket.io/component-emitter';
 import { mock, MockProxy } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
+import Wardrobe from '../../townService/src/lib/Wardrobe';
 import ConversationAreaController from './classes/ConversationAreaController';
 import PlayerController from './classes/PlayerController';
 import TownController, { TownEvents } from './classes/TownController';
@@ -152,6 +153,7 @@ export async function mockTownControllerConnection(
           id: ourUserID,
           userName: testController.userName,
           location: { moving: false, x: 0, y: 0, rotation: 'back' },
+          wardrobe: new Wardrobe(),
         },
       ],
       friendlyName: nanoid(),
@@ -171,6 +173,7 @@ export async function mockTownControllerConnection(
         id: playerID,
         userName: nanoid(),
         location: { moving: false, x: 0, y: 0, rotation: 'back' },
+        wardrobe: new Wardrobe(),
       });
       responseToSendController.interactables.push({
         id: nanoid(),

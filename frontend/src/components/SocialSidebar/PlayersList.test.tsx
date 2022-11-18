@@ -12,6 +12,7 @@ import { mockTownController } from '../../TestUtils';
 import { PlayerLocation } from '../../types/CoveyTownSocket';
 import * as PlayerName from './PlayerName';
 import PlayersList from './PlayersList';
+import Wardrobe from '../../../../townService/src/lib/Wardrobe';
 
 describe('PlayersInTownList', () => {
   const randomLocation = (): PlayerLocation => ({
@@ -76,6 +77,7 @@ describe('PlayersInTownList', () => {
           `testingPlayerID${i}-${nanoid()}`,
           `testingPlayerUser${i}-${nanoid()}}`,
           randomLocation(),
+          new Wardrobe(),
         ),
       );
     }
@@ -137,6 +139,7 @@ describe('PlayersInTownList', () => {
           `testingPlayerID-${i}.new`,
           `testingPlayerUser${i}.new`,
           randomLocation(),
+          new Wardrobe(),
         ),
       ]);
       usePlayersSpy.mockReturnValue(newPlayers);

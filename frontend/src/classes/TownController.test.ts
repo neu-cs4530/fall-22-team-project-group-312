@@ -1,5 +1,6 @@
 import { mock, mockClear, MockProxy } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
+import Wardrobe from '../../../townService/src/lib/Wardrobe';
 import { LoginController } from '../contexts/LoginControllerContext';
 import { ViewingArea } from '../generated/client';
 import {
@@ -410,10 +411,12 @@ describe('TownController', () => {
 
     beforeEach(() => {
       //Create a new PlayerModel
+      const playerWardrobe = new Wardrobe();
       testPlayer = {
         id: nanoid(),
         location: { moving: false, rotation: 'back', x: 0, y: 1, interactableID: nanoid() },
         userName: nanoid(),
+        wardrobe: playerWardrobe,
       };
       //Add that player to the test town
       testPlayerPlayersChangedFn = emitEventAndExpectListenerFiring(

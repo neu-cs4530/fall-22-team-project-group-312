@@ -3,6 +3,7 @@ import { MockProxy } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
+import Wardrobe from '../../../townService/src/lib/Wardrobe';
 import ConversationAreaController, {
   ConversationAreaEvents,
   NO_TOPIC_STRING,
@@ -145,7 +146,12 @@ describe('[T3] TownController-Dependent Hooks', () => {
 
       for (let i = 0; i < 10; i++) {
         players.push(
-          new PlayerController(nanoid(), nanoid(), { moving: false, rotation: 'back', x: 0, y: 1 }),
+          new PlayerController(
+            nanoid(),
+            nanoid(),
+            { moving: false, rotation: 'back', x: 0, y: 1 },
+            new Wardrobe(),
+          ),
         );
       }
 
@@ -374,7 +380,12 @@ describe('ConversationAreaController hooks', () => {
       testPlayers = [];
       for (let i = 0; i < 10; i++) {
         testPlayers.push(
-          new PlayerController(nanoid(), nanoid(), { moving: false, rotation: 'back', x: 0, y: 1 }),
+          new PlayerController(
+            nanoid(),
+            nanoid(),
+            { moving: false, rotation: 'back', x: 0, y: 1 },
+            new Wardrobe(),
+          ),
         );
       }
       conversationAreaController.occupants = [testPlayers[0], testPlayers[1], testPlayers[2]];
