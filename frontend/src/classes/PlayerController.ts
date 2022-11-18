@@ -2,6 +2,7 @@ import EventEmitter from 'events';
 import TypedEmitter from 'typed-emitter';
 import { Player as PlayerModel, PlayerLocation } from '../types/CoveyTownSocket';
 import { Wardrobe } from '../types/CoveyTownSocket';
+import mergeImages from 'merge-images';
 
 export type PlayerEvents = {
   movement: (newLocation: PlayerLocation) => void;
@@ -88,8 +89,10 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
     }
   }
 
-  private _generateSprite() {
-    // make the sprite idk
+  /* Creates and stores sprite objects based on the currently equipped wardrobe items
+  of the player. */
+  private async _generateSprite() {
+    // Signifies the folder where each sprite is held
   }
 
   static fromPlayerModel(modelPlayer: PlayerModel): PlayerController {
