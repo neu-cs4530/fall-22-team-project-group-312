@@ -18,16 +18,7 @@ export default class Wardrobe {
   private _currentSkin: WardrobeItem;
 
   /** The current eye color set in the wardrobe. */
-  private _currentEyes: WardrobeItem;
-
-  /** The current hairstlye set in the wardrobe. */
-  private _currentHair: WardrobeItem;
-
-  /** The current clothing item set in the wardrobe. */
-  private _currentClothing: WardrobeItem;
-
-  /** The current accessory item set in the wardrobe. */
-  private _currentAccessory: WardrobeItem;
+  private _currentOutfit: WardrobeItem;
 
   /** A map of each item category available to the player and the wardrobe items in that cateogry they currently have unlocked.  */
   private _inventory: Map<ItemCategory, WardrobeItem[]>;
@@ -36,27 +27,15 @@ export default class Wardrobe {
     this._currency = 0;
     this._inventory = new Map<ItemCategory, WardrobeItem[]>();
     this.inventory.set('skin', []);
-    this.inventory.set('eyes', []);
-    this.inventory.set('hair', []);
-    this.inventory.set('clothing', []);
-    this.inventory.set('accessory', []);
+    this.inventory.set('outfit', []);
     // Add all default items to wardrobe.
     DEFAULT_ITEMS.forEach((item: WardrobeItem) => this.addWardrobeItem(item));
     // Set the default items to the currently worn items in the wardrobe.
     this._currentSkin = DEFAULT_ITEMS.find(
       (item: WardrobeItem) => item.name === '0',
     ) as WardrobeItem;
-    this._currentEyes = DEFAULT_ITEMS.find(
-      (item: WardrobeItem) => item.name === 'defualt eyes',
-    ) as WardrobeItem;
-    this._currentClothing = DEFAULT_ITEMS.find(
-      (item: WardrobeItem) => item.name === 'default clothing',
-    ) as WardrobeItem;
-    this._currentHair = DEFAULT_ITEMS.find(
-      (item: WardrobeItem) => item.name === 'default hair',
-    ) as WardrobeItem;
-    this._currentAccessory = DEFAULT_ITEMS.find(
-      (item: WardrobeItem) => item.name === 'no accessory',
+    this._currentOutfit = DEFAULT_ITEMS.find(
+      (item: WardrobeItem) => item.name === 'defualt outfit',
     ) as WardrobeItem;
   }
 
@@ -88,57 +67,15 @@ export default class Wardrobe {
     }
   }
 
-  // Returns the current eye item of the player this wardrobe corresponds to.
-  get currentEyes(): WardrobeItem {
-    return this._currentEyes;
+  // Returns the current outfit of the player this wardrobe corresponds to.
+  get currentOutfit(): WardrobeItem {
+    return this._currentOutfit;
   }
 
-  // Sets the eye item of the player to the given WardrobeItem if it is in the inventory.
-  set currentEyes(eyes: WardrobeItem) {
-    if (this._itemIsInInventory(eyes) && eyes.category === 'eyes') {
-      this._currentEyes = eyes;
-    } else {
-      throw new Error('Item not in inventory or invalid');
-    }
-  }
-
-  // Returns the current hair item of the player this wardrobe corresponds to.
-  get currentHair(): WardrobeItem {
-    return this._currentHair;
-  }
-
-  // Sets the hair item of the player to the given WardrobeItem if it is in the inventory.
-  set currentHair(hair: WardrobeItem) {
-    if (this._itemIsInInventory(hair) && hair.category === 'hair') {
-      this._currentHair = hair;
-    } else {
-      throw new Error('Item not in inventory or invalid');
-    }
-  }
-
-  // Returns the current clothing item of the player this wardrobe corresponds to.
-  get currentClothing(): WardrobeItem {
-    return this._currentClothing;
-  }
-
-  // Sets the clothing of the player to the given WardrobeItem if it is in the inventory.
-  set currentClothing(clothing: WardrobeItem) {
-    if (this._itemIsInInventory(clothing) && clothing.category === 'clothing') {
-      this._currentClothing = clothing;
-    } else {
-      throw new Error('Item not in inventory or invalid');
-    }
-  }
-
-  // Returns the current accessory of the player this wardrobe corresponds to.
-  get currentAccessory(): WardrobeItem {
-    return this._currentAccessory;
-  }
-
-  // Sets the accessory of the player to the given WardrobeItem if it is in the inventory.
-  set currentAccessory(accessory: WardrobeItem) {
-    if (this._itemIsInInventory(accessory) && accessory.category === 'accessory') {
-      this._currentAccessory = accessory;
+  // Sets the outfit item of the player to the given WardrobeItem if it is in the inventory.
+  set currentOutfit(outfit: WardrobeItem) {
+    if (this._itemIsInInventory(outfit) && outfit.category === 'outfit') {
+      this._currentOutfit = outfit;
     } else {
       throw new Error('Item not in inventory or invalid');
     }
