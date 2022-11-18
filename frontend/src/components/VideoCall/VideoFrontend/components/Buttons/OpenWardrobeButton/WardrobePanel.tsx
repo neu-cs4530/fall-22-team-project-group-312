@@ -1,16 +1,18 @@
 import {
   Button,
+  Image,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  StackDivider,
+  VStack,
 } from '@chakra-ui/react';
-import React, { useEffect, useState, useContext, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import { ItemCategory, WardrobeItem } from '../../../../../../types/CoveyTownSocket';
+import React, { useCallback, useState } from 'react';
 import TownController from '../../../../../../classes/TownController';
+import { ItemCategory, WardrobeItem } from '../../../../../../types/CoveyTownSocket';
 
 function WardrobePanel({
   isOpen,
@@ -23,7 +25,6 @@ function WardrobePanel({
   onClose: any;
   coveyTownController: TownController;
 }) {
-  const [currentMenuType, setCurrentMenuType] = useState<ItemCategory>();
   const [selectedItem, setSelectedItems] = useState<WardrobeItem[]>();
 
   const closeWardrobe = useCallback(() => {
@@ -48,20 +49,20 @@ function WardrobePanel({
           <ModalHeader>Changing Room</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <div className='previewPane'></div>
-            <div className='selectionPane'>
-              <div className='navigationMenu'>
-                <Button title='eyeColor'></Button>
-                <Button title='hairStyle'></Button>
-                <Button title='skinColor'></Button>
-                <Button title='outfit'></Button>
-                <Button title='accessory'></Button>
+            <VStack divider={<StackDivider borderColor='gray.200' />} spacing={8} align='stretch'>
+              <div className='previewPane'>
+                <Image src={/*Sprite png will change based on selected items*/} alt='sprite' />
               </div>
-              <div className='selectClothingMenu'>
-                {/* put this in a for loop: <SelectableItem /> */}
+              <div className='selectionPane'>
+                <div className='selectClothingMenu'>
+                  {/* put this in a for loop: <SelectableItem /> */}
+                </div>
+                <div className='selectSkinColorMenu'>
+                  {/* put this in a for loop: <SelectableItem /> */}
+                </div>
+                <Button title='Confirm'></Button>
               </div>
-              <Button title='Confirm'></Button>
-            </div>
+            </VStack>
           </ModalBody>
         </ModalContent>
       </Modal>
