@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import { PlayerLocation } from '../types/CoveyTownSocket';
 import ConversationAreaController, { ConversationAreaEvents } from './ConversationAreaController';
 import PlayerController from './PlayerController';
+import Wardrobe from '../../../townService/src/lib/Wardrobe';
 
 describe('[T2] ConversationAreaController', () => {
   // A valid ConversationAreaController to be reused within the tests
@@ -15,11 +16,12 @@ describe('[T2] ConversationAreaController', () => {
       y: 0,
       rotation: 'front',
     };
+    const playerWardrobe = new Wardrobe();
     testArea = new ConversationAreaController(nanoid(), nanoid());
     testArea.occupants = [
-      new PlayerController(nanoid(), nanoid(), playerLocation),
-      new PlayerController(nanoid(), nanoid(), playerLocation),
-      new PlayerController(nanoid(), nanoid(), playerLocation),
+      new PlayerController(nanoid(), nanoid(), playerLocation, playerWardrobe),
+      new PlayerController(nanoid(), nanoid(), playerLocation, playerWardrobe),
+      new PlayerController(nanoid(), nanoid(), playerLocation, playerWardrobe),
     ];
     mockClear(mockListeners.occupantsChange);
     mockClear(mockListeners.topicChange);
