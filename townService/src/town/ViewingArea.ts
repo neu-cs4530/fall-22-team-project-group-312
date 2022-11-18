@@ -67,14 +67,12 @@ export default class ViewingArea extends InteractableArea {
    * @param viewingArea updated model
    */
   public updateModel({ isPlaying, elapsedTimeSec: progress, video }: ViewingAreaModel) {
-    // if it is still playing the same video
-    if (this._video === video) {
+    // if it is still playing the same video and video is progresing
+    if (this._video === video && this._elapsedTimeSec < progress) {
       // give currency to occupants watching
       this._occupants.forEach(occupant => {
-        occupant.wardrobe.currency +=
-          (this.elapsedTimeSec - this.elapsedTimeSec) * CURRENCY_GAIN_RATE_FROM_VIEWING_AREA;
+        occupant.wardrobe.currency += CURRENCY_GAIN_RATE_FROM_VIEWING_AREA;
       });
-      this._occupants.forEach(o => console.log(o.wardrobe.currency));
     }
     this._video = video;
     this._isPlaying = isPlaying;
