@@ -1,5 +1,6 @@
 import Wardrobe from './Wardrobe';
-import { WardrobeItem, ItemCategory, DEFAULT_ITEMS } from './WardrobeItem';
+import { DEFAULT_ITEMS } from './WardrobeItem';
+import { WardrobeItem } from '../types/CoveyTownSocket';
 
 describe('Wardrobe', () => {
   // A valid Wardrobe and WardrobeItem(s) to be reused within the tests
@@ -9,7 +10,11 @@ describe('Wardrobe', () => {
   let testClothing: WardrobeItem;
   let testAccessory: WardrobeItem;
   let testEyes: WardrobeItem;
-
+  let unaddedHair: WardrobeItem;
+  let unaddedSkin: WardrobeItem;
+  let unaddedClothing: WardrobeItem;
+  let unaddedAccessory: WardrobeItem;
+  let unaddedEyes: WardrobeItem;
   // Mock listeners for each of the WardrobeEvents, will be added to the testArea
   // const mockListeners = mock<ViewingAreaEvents>();
   beforeEach(() => {
@@ -39,10 +44,45 @@ describe('Wardrobe', () => {
       category: 'eyes',
       spriteLocation: '',
     };
+    unaddedHair = {
+      name: 'unadded hair',
+      category: 'hair',
+      spriteLocation: '',
+    };
+    unaddedSkin = {
+      name: 'unadded skin',
+      category: 'skin',
+      spriteLocation: '',
+    };
+    unaddedClothing = {
+      name: 'unadded clothing',
+      category: 'clothing',
+      spriteLocation: '',
+    };
+    unaddedAccessory = {
+      name: 'unadded accessory',
+      category: 'accessory',
+      spriteLocation: '',
+    };
+    unaddedEyes = {
+      name: 'unadded eyes',
+      category: 'eyes',
+      spriteLocation: '',
+    };
     testWardrobe = new Wardrobe();
+    // Add test items to wardrobe.
+    testWardrobe.addWardrobeItem(testHair);
+    testWardrobe.addWardrobeItem(testSkin);
+    testWardrobe.addWardrobeItem(testClothing);
+    testWardrobe.addWardrobeItem(testAccessory);
+    testWardrobe.addWardrobeItem(testEyes);
   });
 
-  describe('addWardrobeItem', () => {});
+  describe('Default Items', () => {
+    it('Ensures default items have been properly added', () => {
+      DEFAULT_ITEMS.forEach(item => expect(testWardrobe.addWardrobeItem(item)).toBe(false));
+    });
+  });
 
   describe('currency', () => {
     it('gets the currency', () => {
@@ -53,6 +93,11 @@ describe('Wardrobe', () => {
       testWardrobe.currency = 20;
       expect(testWardrobe.currency).toEqual(20);
     });
+    it('Throws an error if currency is set to a negative value', () => {
+      expect(() => {
+        testWardrobe.currency = -20;
+      }).toThrowError();
+    });
   });
 
   describe('currentSkin', () => {
@@ -60,9 +105,19 @@ describe('Wardrobe', () => {
       const testCurrentSkin = testWardrobe.currentSkin;
       expect(testWardrobe.currentSkin).toEqual(testCurrentSkin);
     });
-    it('sets the currency to number', () => {
+    it('sets the current skin to something in the Wardrobe', () => {
       testWardrobe.currentSkin = testSkin;
       expect(testWardrobe.currentSkin).toEqual(testSkin);
+    });
+    it('Throws an error if the skin to add is not in the wardrobe.', () => {
+      expect(() => {
+        testWardrobe.currentSkin = unaddedSkin;
+      }).toThrowError();
+    });
+    it('Throws an error if the item is not of the right category', () => {
+      expect(() => {
+        testWardrobe.currentSkin = testEyes;
+      }).toThrowError();
     });
   });
   describe('currentEyes', () => {
@@ -70,9 +125,19 @@ describe('Wardrobe', () => {
       const testCurrentEyes = testWardrobe.currentEyes;
       expect(testWardrobe.currentEyes).toEqual(testCurrentEyes);
     });
-    it('sets the current eye color to a differnet eye color', () => {
+    it('sets the current eye color to a different eye color', () => {
       testWardrobe.currentEyes = testEyes;
       expect(testWardrobe.currentEyes).toEqual(testEyes);
+    });
+    it('Throws an error if the eye color to add is not in the wardrobe.', () => {
+      expect(() => {
+        testWardrobe.currentEyes = unaddedEyes;
+      }).toThrowError();
+    });
+    it('Throws an error if the item is not of the right category', () => {
+      expect(() => {
+        testWardrobe.currentEyes = testSkin;
+      }).toThrowError();
     });
   });
 
@@ -85,6 +150,16 @@ describe('Wardrobe', () => {
       testWardrobe.currentHair = testHair;
       expect(testWardrobe.currentHair).toEqual(testHair);
     });
+    it('Throws an error if the hair to add is not in the wardrobe.', () => {
+      expect(() => {
+        testWardrobe.currentHair = unaddedHair;
+      }).toThrowError();
+    });
+    it('Throws an error if the item is not of the right category', () => {
+      expect(() => {
+        testWardrobe.currentHair = testSkin;
+      }).toThrowError();
+    });
   });
   describe('currentClothing', () => {
     it('gets the current clothing', () => {
@@ -94,6 +169,16 @@ describe('Wardrobe', () => {
     it('sets the currenct clothing to a different piece of clothing', () => {
       testWardrobe.currentClothing = testClothing;
       expect(testWardrobe.currentClothing).toEqual(testClothing);
+    });
+    it('Throws an error if the clothing to add is not in the wardrobe.', () => {
+      expect(() => {
+        testWardrobe.currentClothing = unaddedClothing;
+      }).toThrowError();
+    });
+    it('Throws an error if the item is not of the right category', () => {
+      expect(() => {
+        testWardrobe.currentClothing = testSkin;
+      }).toThrowError();
     });
   });
 
@@ -106,12 +191,58 @@ describe('Wardrobe', () => {
       testWardrobe.currentAccessory = testAccessory;
       expect(testWardrobe.currentAccessory).toEqual(testAccessory);
     });
+    it('Throws an error if the accessory to add is not in the wardrobe.', () => {
+      expect(() => {
+        testWardrobe.currentAccessory = unaddedAccessory;
+      }).toThrowError();
+    });
+    it('Throws an error if the item is not of the right category', () => {
+      expect(() => {
+        testWardrobe.currentAccessory = testSkin;
+      }).toThrowError();
+    });
   });
 
   describe('inventory', () => {
-    it('gets the current accessory', () => {
-      const testCurrentAccessory = testWardrobe.currentAccessory;
-      expect(testWardrobe.currentAccessory).toEqual(testCurrentAccessory);
+    it('gets the inventory', () => {
+      const testCurrentInventory = testWardrobe.inventory;
+      expect(testWardrobe.inventory).toEqual(testCurrentInventory);
+    });
+  });
+
+  describe('addWardrobeItem', () => {
+    it('returns false if item to add is already in the inventory', () => {
+      expect(testWardrobe.addWardrobeItem(testSkin)).toBe(false);
+    });
+    it('returns true and adds new skin, and cannot be added twice', () => {
+      expect(testWardrobe.addWardrobeItem(unaddedSkin)).toBe(true);
+      expect(testWardrobe.inventory.get('skin')?.includes(unaddedSkin)).toBe(true);
+      // Trying to add again should return false.
+      expect(testWardrobe.addWardrobeItem(unaddedSkin)).toBe(false);
+    });
+    it('returns true and adds new hair, and cannot be added twice', () => {
+      expect(testWardrobe.addWardrobeItem(unaddedHair)).toBe(true);
+      expect(testWardrobe.inventory.get('hair')?.includes(unaddedHair)).toBe(true);
+      // Trying to add again should return false.
+      expect(testWardrobe.addWardrobeItem(unaddedHair)).toBe(false);
+    });
+    it('returns true and adds new clothing, and cannot be added twice', () => {
+      expect(testWardrobe.addWardrobeItem(unaddedClothing)).toBe(true);
+      expect(testWardrobe.inventory.get('clothing')?.includes(unaddedClothing)).toBe(true);
+      // Trying to add again should return false.
+      expect(testWardrobe.addWardrobeItem(unaddedClothing)).toBe(false);
+    });
+    it('returns true and adds new eyes, and cannot be added twice', () => {
+      expect(testWardrobe.addWardrobeItem(unaddedEyes)).toBe(true);
+      expect(testWardrobe.inventory.get('eyes')?.includes(unaddedEyes)).toBe(true);
+      // Trying to add again should return false.
+      expect(testWardrobe.addWardrobeItem(unaddedEyes)).toBe(false);
+    });
+    it('returns true and adds new accessory, and cannot be added twice', () => {
+      expect(testWardrobe.addWardrobeItem(unaddedAccessory)).toBe(true);
+      expect(testWardrobe.inventory.get('accessory')?.includes(unaddedAccessory)).toBe(true);
+      // Trying to add again should return false.
+      expect(testWardrobe.addWardrobeItem(unaddedAccessory)).toBe(false);
     });
   });
 });
