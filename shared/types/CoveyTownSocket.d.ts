@@ -35,7 +35,7 @@ export interface Player {
 /**
  * Represents the location of a WardrobeItem on the player's body.
  */
- export type ItemCategory = 'skin' | 'eyes' | 'hair' | 'clothing' | 'accessory';
+ export type ItemCategory = 'skin' | 'outfit';
 
  /**
   * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
@@ -51,13 +51,7 @@ export interface Wardrobe {
   /** The current skin color set in the wardrobe. */
   currentSkin: WardrobeItem;
   /** The current eye color set in the wardrobe. */
-  currentEyes: WardrobeItem;
-  /** The current hairstlye set in the wardrobe. */
-  currentHair: WardrobeItem;
-  /** The current clothing item set in the wardrobe. */
-  currentClothing: WardrobeItem;
-  /** The current accessory item set in the wardrobe. */
-  currentAccessory: WardrobeItem;
+  currentOutfit: WardrobeItem;
   /** A map of each item category available to the player and the wardrobe items in that cateogry they currently have unlocked.  */
   inventory: Map<ItemCategory, WardrobeItem[]>;
 }
