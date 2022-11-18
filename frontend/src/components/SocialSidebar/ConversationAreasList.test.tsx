@@ -13,6 +13,7 @@ import { mock, mockClear } from 'jest-mock-extended';
 import { BoundingBox, CoveyTownSocket } from '../../types/CoveyTownSocket';
 import { getEventListener, mockTownControllerConnection } from '../../TestUtils';
 import TownControllerContext from '../../contexts/TownControllerContext';
+import Wardrobe from '../../../../townService/src/lib/Wardrobe';
 
 /**
  * Mocks the socket-io client constructor such that it will always return the same
@@ -141,6 +142,7 @@ describe('ConversationAreasList', () => {
               rotation: 'front',
               moving: false,
             },
+            new Wardrobe(),
           ),
         );
       }
