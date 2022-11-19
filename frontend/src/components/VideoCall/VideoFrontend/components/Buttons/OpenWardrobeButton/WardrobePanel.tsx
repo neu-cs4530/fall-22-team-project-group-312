@@ -26,7 +26,7 @@ function WardrobePanel({
   onClose: any;
   coveyTownController: TownController;
 }) {
-  const [selectedItem, setSelectedItems] = useState<WardrobeItem[]>();
+  const [selectedItems, setSelectedItems] = useState<WardrobeItem[]>();
 
   const closeWardrobe = useCallback(() => {
     onClose();
@@ -58,7 +58,13 @@ function WardrobePanel({
                 <div className='selectClothingMenu'>
                   <Stack spacing={5} direction='row' align='center'>
                     <Button size='md'>
-                      <Image src={/*Misa Original Image*/} alt='Misa Original Costume' onClick={} />
+                      <Image
+                        src={/*Misa Original Image*/}
+                        alt='Misa Original Costume'
+                        onClick={() => {
+                          setSelectedItems(/* Set Wardrobe Item List */);
+                        }}
+                      />
                       Misa Original
                     </Button>
                     <Button size='md'>
