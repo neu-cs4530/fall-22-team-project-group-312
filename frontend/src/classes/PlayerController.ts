@@ -2,11 +2,10 @@ import EventEmitter from 'events';
 import TypedEmitter from 'typed-emitter';
 import { Player as PlayerModel, PlayerLocation } from '../types/CoveyTownSocket';
 import { Wardrobe } from '../types/CoveyTownSocket';
+import mergeImages from 'merge-images';
 
 export type PlayerEvents = {
   movement: (newLocation: PlayerLocation) => void;
-  // Event that signals an update in the player's wardrobe object
-  wardrobeUpdate: (newWardobe: Wardrobe) => void;
 };
 
 export type PlayerGameObjects = {
@@ -59,7 +58,9 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
   // Change the player's wardrobe. Emit an update signaling this change.
   set wardrobe(newWardrobe: Wardrobe) {
     this._wardrobe = newWardrobe;
-    this.emit('wardrobeUpdate', newWardrobe);
+    // Uses the movement emitter and update location method to signal a wardrobe change.
+    this._updateGameComponentLocation();
+    this.emit('movement', this.location);
   }
 
   toPlayerModel(): PlayerModel {
@@ -86,6 +87,12 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
         sprite.setTexture('atlas', `misa-${this.location.rotation}`);
       }
     }
+  }
+
+  /* Creates and stores sprite objects based on the currently equipped wardrobe items
+  of the player. */
+  private async _generateSprite() {
+    // Signifies the folder where each sprite is held
   }
 
   static fromPlayerModel(modelPlayer: PlayerModel): PlayerController {
