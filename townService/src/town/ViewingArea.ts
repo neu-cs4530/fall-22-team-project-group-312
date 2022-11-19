@@ -1,5 +1,6 @@
 import { ITiledMapObject } from '@jonbell/tiled-map-type-guard';
 import Player from '../lib/Player';
+import { CURRENCY_GAIN_RATE_FROM_VIEWING_AREA } from '../lib/Wardrobe';
 import {
   BoundingBox,
   TownEmitter,
@@ -66,6 +67,13 @@ export default class ViewingArea extends InteractableArea {
    * @param viewingArea updated model
    */
   public updateModel({ isPlaying, elapsedTimeSec: progress, video }: ViewingAreaModel) {
+    // if it is still playing the same video and video is progresing
+    if (this._video === video && this._elapsedTimeSec < progress) {
+      // give currency to occupants watching
+      this._occupants.forEach(occupant => {
+        occupant.wardrobe.currency += CURRENCY_GAIN_RATE_FROM_VIEWING_AREA;
+      });
+    }
     this._video = video;
     this._isPlaying = isPlaying;
     this._elapsedTimeSec = progress;

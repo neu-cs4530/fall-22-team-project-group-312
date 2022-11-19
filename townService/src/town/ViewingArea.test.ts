@@ -1,6 +1,7 @@
 import { mock, mockClear } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import Player from '../lib/Player';
+import { CURRENCY_GAIN_RATE_FROM_VIEWING_AREA } from '../lib/Wardrobe';
 import { getLastEmittedEvent } from '../TestUtils';
 import { TownEmitter } from '../types/CoveyTownSocket';
 import ViewingArea from './ViewingArea';
@@ -72,6 +73,38 @@ describe('ViewingArea', () => {
     expect(testArea.id).toBe(id);
     expect(testArea.elapsedTimeSec).toBe(150);
     expect(testArea.video).toBe('test2');
+  });
+  describe('player currency update', () => {
+    it('updateModel updates the currency of players', () => {
+      const originalCurrency = newPlayer.wardrobe.currency;
+      //  simulate running 15 seconds worth of a video
+      for (let i = 1; i <= 10; i++) {
+        testArea.updateModel({
+          id: testArea.id,
+          isPlaying: testArea.isPlaying,
+          elapsedTimeSec: testArea.elapsedTimeSec + 1,
+          video: testArea.video,
+        });
+        // check that currency gained is correct for each second
+        expect(newPlayer.wardrobe.currency).toEqual(
+          originalCurrency + CURRENCY_GAIN_RATE_FROM_VIEWING_AREA * i,
+        );
+      }
+    });
+    it('updateModel does not add currency if video is not playing', () => {
+      const originalCurrency = newPlayer.wardrobe.currency;
+      for (let i = 1; i <= 10; i++) {
+        testArea.updateModel({
+          id: testArea.id,
+          isPlaying: testArea.isPlaying,
+          // do not update elapsed time
+          elapsedTimeSec: testArea.elapsedTimeSec,
+          video: testArea.video,
+        });
+        // check that currency gained is correct for each second
+        expect(newPlayer.wardrobe.currency).toEqual(originalCurrency);
+      }
+    });
   });
   describe('fromMapObject', () => {
     it('Throws an error if the width or height are missing', () => {
