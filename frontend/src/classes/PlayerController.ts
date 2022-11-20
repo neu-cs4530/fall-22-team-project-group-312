@@ -1,7 +1,6 @@
 import EventEmitter from 'events';
 import TypedEmitter from 'typed-emitter';
-import { Player as PlayerModel, PlayerLocation } from '../types/CoveyTownSocket';
-import { Wardrobe } from '../types/CoveyTownSocket';
+import { Player as PlayerModel, PlayerLocation, Wardrobe } from '../types/CoveyTownSocket';
 
 export type PlayerEvents = {
   movement: (newLocation: PlayerLocation) => void;

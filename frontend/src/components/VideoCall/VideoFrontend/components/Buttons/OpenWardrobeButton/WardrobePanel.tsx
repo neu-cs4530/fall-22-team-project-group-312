@@ -48,9 +48,9 @@ function WardrobePanel({
   const initalSprite: WardrobeItem[] = [initalOutfit, initialSkin];
   const [spritePreview, setSpritePreview] = useState<WardrobeItem[]>(initalSprite);
 
-  useEffect(() => {
-    
-  });
+  // useEffect(() => {
+
+  // });
 
   const closeWardrobe = useCallback(() => {
     onClose();

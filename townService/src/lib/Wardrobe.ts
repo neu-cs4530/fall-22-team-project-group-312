@@ -35,7 +35,8 @@ export default class Wardrobe {
       (item: WardrobeItem) => item.id === 'skin1',
     ) as WardrobeItem;
     this._currentOutfit = DEFAULT_ITEMS.find(
-      (item: WardrobeItem) => item.id === 'misa',
+      // TODO: change this to accept an id
+      (item: WardrobeItem) => item.name === 'default outfit',
     ) as WardrobeItem;
   }
 
