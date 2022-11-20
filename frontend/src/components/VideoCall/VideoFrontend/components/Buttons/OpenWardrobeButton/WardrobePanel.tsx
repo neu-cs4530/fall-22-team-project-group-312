@@ -12,9 +12,12 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
+import {
+  DEFAULT_ITEMS,
+  UNLOCKABLE_ITEMS,
+} from '../../../../../../../../townService/src/lib/WardrobeItem';
 import TownController from '../../../../../../classes/TownController';
 import { WardrobeItem } from '../../../../../../types/CoveyTownSocket';
-
 function WardrobePanel({
   isOpen,
   onOpen,
@@ -26,7 +29,18 @@ function WardrobePanel({
   onClose: any;
   coveyTownController: TownController;
 }) {
-  const [selectedItems, setSelectedItems] = useState<WardrobeItem[]>();
+  const initalOutfit: WardrobeItem = {
+    name: 'default outfit',
+    category: 'outfit',
+    spriteLocation: '',
+  };
+  const initialSkin: WardrobeItem = {
+    name: '1',
+    category: 'skin',
+    spriteLocation: '',
+  };
+  const initalSprite: WardrobeItem[] = [initalOutfit, initialSkin];
+  const [spritePreview, setSpritePreview] = useState<WardrobeItem[]>(initalSprite);
 
   const closeWardrobe = useCallback(() => {
     onClose();
@@ -52,7 +66,10 @@ function WardrobePanel({
           <ModalBody pb={6}>
             <VStack divider={<StackDivider borderColor='gray.200' />} spacing={8} align='stretch'>
               <div className='previewPane'>
-                <Image src={/*Sprite png will change based on selected items*/} alt='sprite' />
+                <Image
+                  src={`${spritePreview[0].name}-${spritePreview[1].name}front.png`}
+                  alt='sprite'
+                />
               </div>
               <div className='selectionPane'>
                 <div className='selectClothingMenu'>
@@ -62,25 +79,63 @@ function WardrobePanel({
                         src={/*Misa Original Image*/}
                         alt='Misa Original Costume'
                         onClick={() => {
-                          setSelectedItems(/* Set Wardrobe Item List */);
+                          const currentSkin = spritePreview[1];
+                          const newSpritePreview: WardrobeItem[] = [
+                            DEFAULT_ITEMS.find(
+                              item => item.name === 'default outfit',
+                            ) as WardrobeItem,
+                            currentSkin,
+                          ];
+                          setSpritePreview(newSpritePreview);
                         }}
                       />
                       Misa Original
                     </Button>
                     <Button size='md'>
-                      <Image src={/*Birthday Suit Image*/} alt='Birthday Suit' onClick={} />
+                      <Image
+                        src={/*Birthday Suit Image*/}
+                        alt='Birthday Suit'
+                        onClick={() => {
+                          const currentSkin = spritePreview[1];
+                          const newSpritePreview: WardrobeItem[] = [
+                            DEFAULT_ITEMS.find(
+                              item => item.name === 'birthday_suit',
+                            ) as WardrobeItem,
+                            currentSkin,
+                          ];
+                          setSpritePreview(newSpritePreview);
+                        }}
+                      />
                       Birthday Suit
                     </Button>
                     <Button size='md'>
-                      <Image src={/*Keqing image*/} alt='Keqing' onClick={} />
+                      <Image
+                        src={/*Keqing image*/}
+                        alt='Keqing'
+                        onClick={() => {
+                          setSelectedItem(UNLOCKABLE_ITEMS.find(item => item.name === 'keqing'));
+                        }}
+                      />
                       Keqing
                     </Button>
                     <Button size='md'>
-                      <Image src={/*Ness image*/} alt='Ness' onClick={} />
+                      <Image
+                        src={/*Ness image*/}
+                        alt='Ness'
+                        onClick={() => {
+                          setSelectedItem(UNLOCKABLE_ITEMS.find(item => item.name === 'ness'));
+                        }}
+                      />
                       Ness
                     </Button>
                     <Button size='md'>
-                      <Image src={/*Catboy image*/} alt='Catboy' onClick={} />
+                      <Image
+                        src={/*Catboy image*/}
+                        alt='Catboy'
+                        onClick={() => {
+                          setSelectedItem(UNLOCKABLE_ITEMS.find(item => item.name === 'catboy'));
+                        }}
+                      />
                       Catboy
                     </Button>
                   </Stack>
@@ -109,7 +164,7 @@ function WardrobePanel({
                     </Button>
                   </Stack>
                 </div>
-                <Button title='Confirm' onClick={}></Button>
+                <Button title='Confirm' onClick={closeWardrobe}></Button>
               </div>
             </VStack>
           </ModalBody>
