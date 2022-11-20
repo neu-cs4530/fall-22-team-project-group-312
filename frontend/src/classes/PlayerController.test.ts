@@ -26,6 +26,7 @@ describe('PlayerController', () => {
       // Create a new wardrobe.
       const newWardrobe = new Wardrobe();
       const testOutfit: WardrobeItem = {
+        id: 'testoutfit',
         name: 'test outfit',
         category: 'outfit',
       };
