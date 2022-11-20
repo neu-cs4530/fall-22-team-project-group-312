@@ -18,6 +18,12 @@ import {
 } from '../../../../../../../../townService/src/lib/WardrobeItem';
 import TownController from '../../../../../../classes/TownController';
 import { WardrobeItem } from '../../../../../../types/CoveyTownSocket';
+/**
+ * The wardrobe panel inside the pop up modal. This shows all the available outfits and
+ * skin colors that the player can style their avatar with.
+ * @param param0 
+ * @returns the wardrobe panel.
+ */
 function WardrobePanel({
   isOpen,
   onOpen,
@@ -47,6 +53,11 @@ function WardrobePanel({
     coveyTownController.unPause();
   }, [onClose, coveyTownController]);
 
+  /**
+   * Switches the sprite preview to one with the newly selected item and the 
+   * other currently selected item.
+   * @param itemID the id of the item(outfit or skin color) the player selected
+   */
   function switchSpriteItems(itemID: string): void {
     if (itemID.startsWith('skin')) {
       const currentOutfit = spritePreview[0];
