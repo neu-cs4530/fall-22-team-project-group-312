@@ -30,14 +30,14 @@ function WardrobePanel({
   coveyTownController: TownController;
 }) {
   const initalOutfit: WardrobeItem = {
-    name: 'default outfit',
+    id: 'misa',
+    name: 'Default Outfit',
     category: 'outfit',
-    spriteLocation: '',
   };
   const initialSkin: WardrobeItem = {
-    name: '1',
+    id: 'skin1',
+    name: 'skin1',
     category: 'skin',
-    spriteLocation: '',
   };
   const initalSprite: WardrobeItem[] = [initalOutfit, initialSkin];
   const [spritePreview, setSpritePreview] = useState<WardrobeItem[]>(initalSprite);
@@ -46,6 +46,24 @@ function WardrobePanel({
     onClose();
     coveyTownController.unPause();
   }, [onClose, coveyTownController]);
+
+  function switchSpriteItems(itemID: string): void {
+    if (itemID.startsWith('skin')) {
+      const currentOutfit = spritePreview[0];
+      const newSpritePreview: WardrobeItem[] = [
+        currentOutfit,
+        UNLOCKABLE_ITEMS.find(item => item.id === itemID) as WardrobeItem,
+      ];
+      setSpritePreview(newSpritePreview);
+    } else {
+      const currentSkin = spritePreview[1];
+      const newSpritePreview: WardrobeItem[] = [
+        DEFAULT_ITEMS.find(item => item.id === itemID) as WardrobeItem,
+        currentSkin,
+      ];
+      setSpritePreview(newSpritePreview);
+    }
+  }
 
   /**
    * modal
@@ -79,14 +97,7 @@ function WardrobePanel({
                         src={/*Misa Original Image*/}
                         alt='Misa Original Costume'
                         onClick={() => {
-                          const currentSkin = spritePreview[1];
-                          const newSpritePreview: WardrobeItem[] = [
-                            DEFAULT_ITEMS.find(
-                              item => item.name === 'default outfit',
-                            ) as WardrobeItem,
-                            currentSkin,
-                          ];
-                          setSpritePreview(newSpritePreview);
+                          switchSpriteItems('misa');
                         }}
                       />
                       Misa Original
@@ -96,14 +107,7 @@ function WardrobePanel({
                         src={/*Birthday Suit Image*/}
                         alt='Birthday Suit'
                         onClick={() => {
-                          const currentSkin = spritePreview[1];
-                          const newSpritePreview: WardrobeItem[] = [
-                            DEFAULT_ITEMS.find(
-                              item => item.name === 'birthday_suit',
-                            ) as WardrobeItem,
-                            currentSkin,
-                          ];
-                          setSpritePreview(newSpritePreview);
+                          switchSpriteItems('bday');
                         }}
                       />
                       Birthday Suit
@@ -113,7 +117,7 @@ function WardrobePanel({
                         src={/*Keqing image*/}
                         alt='Keqing'
                         onClick={() => {
-                          setSelectedItem(UNLOCKABLE_ITEMS.find(item => item.name === 'keqing'));
+                          switchSpriteItems('keqing');
                         }}
                       />
                       Keqing
@@ -123,7 +127,7 @@ function WardrobePanel({
                         src={/*Ness image*/}
                         alt='Ness'
                         onClick={() => {
-                          setSelectedItem(UNLOCKABLE_ITEMS.find(item => item.name === 'ness'));
+                          switchSpriteItems('ness');
                         }}
                       />
                       Ness
@@ -133,7 +137,7 @@ function WardrobePanel({
                         src={/*Catboy image*/}
                         alt='Catboy'
                         onClick={() => {
-                          setSelectedItem(UNLOCKABLE_ITEMS.find(item => item.name === 'catboy'));
+                          switchSpriteItems('xiaofei');
                         }}
                       />
                       Catboy
@@ -143,23 +147,53 @@ function WardrobePanel({
                 <div className='selectSkinColorMenu'>
                   <Stack spacing={5} direction='row' align='center'>
                     <Button size='md'>
-                      <Image src={/*Skin Color 0 image*/} alt='0 skin color' onClick={} />
+                      <Image
+                        src={/*Skin Color 0 image*/}
+                        alt='0 skin color'
+                        onClick={() => {
+                          switchSpriteItems('skin0');
+                        }}
+                      />
                       Skin Color 0
                     </Button>
                     <Button size='md'>
-                      <Image src={/*Skin Color 1 image*/} alt='1 skin color' onClick={} />
+                      <Image
+                        src={/*Skin Color 1 image*/}
+                        alt='1 skin color'
+                        onClick={() => {
+                          switchSpriteItems('skin1');
+                        }}
+                      />
                       Skin Color 1
                     </Button>
                     <Button size='md'>
-                      <Image src={/*Skin Color 2 image*/} alt='2 skin color' onClick={} />
+                      <Image
+                        src={/*Skin Color 2 image*/}
+                        alt='2 skin color'
+                        onClick={() => {
+                          switchSpriteItems('skin2');
+                        }}
+                      />
                       Skin Color 2
                     </Button>
                     <Button size='md'>
-                      <Image src={/*Skin Color 3 image*/} alt='3 skin color' onClick={} />
+                      <Image
+                        src={/*Skin Color 3 image*/}
+                        alt='3 skin color'
+                        onClick={() => {
+                          switchSpriteItems('skin3');
+                        }}
+                      />
                       Skin Color 3
                     </Button>
                     <Button size='md'>
-                      <Image src={/*Skin Color 4 image*/} alt='4 skin color' onClick={} />
+                      <Image
+                        src={/*Skin Color 4 image*/}
+                        alt='4 skin color'
+                        onClick={() => {
+                          switchSpriteItems('skin4');
+                        }}
+                      />
                       Skin Color 4
                     </Button>
                   </Stack>
