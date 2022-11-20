@@ -1,0 +1,172 @@
+{"frames": {
+
+"keqing-skin2-back-walk.000.png":
+{
+	"frame": {"x":1,"y":1,"w":32,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":23,"w":32,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-back-walk.001.png":
+{
+	"frame": {"x":35,"y":1,"w":32,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":23,"w":32,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-back-walk.002.png":
+{
+	"frame": {"x":1,"y":1,"w":32,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":23,"w":32,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-back-walk.003.png":
+{
+	"frame": {"x":69,"y":1,"w":32,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":23,"w":32,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-back.png":
+{
+	"frame": {"x":1,"y":1,"w":32,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":23,"w":32,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-front-walk.000.png":
+{
+	"frame": {"x":34,"y":92,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-front-walk.001.png":
+{
+	"frame": {"x":68,"y":92,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-front-walk.002.png":
+{
+	"frame": {"x":34,"y":92,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-front-walk.003.png":
+{
+	"frame": {"x":34,"y":142,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-front.png":
+{
+	"frame": {"x":34,"y":92,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-left-walk.000.png":
+{
+	"frame": {"x":1,"y":140,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-left-walk.001.png":
+{
+	"frame": {"x":1,"y":44,"w":31,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":18,"w":31,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-left-walk.002.png":
+{
+	"frame": {"x":1,"y":140,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-left-walk.003.png":
+{
+	"frame": {"x":34,"y":44,"w":31,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":18,"w":31,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-left.png":
+{
+	"frame": {"x":1,"y":140,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-right-walk.000.png":
+{
+	"frame": {"x":68,"y":142,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-right-walk.001.png":
+{
+	"frame": {"x":67,"y":44,"w":31,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":18,"w":31,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-right-walk.002.png":
+{
+	"frame": {"x":68,"y":142,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-right-walk.003.png":
+{
+	"frame": {"x":1,"y":92,"w":31,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":18,"w":31,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"keqing-skin2-right.png":
+{
+	"frame": {"x":68,"y":142,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "keqing-skin2.png",
+	"format": "RGBA8888",
+	"size": {"w":102,"h":191},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:1193c05a097e08cefb32993417684014:09ead068a6756daa1f0dabb8e34bd4c6:48d0b356adcd1f7dc8ef683b786fd626$"
+}
+}

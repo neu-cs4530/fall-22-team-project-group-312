@@ -1,0 +1,172 @@
+{"frames": {
+
+"ness-skin2-back-walk.000.png":
+{
+	"frame": {"x":35,"y":49,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-back-walk.001.png":
+{
+	"frame": {"x":69,"y":49,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-back-walk.002.png":
+{
+	"frame": {"x":35,"y":49,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-back-walk.003.png":
+{
+	"frame": {"x":1,"y":97,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-back.png":
+{
+	"frame": {"x":35,"y":49,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-front-walk.000.png":
+{
+	"frame": {"x":35,"y":99,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-front-walk.001.png":
+{
+	"frame": {"x":68,"y":99,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-front-walk.002.png":
+{
+	"frame": {"x":35,"y":99,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-front-walk.003.png":
+{
+	"frame": {"x":1,"y":147,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-front.png":
+{
+	"frame": {"x":35,"y":99,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-left-walk.000.png":
+{
+	"frame": {"x":34,"y":149,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-left-walk.001.png":
+{
+	"frame": {"x":1,"y":1,"w":32,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":18,"w":32,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-left-walk.002.png":
+{
+	"frame": {"x":34,"y":149,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-left-walk.003.png":
+{
+	"frame": {"x":35,"y":1,"w":32,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":18,"w":32,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-left.png":
+{
+	"frame": {"x":34,"y":149,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-right-walk.000.png":
+{
+	"frame": {"x":68,"y":149,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-right-walk.001.png":
+{
+	"frame": {"x":69,"y":1,"w":32,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":18,"w":32,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-right-walk.002.png":
+{
+	"frame": {"x":68,"y":149,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-right-walk.003.png":
+{
+	"frame": {"x":1,"y":49,"w":32,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":18,"w":32,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin2-right.png":
+{
+	"frame": {"x":68,"y":149,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "ness-skin2.png",
+	"format": "RGBA8888",
+	"size": {"w":102,"h":198},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:878b341612f62c3a1a6a972004bbe4cb:2dcb8b52abe2179b0b78d50286593219:8dc11f941e5186ddd54936782281ace3$"
+}
+}
