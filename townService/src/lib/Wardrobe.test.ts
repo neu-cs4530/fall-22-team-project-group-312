@@ -14,24 +14,24 @@ describe('Wardrobe', () => {
   beforeEach(() => {
     // the other name needs to be changed later
     testSkin = {
+      id: '2',
       name: '2',
       category: 'skin',
-      spriteLocation: '',
     };
     testOutfit = {
+      id: 'other',
       name: 'other clothing',
       category: 'outfit',
-      spriteLocation: '',
     };
     unaddedSkin = {
+      id: 'unaddedskin',
       name: 'unadded skin',
       category: 'skin',
-      spriteLocation: '',
     };
     unaddedOutfit = {
+      id: 'unaddedoutfit',
       name: 'unadded outfit',
       category: 'outfit',
-      spriteLocation: '',
     };
     testWardrobe = new Wardrobe();
     // Add test items to wardrobe.

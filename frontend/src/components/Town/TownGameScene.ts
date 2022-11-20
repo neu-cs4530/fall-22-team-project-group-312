@@ -195,6 +195,10 @@ export default class TownGameScene extends Phaser.Scene {
       return;
     }
     const gameObjects = this.coveyTownController.ourPlayer.gameObjects;
+    const playerTexture =
+      this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id +
+      '-' +
+      this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
     if (gameObjects && this._cursors) {
       const speed = 175;
 
@@ -227,12 +231,12 @@ export default class TownGameScene extends Phaser.Scene {
           gameObjects.sprite.anims.stop();
           // If we were moving, pick and idle frame to use
           if (prevVelocity.x < 0) {
-            gameObjects.sprite.setTexture('atlas', 'misa-left');
+            gameObjects.sprite.setTexture(playerTexture, 'misa-left');
           } else if (prevVelocity.x > 0) {
-            gameObjects.sprite.setTexture('atlas', 'misa-right');
+            gameObjects.sprite.setTexture(playerTexture, 'misa-right');
           } else if (prevVelocity.y < 0) {
-            gameObjects.sprite.setTexture('atlas', 'misa-back');
-          } else if (prevVelocity.y > 0) gameObjects.sprite.setTexture('atlas', 'misa-front');
+            gameObjects.sprite.setTexture(playerTexture, 'misa-back');
+          } else if (prevVelocity.y > 0) gameObjects.sprite.setTexture(playerTexture, 'misa-front');
           break;
       }
 
@@ -387,8 +391,12 @@ export default class TownGameScene extends Phaser.Scene {
     // Create a sprite with physics enabled via the physics system. The image used for the sprite
     // has a bit of whitespace, so I'm using setSize & setOffset to control the size of the
     // player's body.
+    const playerTexture =
+      this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id +
+      '-' +
+      this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
     const sprite = this.physics.add
-      .sprite(spawnPoint.x, spawnPoint.y, 'atlas', 'misa-front')
+      .sprite(spawnPoint.x, spawnPoint.y, playerTexture, 'misa-front')
       .setSize(30, 40)
       .setOffset(0, 24)
       .setDepth(6);
@@ -416,12 +424,12 @@ export default class TownGameScene extends Phaser.Scene {
     this.physics.add.collider(sprite, aboveLayer);
     this.physics.add.collider(sprite, onTheWallsLayer);
 
-    // Create the player's walking animations from the texture atlas. These are stored in the global
+    // Create the player's walking animations from the texture matching the players wardrobe. These are stored in the global
     // animation manager so any sprite can access them.
     const { anims } = this;
     anims.create({
       key: 'misa-left-walk',
-      frames: anims.generateFrameNames('atlas', {
+      frames: anims.generateFrameNames(playerTexture, {
         prefix: 'misa-left-walk.',
         start: 0,
         end: 3,
@@ -432,7 +440,7 @@ export default class TownGameScene extends Phaser.Scene {
     });
     anims.create({
       key: 'misa-right-walk',
-      frames: anims.generateFrameNames('atlas', {
+      frames: anims.generateFrameNames(playerTexture, {
         prefix: 'misa-right-walk.',
         start: 0,
         end: 3,
@@ -443,7 +451,7 @@ export default class TownGameScene extends Phaser.Scene {
     });
     anims.create({
       key: 'misa-front-walk',
-      frames: anims.generateFrameNames('atlas', {
+      frames: anims.generateFrameNames(playerTexture, {
         prefix: 'misa-front-walk.',
         start: 0,
         end: 3,
@@ -454,7 +462,7 @@ export default class TownGameScene extends Phaser.Scene {
     });
     anims.create({
       key: 'misa-back-walk',
-      frames: anims.generateFrameNames('atlas', {
+      frames: anims.generateFrameNames(playerTexture, {
         prefix: 'misa-back-walk.',
         start: 0,
         end: 3,
@@ -491,9 +499,10 @@ export default class TownGameScene extends Phaser.Scene {
   }
 
   createPlayerSprites(player: PlayerController) {
+    const playerTexture = player.wardrobe.currentOutfit.id + '-' + player.wardrobe.currentSkin.id;
     if (!player.gameObjects) {
       const sprite = this.physics.add
-        .sprite(player.location.x, player.location.y, 'atlas', 'misa-front')
+        .sprite(player.location.x, player.location.y, playerTexture, 'misa-front')
         .setSize(30, 40)
         .setOffset(0, 24);
       const label = this.add.text(
