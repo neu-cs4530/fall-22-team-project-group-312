@@ -96,7 +96,7 @@ function WardrobePanel({
             <VStack divider={<StackDivider borderColor='gray.200' />} spacing={8} align='stretch'>
               <div className='previewPane'>
                 <Image
-                  src={`${spritePreview[0].name}-${spritePreview[1].name}front.png`}
+                  src={`${spritePreview[0].name}-${spritePreview[1].name}-front.png`}
                   alt='sprite'
                 />
               </div>
