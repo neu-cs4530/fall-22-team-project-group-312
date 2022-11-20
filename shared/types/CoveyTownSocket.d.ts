@@ -41,9 +41,9 @@ export interface Player {
   * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
   */
  export type WardrobeItem = {
+   id: string;
    name: string;
    category: ItemCategory;
-   spriteLocation: string;
  };
 export interface Wardrobe {
   /** The amount of currency a wardrobe currently has to be spent on WardrobeItems. */
