@@ -15,36 +15,37 @@ export type TownJoinResponse = {
   isPubliclyListed: boolean;
   /** Current state of interactables in this town */
   interactables: Interactable[];
-}
+};
 
 export type Interactable = ViewingArea | ConversationArea;
 
 export type TownSettingsUpdate = {
   friendlyName?: string;
   isPubliclyListed?: boolean;
-}
+};
 
-export type Direction = 'front' | 'back' | 'left' | 'right';
+export type Direction = "front" | "back" | "left" | "right";
 export interface Player {
   id: string;
   userName: string;
   location: PlayerLocation;
   wardrobe: Wardrobe;
-};
+}
 
 /**
  * Represents the location of a WardrobeItem on the player's body.
  */
- export type ItemCategory = 'skin' | 'outfit';
+export type ItemCategory = "skin" | "outfit";
 
- /**
-  * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
-  */
- export type WardrobeItem = {
-   name: string;
-   category: ItemCategory;
-   spriteLocation: string;
- };
+/**
+ * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
+ */
+export type WardrobeItem = {
+  name: string;
+  category: ItemCategory;
+  spriteLocation: string;
+  rarity: number;
+};
 export interface Wardrobe {
   /** The amount of currency a wardrobe currently has to be spent on WardrobeItems. */
   currency: number;
@@ -56,7 +57,7 @@ export interface Wardrobe {
   inventory: Map<ItemCategory, WardrobeItem[]>;
 }
 
-export type XY = { x: number, y: number };
+export type XY = { x: number; y: number };
 
 export interface PlayerLocation {
   /* The CENTER x coordinate of this player's location */
@@ -67,7 +68,7 @@ export interface PlayerLocation {
   rotation: Direction;
   moving: boolean;
   interactableID?: string;
-};
+}
 export type ChatMessage = {
   author: string;
   sid: string;
@@ -79,13 +80,13 @@ export interface ConversationArea {
   id: string;
   topic?: string;
   occupantsByID: string[];
-};
+}
 export interface BoundingBox {
   x: number;
   y: number;
   width: number;
   height: number;
-};
+}
 
 export interface ViewingArea {
   id: string;
