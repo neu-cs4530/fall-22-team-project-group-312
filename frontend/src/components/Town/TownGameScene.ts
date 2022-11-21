@@ -126,6 +126,21 @@ export default class TownGameScene extends Phaser.Scene {
       this._resourcePathPrefix + '/assets/atlas/atlas.json',
     );
     this.load.atlas(
+      'misa-skin0',
+      this._resourcePathPrefix + '/assets/atlas/misa-skin0.png',
+      this._resourcePathPrefix + '/assets/atlas/misa-skin0.json',
+    );
+    this.load.atlas(
+      'misa-skin1',
+      this._resourcePathPrefix + '/assets/atlas/misa-skin1.png',
+      this._resourcePathPrefix + '/assets/atlas/misa-skin1.json',
+    );
+    this.load.atlas(
+      'misa-skin4',
+      this._resourcePathPrefix + '/assets/atlas/misa-skin4.png',
+      this._resourcePathPrefix + '/assets/atlas/misa-skin4.json',
+    );
+    this.load.atlas(
       'keqing-skin0',
       this._resourcePathPrefix + '/assets/atlas/keqing-skin0.png',
       this._resourcePathPrefix + '/assets/atlas/keqing-skin0.json',
@@ -220,9 +235,9 @@ export default class TownGameScene extends Phaser.Scene {
       return;
     }
     const gameObjects = this.coveyTownController.ourPlayer.gameObjects;
-    const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
-    const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
-    const playerTexture = outfitId + '-' + skinId;
+    // const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
+    // const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
+    const playerTexture = 'misa-skin4'; //outfitId + '-' + skinId;
     if (gameObjects && this._cursors) {
       const speed = 175;
 
@@ -418,9 +433,9 @@ export default class TownGameScene extends Phaser.Scene {
     // has a bit of whitespace, so I'm using setSize & setOffset to control the size of the
     // player's body.
     console.log('id: ', this.coveyTownController.ourPlayer.wardrobe.currentOutfit);
-    const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
-    const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
-    const playerTexture: string = outfitId + '-' + skinId;
+    // const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
+    // const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
+    const playerTexture = 'misa-skin4'; //outfitId + '-' + skinId;
     const sprite = this.physics.add
       .sprite(spawnPoint.x, spawnPoint.y, playerTexture, playerTexture + '-front')
       .setSize(30, 40)
@@ -535,7 +550,7 @@ export default class TownGameScene extends Phaser.Scene {
   }
 
   createPlayerSprites(player: PlayerController) {
-    const playerTexture = player.wardrobe.currentOutfit.id + '-' + player.wardrobe.currentSkin.id;
+    const playerTexture = 'misa-skin4'; //player.wardrobe.currentOutfit.id + '-' + player.wardrobe.currentSkin.id;
     if (!player.gameObjects) {
       const sprite = this.physics.add
         .sprite(player.location.x, player.location.y, playerTexture, `${playerTexture}-front`)
