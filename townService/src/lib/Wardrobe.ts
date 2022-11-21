@@ -46,9 +46,13 @@ export default class Wardrobe {
     ) as WardrobeItem;
   }
 
-  public static getWardrobeFromJSON(jsonString: string): Wardrobe {
-    // TODO: check json parse is correcty turned into WardrobeJSOn and throw error if it doesnt work
-    const json = JSON.parse(jsonString) as WardrobeJSON;
+  public static getWardrobeFromJSON(jsonString: string): Wardrobe | undefined {
+    let json: WardrobeJSON;
+    try {
+      json = JSON.parse(jsonString) as WardrobeJSON;
+    } catch {
+      return undefined;
+    }
     const wardrobe = new Wardrobe();
     wardrobe.currency = json.currency;
     wardrobe._currentSkin = json.currentSkin;
