@@ -130,6 +130,26 @@ export default class TownGameScene extends Phaser.Scene {
       this._resourcePathPrefix + '/assets/atlas/keqing-skin0.png',
       this._resourcePathPrefix + '/assets/atlas/keqing-skin0.json',
     );
+    this.load.atlas(
+      'keqing-skin1',
+      this._resourcePathPrefix + '/assets/atlas/keqing-skin1.png',
+      this._resourcePathPrefix + '/assets/atlas/keqing-skin1.json',
+    );
+    this.load.atlas(
+      'keqing-skin2',
+      this._resourcePathPrefix + '/assets/atlas/keqing-skin2.png',
+      this._resourcePathPrefix + '/assets/atlas/keqing-skin2.json',
+    );
+    this.load.atlas(
+      'keqing-skin3',
+      this._resourcePathPrefix + '/assets/atlas/keqing-skin3.png',
+      this._resourcePathPrefix + '/assets/atlas/keqing-skin3.json',
+    );
+    this.load.atlas(
+      'keqing-skin4',
+      this._resourcePathPrefix + '/assets/atlas/keqing-skin4.png',
+      this._resourcePathPrefix + '/assets/atlas/keqing-skin4.json',
+    );
   }
 
   updatePlayers(players: PlayerController[]) {

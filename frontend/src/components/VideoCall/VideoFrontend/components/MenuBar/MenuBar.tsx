@@ -1,18 +1,17 @@
-import React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-
+import { Grid, Hidden, Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import EndCallButton from '../Buttons/EndCallButton/EndCallButton';
-import { isMobile } from '../../utils';
-import Menu from './Menu/Menu';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import React from 'react';
+import TownSettings from '../../../../Login/TownSettings';
 import useRoomState from '../../hooks/useRoomState/useRoomState';
 import useVideoContext from '../../hooks/useVideoContext/useVideoContext';
-import { Typography, Grid, Hidden } from '@material-ui/core';
+import { isMobile } from '../../utils';
+import EndCallButton from '../Buttons/EndCallButton/EndCallButton';
 import ToggleAudioButton from '../Buttons/ToggleAudioButton/ToggleAudioButton';
 import ToggleChatButton from '../Buttons/ToggleChatButton/ToggleChatButton';
 import ToggleVideoButton from '../Buttons/ToggleVideoButton/ToggleVideoButton';
 import ToggleScreenShareButton from '../Buttons/ToogleScreenShareButton/ToggleScreenShareButton';
-import TownSettings from '../../../../Login/TownSettings';
+import Menu from './Menu/Menu';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,21 +31,21 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     screenShareBanner: {
-      position: 'fixed',
-      zIndex: 8,
-      bottom: `${theme.footerHeight}px`,
-      left: 0,
-      right: 0,
-      height: '104px',
-      background: 'rgba(0, 0, 0, 0.5)',
+      'position': 'fixed',
+      'zIndex': 8,
+      'bottom': `${theme.footerHeight}px`,
+      'left': 0,
+      'right': 0,
+      'height': '104px',
+      'background': 'rgba(0, 0, 0, 0.5)',
       '& h6': {
         color: 'white',
       },
       '& button': {
-        background: 'white',
-        color: theme.brand,
-        border: `2px solid ${theme.brand}`,
-        margin: '0 2em',
+        'background': 'white',
+        'color': theme.brand,
+        'border': `2px solid ${theme.brand}`,
+        'margin': '0 2em',
         '&:hover': {
           color: '#600101',
           border: `2px solid #600101`,
@@ -60,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
         display: 'none',
       },
     },
-  })
+  }),
 );
 
 export default function MenuBar() {
@@ -73,19 +72,27 @@ export default function MenuBar() {
   return (
     <>
       {isSharingScreen && (
-        <Grid container justifyContent="center" alignItems="center" className={classes.screenShareBanner}>
-          <Typography variant="h6">You are sharing your screen</Typography>
+        <Grid
+          container
+          justifyContent='center'
+          alignItems='center'
+          className={classes.screenShareBanner}>
+          <Typography variant='h6'>You are sharing your screen</Typography>
           <Button onClick={() => toggleScreenShare()}>Stop Sharing</Button>
         </Grid>
       )}
       <footer className={classes.container}>
-        <Grid container justifyContent="space-around" alignItems="center">
+        <Grid container justifyContent='space-around' alignItems='center'>
           <Grid item>
-            <Grid container justifyContent="center">
-            {process.env.REACT_APP_DISABLE_TWILIO_CONVERSATIONS !== 'true' && <ToggleChatButton />}
+            <Grid container justifyContent='center'>
+              {process.env.REACT_APP_DISABLE_TWILIO_CONVERSATIONS !== 'true' && (
+                <ToggleChatButton />
+              )}
               <ToggleAudioButton disabled={isReconnecting} />
               <ToggleVideoButton disabled={isReconnecting} />
-              {!isSharingScreen && !isMobile && <ToggleScreenShareButton disabled={isReconnecting} />}
+              {!isSharingScreen && !isMobile && (
+                <ToggleScreenShareButton disabled={isReconnecting} />
+              )}
               <Hidden smDown>
                 <Menu />
                 <TownSettings />
@@ -95,7 +102,7 @@ export default function MenuBar() {
           </Grid>
           <Hidden smDown>
             <Grid style={{ flex: 1 }}>
-              <Grid container justifyContent="flex-end">
+              <Grid container justifyContent='flex-end'>
                 <EndCallButton />
               </Grid>
             </Grid>

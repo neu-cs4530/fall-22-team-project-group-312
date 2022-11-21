@@ -12,11 +12,9 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  DEFAULT_ITEMS,
-  UNLOCKABLE_ITEMS,
-} from '../../../../../../../../townService/src/lib/WardrobeItem';
+import { DEFAULT_ITEMS } from '../../../../../../../../townService/src/lib/WardrobeItem';
 import TownController from '../../../../../../classes/TownController';
+import useTownController from '../../../../../../hooks/useTownController';
 import { WardrobeItem } from '../../../../../../types/CoveyTownSocket';
 /**
  * The wardrobe panel inside the pop up modal. This shows all the available outfits and
@@ -35,22 +33,14 @@ function WardrobePanel({
   onClose: any;
   coveyTownController: TownController;
 }) {
-  const initalOutfit: WardrobeItem = {
-    id: 'misa',
-    name: 'Default Outfit',
-    category: 'outfit',
-  };
-  const initialSkin: WardrobeItem = {
-    id: 'skin1',
-    name: 'skin1',
-    category: 'skin',
-  };
-  const initalSprite: WardrobeItem[] = [initalOutfit, initialSkin];
-  const [spritePreview, setSpritePreview] = useState<WardrobeItem[]>(initalSprite);
+  const town = useTownController();
+  const initalOutfit = town.ourPlayer.wardrobe.currentOutfit;
+  const initialSkin = town.ourPlayer.wardrobe.currentSkin;
 
-  // useEffect(() => {
-
-  // });
+  const [spritePreview, setSpritePreview] = useState<WardrobeItem[]>([initalOutfit, initialSkin]);
+  useEffect(() => {
+    console.log('Sprite preview changed.');
+  });
 
   const closeWardrobe = useCallback(() => {
     onClose();
@@ -67,7 +57,7 @@ function WardrobePanel({
       const currentOutfit = spritePreview[0];
       const newSpritePreview: WardrobeItem[] = [
         currentOutfit,
-        UNLOCKABLE_ITEMS.find(item => item.id === itemID) as WardrobeItem,
+        DEFAULT_ITEMS.find(item => item.id === itemID) as WardrobeItem,
       ];
       setSpritePreview(newSpritePreview);
     } else {
@@ -80,6 +70,14 @@ function WardrobePanel({
     }
   }
 
+  function unlocked(itemID: string): boolean {
+    if (town.ourPlayer.wardrobe.inventory.get('outfit')?.find(o => o.name === itemID)) {
+      return true;
+    }
+    return false;
+  }
+
+  const prefix = 'frontend/public/assets/atlas/';
   /**
    * modal
    * left side of the preview png
@@ -100,9 +98,8 @@ function WardrobePanel({
             <VStack divider={<StackDivider borderColor='gray.200' />} spacing={8} align='stretch'>
               <div className='previewPane'>
                 <Image
-                  // frontend/public/assets/atlas/${spritePreview[0].name}-${spritePreview[1].name}/
-                  //${spritePreview[0].name}-${spritePreview[1].name}-front.png
-                  src={`${spritePreview[0].name}-${spritePreview[1].name}-front.png`}
+                  src={`${prefix}${spritePreview[0].name}-${spritePreview[1].name}/
+                  //${spritePreview[0].name}-${spritePreview[1].name}-front.png`}
                   alt='sprite'
                 />
               </div>
@@ -119,7 +116,7 @@ function WardrobePanel({
                       />
                       Misa Original
                     </Button>
-                    <Button size='md'>
+                    <Button disabled={unlocked('bday')} size='md'>
                       <Image
                         src={'bday-skin1.png'}
                         alt='Birthday Suit'
@@ -129,7 +126,7 @@ function WardrobePanel({
                       />
                       Birthday Suit
                     </Button>
-                    <Button size='md'>
+                    <Button disabled={unlocked('keqing')} size='md'>
                       <Image
                         src={'keqing-skin1.png'}
                         alt='Keqing'
@@ -139,7 +136,7 @@ function WardrobePanel({
                       />
                       Keqing
                     </Button>
-                    <Button size='md'>
+                    <Button disabled={unlocked('ness')} size='md'>
                       <Image
                         src={'ness-skin1.png'}
                         alt='Ness'
@@ -149,7 +146,7 @@ function WardrobePanel({
                       />
                       Ness
                     </Button>
-                    <Button size='md'>
+                    <Button disabled={unlocked('xiaofei')} size='md'>
                       <Image
                         src={'ness-skin1.png'}
                         alt='Catboy'
