@@ -126,4 +126,17 @@ describe('Wardrobe', () => {
       expect(testWardrobe.addWardrobeItem(unaddedOutfit)).toBe(false);
     });
   });
+
+  describe('exportWardrobe', () => {
+    it('returns the correct item with no unlocked items', () => {
+      expect(new Wardrobe().exportWardrobe()).toEqual(
+        '{"currency":0,' +
+          '"currentSkin":{"name":"0","category":"skin","spriteLocation":""},' +
+          '"currentOutfit":{"name":"defualt outfit","category":"outfit","spriteLocation":""},' +
+          '"inventory":[' +
+          '{"name":"defualt outfit","category":"outfit","spriteLocation":""}]' +
+          '}',
+      );
+    });
+  });
 });

@@ -6,6 +6,13 @@ export const CURRENCY_GAIN_RATE_FROM_INTERACTABLE_AREA = 2;
 export const CURRENCY_GAIN_RATE_FROM_VIEWING_AREA = 2;
 export const CURRENCY_GAIN_RATE_FROM_PROXIMITY = 1;
 
+export interface WardrobeJSON {
+  currency: number;
+  currentSkin: WardrobeItem;
+  currentOutfit: WardrobeItem;
+  inventory: WardrobeItem[];
+}
+
 /**
  * Serves as an inventory for a Player that contains their current currency, any WardrobeItems they
  * have acquired, and the information for the WardrobeItems they are currently wearing.
@@ -37,6 +44,26 @@ export default class Wardrobe {
     this._currentOutfit = DEFAULT_ITEMS.find(
       (item: WardrobeItem) => item.name === 'defualt outfit',
     ) as WardrobeItem;
+  }
+
+  public static getWardrobeFromJSON(jsonString: string): Wardrobe {
+    // TODO: check json parse is correcty turned into WardrobeJSOn and throw error if it doesnt work
+    const json = JSON.parse(jsonString) as WardrobeJSON;
+    const wardrobe = new Wardrobe();
+    wardrobe.currency = json.currency;
+    wardrobe._currentSkin = json.currentSkin;
+    wardrobe._currentOutfit = json.currentOutfit;
+    json.inventory.forEach(item => wardrobe.addWardrobeItem(item));
+    return wardrobe;
+  }
+
+  public exportWardrobe(): string {
+    return JSON.stringify({
+      currency: this._currency,
+      currentSkin: this._currentSkin,
+      currentOutfit: this.currentOutfit,
+      inventory: this._inventory.get('outfit') as WardrobeItem[],
+    });
   }
 
   // Returns the currency in the wardrobe.
