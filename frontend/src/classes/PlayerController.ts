@@ -78,14 +78,13 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
       sprite.setY(this.location.y);
       label.setX(sprite.body.position.x);
       label.setY(sprite.body.position.y - 20);
+      const currentSprite = this.wardrobe.currentOutfit.id + '-' + this.wardrobe.currentSkin.id;
       if (this.location.moving) {
-        sprite.anims.play(`misa-${this.location.rotation}-walk`, true);
+        // sprite.anims.play(`misa-${this.location.rotation}-walk`, true);
+        sprite.anims.play(`${currentSprite}-${this.location.rotation}-walk`, true);
       } else {
         sprite.anims.stop();
-        sprite.setTexture(
-          this.wardrobe.currentOutfit.id + '-' + this.wardrobe.currentSkin.id,
-          `misa-${this.location.rotation}`,
-        );
+        sprite.setTexture(currentSprite, `${currentSprite}-${this.location.rotation}`);
       }
     }
   }
