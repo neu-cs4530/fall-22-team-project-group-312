@@ -35,7 +35,7 @@ export default class Wardrobe {
       (item: WardrobeItem) => item.name === '0',
     ) as WardrobeItem;
     this._currentOutfit = DEFAULT_ITEMS.find(
-      (item: WardrobeItem) => item.name === 'defualt outfit',
+      (item: WardrobeItem) => item.name === 'default outfit',
     ) as WardrobeItem;
   }
 
