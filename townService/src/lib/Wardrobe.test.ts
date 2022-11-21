@@ -5,6 +5,7 @@ import { WardrobeItem } from '../types/CoveyTownSocket';
 describe('Wardrobe', () => {
   // A valid Wardrobe and WardrobeItem(s) to be reused within the tests
   let testWardrobe: Wardrobe;
+  let emptyWardrobe: Wardrobe;
   let testSkin: WardrobeItem;
   let testOutfit: WardrobeItem;
   let unaddedSkin: WardrobeItem;
@@ -37,11 +38,16 @@ describe('Wardrobe', () => {
     // Add test items to wardrobe.
     testWardrobe.addWardrobeItem(testSkin);
     testWardrobe.addWardrobeItem(testOutfit);
+    emptyWardrobe = new Wardrobe();
   });
 
   describe('Default Items', () => {
-    it('Ensures default items have been properly added', () => {
-      DEFAULT_ITEMS.forEach(item => expect(testWardrobe.addWardrobeItem(item)).toBe(false));
+    it('Ensures default items have been properly added to the inventory', () => {
+      // checks that every item in DEFAULT_ITEMS is in the wardrobe inventory
+      DEFAULT_ITEMS.forEach(item => {
+        const inventory = emptyWardrobe.inventory.get(item.category) as WardrobeItem[];
+        expect(inventory.findIndex(wardrobeItem => wardrobeItem === item) !== -1).toBe(true);
+      });
     });
   });
 
@@ -63,8 +69,7 @@ describe('Wardrobe', () => {
 
   describe('currentSkin', () => {
     it('gets the current Skin', () => {
-      const testCurrentSkin = testWardrobe.currentSkin;
-      expect(testWardrobe.currentSkin).toEqual(testCurrentSkin);
+      expect(emptyWardrobe.currentSkin).toEqual(DEFAULT_ITEMS[1]);
     });
     it('sets the current skin to something in the Wardrobe', () => {
       testWardrobe.currentSkin = testSkin;
@@ -83,8 +88,7 @@ describe('Wardrobe', () => {
   });
   describe('currentOutfit', () => {
     it('gets the current outfit', () => {
-      const testCurrentOutfit = testWardrobe.currentOutfit;
-      expect(testWardrobe.currentOutfit).toEqual(testCurrentOutfit);
+      expect(emptyWardrobe.currentOutfit).toEqual(DEFAULT_ITEMS[0]);
     });
     it('sets the current eye color to a different eye color', () => {
       testWardrobe.currentOutfit = testOutfit;
@@ -99,13 +103,6 @@ describe('Wardrobe', () => {
       expect(() => {
         testWardrobe.currentOutfit = testSkin;
       }).toThrowError();
-    });
-  });
-
-  describe('inventory', () => {
-    it('gets the inventory', () => {
-      const testCurrentInventory = testWardrobe.inventory;
-      expect(testWardrobe.inventory).toEqual(testCurrentInventory);
     });
   });
 
