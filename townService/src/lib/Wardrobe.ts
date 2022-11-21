@@ -34,7 +34,7 @@ export default class Wardrobe {
     this._currentSkin = DEFAULT_ITEMS.find(
       (item: WardrobeItem) => item.id === 'skin1',
     ) as WardrobeItem;
-    this._currentOutfit = UNLOCKABLE_ITEMS.find(
+    this._currentOutfit = DEFAULT_ITEMS.find(
       (item: WardrobeItem) => item.id === 'misa',
     ) as WardrobeItem;
   }

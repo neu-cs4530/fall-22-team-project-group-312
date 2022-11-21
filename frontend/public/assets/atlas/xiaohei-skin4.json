@@ -1,6 +1,6 @@
 {"frames": {
 
-"xiaohei-skin4-back-walk.000.png":
+"xiaohei-skin4-back-walk.000":
 {
 	"frame": {"x":0,"y":0,"w":32,"h":64},
 	"rotated": false,
@@ -8,7 +8,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-back-walk.001.png":
+"xiaohei-skin4-back-walk.001":
 {
 	"frame": {"x":0,"y":64,"w":32,"h":64},
 	"rotated": false,
@@ -16,7 +16,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-back-walk.002.png":
+"xiaohei-skin4-back-walk.002":
 {
 	"frame": {"x":0,"y":128,"w":32,"h":64},
 	"rotated": false,
@@ -24,7 +24,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-back-walk.003.png":
+"xiaohei-skin4-back-walk.003":
 {
 	"frame": {"x":0,"y":192,"w":32,"h":64},
 	"rotated": false,
@@ -32,7 +32,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-back.png":
+"xiaohei-skin4-back":
 {
 	"frame": {"x":0,"y":256,"w":32,"h":64},
 	"rotated": false,
@@ -40,7 +40,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-front-walk.000.png":
+"xiaohei-skin4-front-walk.000":
 {
 	"frame": {"x":0,"y":320,"w":32,"h":64},
 	"rotated": false,
@@ -48,7 +48,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-front-walk.001.png":
+"xiaohei-skin4-front-walk.001":
 {
 	"frame": {"x":0,"y":384,"w":32,"h":64},
 	"rotated": false,
@@ -56,7 +56,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-front-walk.002.png":
+"xiaohei-skin4-front-walk.002":
 {
 	"frame": {"x":0,"y":448,"w":32,"h":64},
 	"rotated": false,
@@ -64,7 +64,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-front-walk.003.png":
+"xiaohei-skin4-front-walk.003":
 {
 	"frame": {"x":0,"y":512,"w":32,"h":64},
 	"rotated": false,
@@ -72,7 +72,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-front.png":
+"xiaohei-skin4-front":
 {
 	"frame": {"x":0,"y":576,"w":32,"h":64},
 	"rotated": false,
@@ -80,7 +80,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-left-walk.000.png":
+"xiaohei-skin4-left-walk.000":
 {
 	"frame": {"x":0,"y":640,"w":32,"h":64},
 	"rotated": false,
@@ -88,7 +88,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-left-walk.001.png":
+"xiaohei-skin4-left-walk.001":
 {
 	"frame": {"x":0,"y":704,"w":32,"h":64},
 	"rotated": false,
@@ -96,7 +96,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-left-walk.002.png":
+"xiaohei-skin4-left-walk.002":
 {
 	"frame": {"x":0,"y":768,"w":32,"h":64},
 	"rotated": false,
@@ -104,7 +104,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-left-walk.003.png":
+"xiaohei-skin4-left-walk.003":
 {
 	"frame": {"x":0,"y":832,"w":32,"h":64},
 	"rotated": false,
@@ -112,7 +112,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-left.png":
+"xiaohei-skin4-left":
 {
 	"frame": {"x":0,"y":896,"w":32,"h":64},
 	"rotated": false,
@@ -120,7 +120,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-right-walk.000.png":
+"xiaohei-skin4-right-walk.000":
 {
 	"frame": {"x":0,"y":960,"w":32,"h":64},
 	"rotated": false,
@@ -128,7 +128,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-right-walk.001.png":
+"xiaohei-skin4-right-walk.001":
 {
 	"frame": {"x":0,"y":1024,"w":32,"h":64},
 	"rotated": false,
@@ -136,7 +136,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-right-walk.002.png":
+"xiaohei-skin4-right-walk.002":
 {
 	"frame": {"x":0,"y":1088,"w":32,"h":64},
 	"rotated": false,
@@ -144,7 +144,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-right-walk.003.png":
+"xiaohei-skin4-right-walk.003":
 {
 	"frame": {"x":0,"y":1152,"w":32,"h":64},
 	"rotated": false,
@@ -152,7 +152,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin4-right.png":
+"xiaohei-skin4-right":
 {
 	"frame": {"x":0,"y":1216,"w":32,"h":64},
 	"rotated": false,

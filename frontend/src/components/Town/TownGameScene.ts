@@ -235,8 +235,8 @@ export default class TownGameScene extends Phaser.Scene {
       return;
     }
     const gameObjects = this.coveyTownController.ourPlayer.gameObjects;
-    // const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
-    // const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
+    //const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
+    //const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
     const playerTexture = 'misa-skin4'; //outfitId + '-' + skinId;
     if (gameObjects && this._cursors) {
       const speed = 175;
@@ -433,8 +433,8 @@ export default class TownGameScene extends Phaser.Scene {
     // has a bit of whitespace, so I'm using setSize & setOffset to control the size of the
     // player's body.
     console.log('id: ', this.coveyTownController.ourPlayer.wardrobe.currentOutfit);
-    // const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
-    // const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
+    //const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
+    //const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
     const playerTexture = 'misa-skin4'; //outfitId + '-' + skinId;
     const sprite = this.physics.add
       .sprite(spawnPoint.x, spawnPoint.y, playerTexture, playerTexture + '-front')
