@@ -1,4 +1,4 @@
-import { DEFAULT_ITEMS } from './WardrobeItem';
+import { DEFAULT_ITEMS, UNLOCKABLE_ITEMS } from './WardrobeItem';
 import { WardrobeItem, ItemCategory } from '../types/CoveyTownSocket';
 
 export const CURRENCY_GAIN_FROM_CHAT = 1;
@@ -34,9 +34,8 @@ export default class Wardrobe {
     this._currentSkin = DEFAULT_ITEMS.find(
       (item: WardrobeItem) => item.id === 'skin1',
     ) as WardrobeItem;
-    // changing for testing purposes
-    this._currentOutfit = DEFAULT_ITEMS.find(
-      (item: WardrobeItem) => item.id === 'keqing',
+    this._currentOutfit = UNLOCKABLE_ITEMS.find(
+      (item: WardrobeItem) => item.id === 'misa',
     ) as WardrobeItem;
   }
 

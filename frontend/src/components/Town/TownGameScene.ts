@@ -417,7 +417,7 @@ export default class TownGameScene extends Phaser.Scene {
     // Create a sprite with physics enabled via the physics system. The image used for the sprite
     // has a bit of whitespace, so I'm using setSize & setOffset to control the size of the
     // player's body.
-    console.log('id: ', this.coveyTownController.ourPlayer.wardrobe);
+    console.log('id: ', this.coveyTownController.ourPlayer.wardrobe.currentOutfit);
     const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
     const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
     const playerTexture: string = outfitId + '-' + skinId;
