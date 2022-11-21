@@ -1,0 +1,180 @@
+{"frames": {
+
+"ness-skin0-back-walk.000.png":
+{
+	"frame": {"x":39,"y":1,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-back-walk.001.png":
+{
+	"frame": {"x":39,"y":51,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-back-walk.002.png":
+{
+	"frame": {"x":39,"y":101,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-back-walk.003.png":
+{
+	"frame": {"x":39,"y":151,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-back.png":
+{
+	"frame": {"x":39,"y":201,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-front-walk.000.png":
+{
+	"frame": {"x":39,"y":551,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-front-walk.001.png":
+{
+	"frame": {"x":39,"y":601,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-front-walk.002.png":
+{
+	"frame": {"x":39,"y":651,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-front-walk.003.png":
+{
+	"frame": {"x":39,"y":701,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-front.png":
+{
+	"frame": {"x":39,"y":751,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-left-walk.000.png":
+{
+	"frame": {"x":39,"y":251,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-left-walk.001.png":
+{
+	"frame": {"x":39,"y":801,"w":32,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":18,"w":32,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-left-walk.002.png":
+{
+	"frame": {"x":39,"y":301,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-left-walk.003.png":
+{
+	"frame": {"x":39,"y":849,"w":32,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":18,"w":32,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-left.png":
+{
+	"frame": {"x":39,"y":351,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-right-walk.000.png":
+{
+	"frame": {"x":39,"y":401,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-right-walk.001.png":
+{
+	"frame": {"x":39,"y":897,"w":32,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":18,"w":32,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-right-walk.002.png":
+{
+	"frame": {"x":39,"y":451,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-right-walk.003.png":
+{
+	"frame": {"x":39,"y":945,"w":32,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":18,"w":32,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-right.png":
+{
+	"frame": {"x":39,"y":501,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0.png":
+{
+	"frame": {"x":1,"y":1,"w":36,"h":992},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":1,"w":36,"h":992},
+	"sourceSize": {"w":36,"h":993}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "ness-skin0.png",
+	"format": "RGBA8888",
+	"size": {"w":72,"h":994},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:a4afcae064c4c6a56c780b6fd7076409:6aa62aebe36c29a1126322861068035d:befe5203ddd8e148cade44653bd63aee$"
+}
+}

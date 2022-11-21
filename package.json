@@ -4,8 +4,8 @@
     "description": "Development setup",
     "main": "index.js",
     "scripts": {
-      "install": "cd townService && CI= NODE_ENV=development npm install && CI= NODE_ENV=development npm run prestart && cd ../frontend && CI= NODE_ENV=development npm install && CI= NODE_ENV=development npm run prestart && cd ../shared && CI= NODE_ENV=development npm install",
-      "heroku-postbuild": "cd townService && CI= NODE_ENV=development npm install && npm run build",
+      "install": "cd townService && CI= NODE_ENV=development CI= NODE_ENV=development npm install && CI= NODE_ENV=development CI= NODE_ENV=development npm run prestart && cd ../frontend && CI= NODE_ENV=development CI= NODE_ENV=development npm install && CI= NODE_ENV=development CI= NODE_ENV=development npm run prestart && cd ../shared && CI= NODE_ENV=development CI= NODE_ENV=development npm install",
+      "heroku-postbuild": "cd townService && CI= NODE_ENV=development CI= NODE_ENV=development npm install && npm run build",
         "run-townservice": "heroku local -p 3001 web",
         "lint": "cd townService && npm run-script lint && cd ../frontend && npm run-script lint && cd ../shared && npm run-script lint",
 		"zip": "npm-pack-zip"

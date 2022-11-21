@@ -32,10 +32,11 @@ export default class Wardrobe {
     DEFAULT_ITEMS.forEach((item: WardrobeItem) => this.addWardrobeItem(item));
     // Set the default items to the currently worn items in the wardrobe.
     this._currentSkin = DEFAULT_ITEMS.find(
-      (item: WardrobeItem) => item.name === '0',
+      (item: WardrobeItem) => item.id === 'skin1',
     ) as WardrobeItem;
     this._currentOutfit = DEFAULT_ITEMS.find(
-      (item: WardrobeItem) => item.name === 'defualt outfit',
+      // TODO: change this to accept an id
+      (item: WardrobeItem) => item.name === 'default outfit',
     ) as WardrobeItem;
   }
 

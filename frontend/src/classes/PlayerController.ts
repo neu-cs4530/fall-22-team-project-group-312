@@ -1,8 +1,6 @@
 import EventEmitter from 'events';
 import TypedEmitter from 'typed-emitter';
-import { Player as PlayerModel, PlayerLocation } from '../types/CoveyTownSocket';
-import { Wardrobe } from '../types/CoveyTownSocket';
-import mergeImages from 'merge-images';
+import { Player as PlayerModel, PlayerLocation, Wardrobe } from '../types/CoveyTownSocket';
 
 export type PlayerEvents = {
   movement: (newLocation: PlayerLocation) => void;
@@ -84,15 +82,12 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
         sprite.anims.play(`misa-${this.location.rotation}-walk`, true);
       } else {
         sprite.anims.stop();
-        sprite.setTexture('atlas', `misa-${this.location.rotation}`);
+        sprite.setTexture(
+          this.wardrobe.currentOutfit.id + '-' + this.wardrobe.currentSkin.id,
+          `misa-${this.location.rotation}`,
+        );
       }
     }
-  }
-
-  /* Creates and stores sprite objects based on the currently equipped wardrobe items
-  of the player. */
-  private async _generateSprite() {
-    // Signifies the folder where each sprite is held
   }
 
   static fromPlayerModel(modelPlayer: PlayerModel): PlayerController {
