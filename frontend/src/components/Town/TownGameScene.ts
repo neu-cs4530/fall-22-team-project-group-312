@@ -125,6 +125,11 @@ export default class TownGameScene extends Phaser.Scene {
       this._resourcePathPrefix + '/assets/atlas/atlas.png',
       this._resourcePathPrefix + '/assets/atlas/atlas.json',
     );
+    this.load.atlas(
+      'keqing-skin0',
+      this._resourcePathPrefix + '/assets/atlas/keqing-skin0.png',
+      this._resourcePathPrefix + '/assets/atlas/keqing-skin0.json',
+    );
   }
 
   updatePlayers(players: PlayerController[]) {
@@ -195,10 +200,9 @@ export default class TownGameScene extends Phaser.Scene {
       return;
     }
     const gameObjects = this.coveyTownController.ourPlayer.gameObjects;
-    const playerTexture =
-      this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id +
-      '-' +
-      this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
+    const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
+    const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
+    const playerTexture = outfitId + '-' + skinId;
     if (gameObjects && this._cursors) {
       const speed = 175;
 
@@ -212,31 +216,33 @@ export default class TownGameScene extends Phaser.Scene {
       switch (primaryDirection) {
         case 'left':
           body.setVelocityX(-speed);
-          gameObjects.sprite.anims.play('misa-left-walk', true);
+          // gameObjects.sprite.anims.play('misa-left-walk', true);
+          gameObjects.sprite.anims.play(`${playerTexture}-left-walk`, true);
           break;
         case 'right':
           body.setVelocityX(speed);
-          gameObjects.sprite.anims.play('misa-right-walk', true);
+          gameObjects.sprite.anims.play(`${playerTexture}-right-walk`, true);
           break;
         case 'front':
           body.setVelocityY(speed);
-          gameObjects.sprite.anims.play('misa-front-walk', true);
+          gameObjects.sprite.anims.play(`${playerTexture}-front-walk`, true);
           break;
         case 'back':
           body.setVelocityY(-speed);
-          gameObjects.sprite.anims.play('misa-back-walk', true);
+          gameObjects.sprite.anims.play(`${playerTexture}-back-walk`, true);
           break;
         default:
           // Not moving
           gameObjects.sprite.anims.stop();
           // If we were moving, pick and idle frame to use
           if (prevVelocity.x < 0) {
-            gameObjects.sprite.setTexture(playerTexture, 'misa-left');
+            gameObjects.sprite.setTexture(playerTexture, `${playerTexture}-left`);
           } else if (prevVelocity.x > 0) {
-            gameObjects.sprite.setTexture(playerTexture, 'misa-right');
+            gameObjects.sprite.setTexture(playerTexture, `${playerTexture}-right`);
           } else if (prevVelocity.y < 0) {
-            gameObjects.sprite.setTexture(playerTexture, 'misa-back');
-          } else if (prevVelocity.y > 0) gameObjects.sprite.setTexture(playerTexture, 'misa-front');
+            gameObjects.sprite.setTexture(playerTexture, `${playerTexture}-back`);
+          } else if (prevVelocity.y > 0)
+            gameObjects.sprite.setTexture(playerTexture, `${playerTexture}-front`);
           break;
       }
 
@@ -391,12 +397,12 @@ export default class TownGameScene extends Phaser.Scene {
     // Create a sprite with physics enabled via the physics system. The image used for the sprite
     // has a bit of whitespace, so I'm using setSize & setOffset to control the size of the
     // player's body.
-    const playerTexture =
-      this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id +
-      '-' +
-      this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
+    console.log('id: ', this.coveyTownController.ourPlayer.wardrobe);
+    const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
+    const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
+    const playerTexture: string = outfitId + '-' + skinId;
     const sprite = this.physics.add
-      .sprite(spawnPoint.x, spawnPoint.y, playerTexture, 'misa-front')
+      .sprite(spawnPoint.x, spawnPoint.y, playerTexture, playerTexture + '-front')
       .setSize(30, 40)
       .setOffset(0, 24)
       .setDepth(6);
@@ -428,9 +434,11 @@ export default class TownGameScene extends Phaser.Scene {
     // animation manager so any sprite can access them.
     const { anims } = this;
     anims.create({
-      key: 'misa-left-walk',
+      // key: 'misa-left-walk',
+      key: `${playerTexture}-left-walk`,
       frames: anims.generateFrameNames(playerTexture, {
-        prefix: 'misa-left-walk.',
+        // prefix: 'misa-left-walk.',
+        prefix: `${playerTexture}-left-walk.`,
         start: 0,
         end: 3,
         zeroPad: 3,
@@ -439,9 +447,11 @@ export default class TownGameScene extends Phaser.Scene {
       repeat: -1,
     });
     anims.create({
-      key: 'misa-right-walk',
+      // key: 'misa-right-walk',
+      key: `${playerTexture}-right-walk`,
       frames: anims.generateFrameNames(playerTexture, {
-        prefix: 'misa-right-walk.',
+        // prefix: 'misa-right-walk.',
+        prefix: `${playerTexture}-right-walk.`,
         start: 0,
         end: 3,
         zeroPad: 3,
@@ -450,9 +460,11 @@ export default class TownGameScene extends Phaser.Scene {
       repeat: -1,
     });
     anims.create({
-      key: 'misa-front-walk',
+      // key: 'misa-front-walk',
+      key: `${playerTexture}-front-walk`,
       frames: anims.generateFrameNames(playerTexture, {
-        prefix: 'misa-front-walk.',
+        // prefix: 'misa-front-walk.',
+        prefix: `${playerTexture}-front-walk.`,
         start: 0,
         end: 3,
         zeroPad: 3,
@@ -461,9 +473,11 @@ export default class TownGameScene extends Phaser.Scene {
       repeat: -1,
     });
     anims.create({
-      key: 'misa-back-walk',
+      // key: 'misa-back-walk',
+      key: `${playerTexture}-back-walk`,
       frames: anims.generateFrameNames(playerTexture, {
-        prefix: 'misa-back-walk.',
+        // prefix: 'misa-back-walk.',
+        prefix: `${playerTexture}-back-walk.`,
         start: 0,
         end: 3,
         zeroPad: 3,
@@ -504,7 +518,7 @@ export default class TownGameScene extends Phaser.Scene {
     const playerTexture = player.wardrobe.currentOutfit.id + '-' + player.wardrobe.currentSkin.id;
     if (!player.gameObjects) {
       const sprite = this.physics.add
-        .sprite(player.location.x, player.location.y, playerTexture, 'misa-front')
+        .sprite(player.location.x, player.location.y, playerTexture, `${playerTexture}-front`)
         .setSize(30, 40)
         .setOffset(0, 24);
       const label = this.add.text(
