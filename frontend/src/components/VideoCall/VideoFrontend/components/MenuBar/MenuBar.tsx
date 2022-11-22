@@ -7,6 +7,7 @@ import useRoomState from '../../hooks/useRoomState/useRoomState';
 import useVideoContext from '../../hooks/useVideoContext/useVideoContext';
 import { isMobile } from '../../utils';
 import EndCallButton from '../Buttons/EndCallButton/EndCallButton';
+import WardrobeButton from '../Buttons/OpenWardrobeButton/OpenWardrobeButton';
 import ToggleAudioButton from '../Buttons/ToggleAudioButton/ToggleAudioButton';
 import ToggleChatButton from '../Buttons/ToggleChatButton/ToggleChatButton';
 import ToggleVideoButton from '../Buttons/ToggleVideoButton/ToggleVideoButton';
@@ -96,7 +97,7 @@ export default function MenuBar() {
               <Hidden smDown>
                 <Menu />
                 <TownSettings />
-                {/* TODO: put 'Change Outfit' button here */}
+                <WardrobeButton />
               </Hidden>
             </Grid>
           </Grid>

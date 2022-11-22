@@ -12,10 +12,10 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { DEFAULT_ITEMS } from '../../../../../../../../townService/src/lib/WardrobeItem';
 import TownController from '../../../../../../classes/TownController';
 import useTownController from '../../../../../../hooks/useTownController';
 import { WardrobeItem } from '../../../../../../types/CoveyTownSocket';
+
 /**
  * The wardrobe panel inside the pop up modal. This shows all the available outfits and
  * skin colors that the player can style their avatar with.
@@ -57,24 +57,29 @@ function WardrobePanel({
       const currentOutfit = spritePreview[0];
       const newSpritePreview: WardrobeItem[] = [
         currentOutfit,
-        DEFAULT_ITEMS.find(item => item.id === itemID) as WardrobeItem,
+        town.ourPlayer.wardrobe.inventory
+          .get('skin')
+          ?.find((item: WardrobeItem) => item.id === itemID) as WardrobeItem,
       ];
       setSpritePreview(newSpritePreview);
     } else {
       const currentSkin = spritePreview[1];
       const newSpritePreview: WardrobeItem[] = [
-        DEFAULT_ITEMS.find(item => item.id === itemID) as WardrobeItem,
+        town.ourPlayer.wardrobe.inventory
+          .get('skin')
+          ?.find((item: WardrobeItem) => item.id === itemID) as WardrobeItem,
         currentSkin,
       ];
       setSpritePreview(newSpritePreview);
     }
   }
 
-  function unlocked(itemID: string): boolean {
-    if (town.ourPlayer.wardrobe.inventory.get('outfit')?.find(o => o.name === itemID)) {
-      return true;
-    }
-    return false;
+  function isOutfitUnlocked(itemID: string): boolean {
+    console.log('wadrobe: ', town.ourPlayer.wardrobe);
+    console.log('inventory: ', town.ourPlayer.wardrobe.inventory);
+    return (
+      town.ourPlayer.wardrobe.inventory.get('outfit')?.find(o => o.name === itemID) !== undefined
+    );
   }
 
   const prefix = 'frontend/public/assets/atlas/';
@@ -116,7 +121,7 @@ function WardrobePanel({
                       />
                       Misa Original
                     </Button>
-                    <Button disabled={unlocked('bday')} size='md'>
+                    <Button disabled={isOutfitUnlocked('bday')} size='md'>
                       <Image
                         src={'bday-skin1.png'}
                         alt='Birthday Suit'
@@ -126,7 +131,7 @@ function WardrobePanel({
                       />
                       Birthday Suit
                     </Button>
-                    <Button disabled={unlocked('keqing')} size='md'>
+                    <Button disabled={isOutfitUnlocked('keqing')} size='md'>
                       <Image
                         src={'keqing-skin1.png'}
                         alt='Keqing'
@@ -136,7 +141,7 @@ function WardrobePanel({
                       />
                       Keqing
                     </Button>
-                    <Button disabled={unlocked('ness')} size='md'>
+                    <Button disabled={isOutfitUnlocked('ness')} size='md'>
                       <Image
                         src={'ness-skin1.png'}
                         alt='Ness'
@@ -146,7 +151,7 @@ function WardrobePanel({
                       />
                       Ness
                     </Button>
-                    <Button disabled={unlocked('xiaofei')} size='md'>
+                    <Button disabled={isOutfitUnlocked('xiaofei')} size='md'>
                       <Image
                         src={'ness-skin1.png'}
                         alt='Catboy'
