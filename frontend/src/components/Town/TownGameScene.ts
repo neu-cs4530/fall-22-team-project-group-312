@@ -235,9 +235,9 @@ export default class TownGameScene extends Phaser.Scene {
       return;
     }
     const gameObjects = this.coveyTownController.ourPlayer.gameObjects;
-    //const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
-    //const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
-    const playerTexture = 'misa-skin4'; //outfitId + '-' + skinId;
+    const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
+    const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
+    const playerTexture = outfitId + '-' + skinId;
     if (gameObjects && this._cursors) {
       const speed = 175;
 
@@ -432,10 +432,9 @@ export default class TownGameScene extends Phaser.Scene {
     // Create a sprite with physics enabled via the physics system. The image used for the sprite
     // has a bit of whitespace, so I'm using setSize & setOffset to control the size of the
     // player's body.
-    console.log('id: ', this.coveyTownController.ourPlayer.wardrobe.currentOutfit);
-    //const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
-    //const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
-    const playerTexture = 'misa-skin4'; //outfitId + '-' + skinId;
+    const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
+    const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
+    const playerTexture = outfitId + '-' + skinId;
     const sprite = this.physics.add
       .sprite(spawnPoint.x, spawnPoint.y, playerTexture, playerTexture + '-front')
       .setSize(30, 40)
@@ -550,7 +549,7 @@ export default class TownGameScene extends Phaser.Scene {
   }
 
   createPlayerSprites(player: PlayerController) {
-    const playerTexture = 'misa-skin4'; //player.wardrobe.currentOutfit.id + '-' + player.wardrobe.currentSkin.id;
+    const playerTexture = player.wardrobe.currentOutfit.id + '-' + player.wardrobe.currentSkin.id;
     if (!player.gameObjects) {
       const sprite = this.physics.add
         .sprite(player.location.x, player.location.y, playerTexture, `${playerTexture}-front`)

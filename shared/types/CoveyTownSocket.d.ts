@@ -29,7 +29,7 @@ export interface Player {
   id: string;
   userName: string;
   location: PlayerLocation;
-  wardrobe: Wardrobe;
+  wardrobe: WardrobeModel;
 };
 
 /**
@@ -45,12 +45,13 @@ export interface Player {
    name: string;
    category: ItemCategory;
  };
-export interface Wardrobe {
+
+export interface WardrobeModel {
   /** The amount of currency a wardrobe currently has to be spent on WardrobeItems. */
   currency: number;
   /** The current skin color set in the wardrobe. */
   currentSkin: WardrobeItem;
-  /** The current eye color set in the wardrobe. */
+  /** The current outfit set in the wardrobe. */
   currentOutfit: WardrobeItem;
   /** A map of each item category available to the player and the wardrobe items in that cateogry they currently have unlocked.  */
   inventory: Map<ItemCategory, WardrobeItem[]>;

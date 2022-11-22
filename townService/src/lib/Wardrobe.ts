@@ -1,5 +1,5 @@
 import { DEFAULT_ITEMS, UNLOCKABLE_ITEMS } from './WardrobeItem';
-import { WardrobeItem, ItemCategory } from '../types/CoveyTownSocket';
+import { WardrobeItem, ItemCategory, WardrobeModel } from '../types/CoveyTownSocket';
 
 export const CURRENCY_GAIN_FROM_CHAT = 1;
 export const CURRENCY_GAIN_RATE_FROM_INTERACTABLE_AREA = 2;
@@ -84,6 +84,15 @@ export default class Wardrobe {
   // Returns the inventory of the player this wardrobe corresponds to.
   get inventory(): Map<ItemCategory, WardrobeItem[]> {
     return this._inventory;
+  }
+
+  public toModel(): WardrobeModel {
+    return {
+      currency: this.currency,
+      currentSkin: this.currentSkin,
+      currentOutfit: this.currentOutfit,
+      inventory: this.inventory,
+    };
   }
 
   /**
