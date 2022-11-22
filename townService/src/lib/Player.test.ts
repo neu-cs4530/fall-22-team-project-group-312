@@ -1,6 +1,6 @@
 import { mock } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
-import { TownEmitter } from '../types/CoveyTownSocket';
+import { TownEmitter, Player as PlayerModel } from '../types/CoveyTownSocket';
 import Player from './Player';
 
 describe('Player', () => {
@@ -18,9 +18,10 @@ describe('Player', () => {
     });
   });
   describe('toPlayerModel', () => {
-    it('Checls that toPlayerModel() properly copies the player wardrobe', () => {
-      const newModel = testPlayer.toPlayerModel();
-      expect(testPlayer.wardrobe).toEqual(newModel.wardrobe);
+    // TODO: fix this
+    it('Checks that toPlayerModel() properly copies the player wardrobe', () => {
+      const newModel: PlayerModel = testPlayer.toPlayerModel();
+      expect(testPlayer.wardrobe.toModel()).toEqual(newModel.wardrobe);
     });
   });
 });
