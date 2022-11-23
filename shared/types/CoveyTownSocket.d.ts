@@ -37,6 +37,7 @@ export interface Player {
  */
 export type ItemCategory = "skin" | "outfit";
 
+export type Rarity = "common" | "rare" | "ultraRare";
 /**
  * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
  */
@@ -44,7 +45,7 @@ export type WardrobeItem = {
   name: string;
   category: ItemCategory;
   spriteLocation: string;
-  rarity: number;
+  rarity: Rarity;
 };
 export interface Wardrobe {
   /** The amount of currency a wardrobe currently has to be spent on WardrobeItems. */
