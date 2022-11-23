@@ -39,16 +39,26 @@ describe('Wardrobe', () => {
     testWardrobe.addWardrobeItem(testOutfit);
   });
 
-  describe('Default Items', () => {
+  describe('constructor', () => {
     it('Ensures default items have been properly added', () => {
       DEFAULT_ITEMS.forEach(item => expect(testWardrobe.addWardrobeItem(item)).toBe(false));
+      // Tests all 5 default skins and testSkin have been added
+      expect(testWardrobe.inventory.get('skin')?.length).toEqual(6);
+      // Tests misa outfit and testOutfit have been added
+      expect(testWardrobe.inventory.get('outfit')?.length).toEqual(2);
+    });
+    it('Ensures a current skin and current outfit are set', () => {
+      expect(testWardrobe.currentSkin).not.toBe(undefined);
+      expect(testWardrobe.currentOutfit).not.toBe(undefined);
+      expect(testWardrobe.currentSkin.id).toEqual('skin1');
+      expect(testWardrobe.currentOutfit.id).toEqual('misa');
     });
   });
 
   describe('currency', () => {
     it('gets the currency', () => {
-      const testCurrency = testWardrobe.currency;
-      expect(testWardrobe.currency).toEqual(testCurrency);
+      // Expect initial currency to be 0.
+      expect(testWardrobe.currency).toEqual(0);
     });
     it('sets the currency to number', () => {
       testWardrobe.currency = 20;
@@ -116,12 +126,16 @@ describe('Wardrobe', () => {
     it('returns true and adds new skin, and cannot be added twice', () => {
       expect(testWardrobe.addWardrobeItem(unaddedSkin)).toBe(true);
       expect(testWardrobe.inventory.get('skin')?.includes(unaddedSkin)).toBe(true);
+      // Length of inventory changes
+      expect(testWardrobe.inventory.get('skin')?.length).toEqual(7);
       // Trying to add again should return false.
       expect(testWardrobe.addWardrobeItem(unaddedSkin)).toBe(false);
     });
     it('returns true and adds new hair, and cannot be added twice', () => {
       expect(testWardrobe.addWardrobeItem(unaddedOutfit)).toBe(true);
       expect(testWardrobe.inventory.get('outfit')?.includes(unaddedOutfit)).toBe(true);
+      // Length of inventory changes
+      expect(testWardrobe.inventory.get('outfit')?.length).toEqual(3);
       // Trying to add again should return false.
       expect(testWardrobe.addWardrobeItem(unaddedOutfit)).toBe(false);
     });

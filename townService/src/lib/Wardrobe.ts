@@ -31,12 +31,12 @@ export default class Wardrobe {
     // Add all default items to wardrobe.
     DEFAULT_ITEMS.forEach((item: WardrobeItem) => this.addWardrobeItem(item));
     // Set the default items to the currently worn items in the wardrobe.
-    this._currentSkin = DEFAULT_ITEMS.find(
-      (item: WardrobeItem) => item.id === 'skin1',
-    ) as WardrobeItem;
-    this._currentOutfit = DEFAULT_ITEMS.find(
-      (item: WardrobeItem) => item.id === 'misa',
-    ) as WardrobeItem;
+    this._currentSkin = this.inventory
+      .get('skin')
+      ?.find((item: WardrobeItem) => item.id === 'skin1') as WardrobeItem;
+    this._currentOutfit = this.inventory
+      .get('outfit')
+      ?.find((item: WardrobeItem) => item.id === 'misa') as WardrobeItem;
   }
 
   // Returns the currency in the wardrobe.
@@ -104,9 +104,8 @@ export default class Wardrobe {
     // If the item is not already in the inventory, add the item
     if (!this._itemIsInInventory(newItem)) {
       // Get the array of WardrobeItems corresponding to the category of the newItem.
-      const itemArray: WardrobeItem[] | undefined = this.inventory.get(newItem.category);
-      if (itemArray !== undefined) {
-        itemArray.push(newItem);
+      if (this.inventory.get(newItem.category) !== undefined) {
+        this.inventory.get(newItem.category)?.push(newItem);
         return true;
       }
       throw new Error('Item category not found');

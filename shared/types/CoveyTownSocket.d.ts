@@ -46,7 +46,10 @@ export interface Player {
    category: ItemCategory;
  };
 
-export interface WardrobeModel {
+/**
+ * Representation of a wardrobe that the TownGameScene can interact with.
+ */
+ export interface WardrobeModel {
   /** The amount of currency a wardrobe currently has to be spent on WardrobeItems. */
   currency: number;
   /** The current skin color set in the wardrobe. */
