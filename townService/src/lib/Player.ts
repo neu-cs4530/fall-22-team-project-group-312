@@ -72,7 +72,7 @@ export default class Player {
       id: this._id,
       location: this.location,
       userName: this._userName,
-      wardrobe: this._wardrobe,
+      wardrobe: this._wardrobe.toModel(),
     };
   }
 }

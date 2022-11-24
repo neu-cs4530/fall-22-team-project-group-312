@@ -39,6 +39,7 @@
     "node-sass": "^7.0.1",
     "normalize.css": "^8.0.1",
     "phaser": "^3.55.2",
+    "prop-types": "^15.8.1",
     "react": "^16.8.0",
     "react-context-mutex": "^1.0.8",
     "react-dom": "^16.8.0",

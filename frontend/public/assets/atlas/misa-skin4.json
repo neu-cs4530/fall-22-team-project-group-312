@@ -1,0 +1,172 @@
+{"frames": {
+
+"misa-skin4-back-walk.000":
+{
+	"frame": {"x":97,"y":1,"w":32,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":23,"w":32,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-back-walk.001":
+{
+	"frame": {"x":97,"y":44,"w":32,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":23,"w":32,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-back-walk.002":
+{
+	"frame": {"x":97,"y":1,"w":32,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":23,"w":32,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-back-walk.003":
+{
+	"frame": {"x":131,"y":1,"w":32,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":23,"w":32,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-back":
+{
+	"frame": {"x":97,"y":1,"w":32,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":23,"w":32,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-front-walk.000":
+{
+	"frame": {"x":1,"y":1,"w":30,"h":43},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":21,"w":30,"h":43},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-front-walk.001":
+{
+	"frame": {"x":33,"y":1,"w":30,"h":43},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":21,"w":30,"h":43},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-front-walk.002":
+{
+	"frame": {"x":1,"y":1,"w":30,"h":43},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":21,"w":30,"h":43},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-front-walk.003":
+{
+	"frame": {"x":65,"y":1,"w":30,"h":43},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":21,"w":30,"h":43},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-front":
+{
+	"frame": {"x":1,"y":1,"w":30,"h":43},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":21,"w":30,"h":43},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-left-walk.000":
+{
+	"frame": {"x":131,"y":44,"w":30,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":23,"w":30,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-left-walk.001":
+{
+	"frame": {"x":1,"y":46,"w":30,"h":39},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":25,"w":30,"h":39},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-left-walk.002":
+{
+	"frame": {"x":131,"y":44,"w":30,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":23,"w":30,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-left-walk.003":
+{
+	"frame": {"x":33,"y":46,"w":30,"h":39},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":25,"w":30,"h":39},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-left":
+{
+	"frame": {"x":131,"y":44,"w":30,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":23,"w":30,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-right-walk.000":
+{
+	"frame": {"x":163,"y":44,"w":30,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":23,"w":30,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-right-walk.001":
+{
+	"frame": {"x":65,"y":46,"w":30,"h":39},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":25,"w":30,"h":39},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-right-walk.002":
+{
+	"frame": {"x":163,"y":44,"w":30,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":23,"w":30,"h":41},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-right-walk.003":
+{
+	"frame": {"x":165,"y":1,"w":30,"h":39},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":25,"w":30,"h":39},
+	"sourceSize": {"w":32,"h":64}
+},
+"misa-skin4-right":
+{
+	"frame": {"x":163,"y":44,"w":30,"h":41},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":23,"w":30,"h":41},
+	"sourceSize": {"w":32,"h":64}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "misa-skin4.png",
+	"format": "RGBA8888",
+	"size": {"w":196,"h":86},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:57957b5f4dd4140380214e8f8b4d2c74:aeb3ef575d4ddda4079a48b19b402577:d53ff011116f13b2db550bd460709578$"
+}
+}

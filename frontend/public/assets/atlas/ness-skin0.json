@@ -1,0 +1,172 @@
+{"frames": {
+
+"ness-skin0-back-walk.000":
+{
+	"frame": {"x":1,"y":1,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-back-walk.001":
+{
+	"frame": {"x":1,"y":51,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-back-walk.002":
+{
+	"frame": {"x":1,"y":101,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-back-walk.003":
+{
+	"frame": {"x":1,"y":151,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-back":
+{
+	"frame": {"x":1,"y":201,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-front-walk.000":
+{
+	"frame": {"x":1,"y":743,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-front-walk.001":
+{
+	"frame": {"x":1,"y":793,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-front-walk.002":
+{
+	"frame": {"x":1,"y":843,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-front-walk.003":
+{
+	"frame": {"x":1,"y":893,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-front":
+{
+	"frame": {"x":1,"y":943,"w":31,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":31,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-left-walk.000":
+{
+	"frame": {"x":1,"y":251,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-left-walk.001":
+{
+	"frame": {"x":1,"y":551,"w":32,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":18,"w":32,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-left-walk.002":
+{
+	"frame": {"x":1,"y":301,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-left-walk.003":
+{
+	"frame": {"x":1,"y":599,"w":32,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":18,"w":32,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-left":
+{
+	"frame": {"x":1,"y":351,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-right-walk.000":
+{
+	"frame": {"x":1,"y":401,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-right-walk.001":
+{
+	"frame": {"x":1,"y":647,"w":32,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":18,"w":32,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-right-walk.002":
+{
+	"frame": {"x":1,"y":451,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-right-walk.003":
+{
+	"frame": {"x":1,"y":695,"w":32,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":18,"w":32,"h":46},
+	"sourceSize": {"w":32,"h":64}
+},
+"ness-skin0-right":
+{
+	"frame": {"x":1,"y":501,"w":32,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
+	"sourceSize": {"w":32,"h":64}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "ness-skin0.png",
+	"format": "RGBA8888",
+	"size": {"w":34,"h":992},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:01eb11867440c4b8d6963d06bb6887bc:2dc4cb110f0c8a89ab521f46f3fc66a4:befe5203ddd8e148cade44653bd63aee$"
+}
+}

@@ -1,5 +1,5 @@
-import { DEFAULT_ITEMS } from './WardrobeItem';
-import { WardrobeItem, ItemCategory } from '../types/CoveyTownSocket';
+import { DEFAULT_ITEMS, UNLOCKABLE_ITEMS } from './WardrobeItem';
+import { WardrobeItem, ItemCategory, WardrobeModel } from '../types/CoveyTownSocket';
 
 export const CURRENCY_GAIN_FROM_CHAT = 1;
 export const CURRENCY_GAIN_RATE_FROM_INTERACTABLE_AREA = 2;
@@ -38,12 +38,12 @@ export default class Wardrobe {
     // Add all default items to wardrobe.
     DEFAULT_ITEMS.forEach((item: WardrobeItem) => this.addWardrobeItem(item));
     // Set the default items to the currently worn items in the wardrobe.
-    this._currentSkin = DEFAULT_ITEMS.find(
-      (item: WardrobeItem) => item.name === '0',
-    ) as WardrobeItem;
-    this._currentOutfit = DEFAULT_ITEMS.find(
-      (item: WardrobeItem) => item.name === 'defualt outfit',
-    ) as WardrobeItem;
+    this._currentSkin = this.inventory
+      .get('skin')
+      ?.find((item: WardrobeItem) => item.id === 'skin1') as WardrobeItem;
+    this._currentOutfit = this.inventory
+      .get('outfit')
+      ?.find((item: WardrobeItem) => item.id === 'misa') as WardrobeItem;
   }
 
   public static getWardrobeFromJSON(jsonString: string): Wardrobe | undefined {
@@ -117,6 +117,15 @@ export default class Wardrobe {
     return this._inventory;
   }
 
+  public toModel(): WardrobeModel {
+    return {
+      currency: this.currency,
+      currentSkin: this.currentSkin,
+      currentOutfit: this.currentOutfit,
+      inventory: this.inventory,
+    };
+  }
+
   /**
    * Adds a new item to the wardrobe if it has not already been added.
    * @param newItem The item to be added.
@@ -126,9 +135,8 @@ export default class Wardrobe {
     // If the item is not already in the inventory, add the item
     if (!this._itemIsInInventory(newItem)) {
       // Get the array of WardrobeItems corresponding to the category of the newItem.
-      const itemArray: WardrobeItem[] | undefined = this.inventory.get(newItem.category);
-      if (itemArray !== undefined) {
-        itemArray.push(newItem);
+      if (this.inventory.get(newItem.category) !== undefined) {
+        this.inventory.get(newItem.category)?.push(newItem);
         return true;
       }
       throw new Error('Item category not found');
