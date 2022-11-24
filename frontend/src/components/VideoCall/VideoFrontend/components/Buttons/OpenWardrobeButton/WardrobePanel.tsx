@@ -1,5 +1,6 @@
 import {
   Button,
+  IconButton,
   Image,
   Modal,
   ModalBody,
@@ -11,10 +12,18 @@ import {
   StackDivider,
   VStack,
 } from '@chakra-ui/react';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import TownController from '../../../../../../classes/TownController';
 import useTownController from '../../../../../../hooks/useTownController';
 import { WardrobeItem } from '../../../../../../types/CoveyTownSocket';
+
+const useStyles = makeStyles({
+  preview: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 /**
  * The wardrobe panel inside the pop up modal. This shows all the available outfits and
@@ -33,6 +42,7 @@ function WardrobePanel({
   onClose: any;
   coveyTownController: TownController;
 }) {
+  const classes = useStyles();
   const town = useTownController();
   const initalOutfit = town.ourPlayer.wardrobe.currentOutfit;
   const initialSkin = town.ourPlayer.wardrobe.currentSkin;
@@ -52,7 +62,8 @@ function WardrobePanel({
    * other currently selected item.
    * @param itemID the id of the item(outfit or skin color) the player selected
    */
-  function switchSpriteItems(itemID: string): void {
+  async function switchSpriteItems(itemID: string): Promise<void> {
+    console.log('hi');
     if (itemID.startsWith('skin')) {
       const currentOutfit = spritePreview[0];
       const newSpritePreview: WardrobeItem[] = [
@@ -82,7 +93,7 @@ function WardrobePanel({
     );
   }
 
-  const prefix = 'frontend/public/assets/atlas/';
+  const prefix = 'assets/atlas/';
   /**
    * modal
    * left side of the preview png
@@ -100,123 +111,157 @@ function WardrobePanel({
           <ModalHeader>Changing Room</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <VStack divider={<StackDivider borderColor='gray.200' />} spacing={8} align='stretch'>
+            <VStack divider={<StackDivider borderColor='gray.200' />} spacing={15} align='stretch'>
               <div className='previewPane'>
                 <Image
-                  src={`${prefix}${spritePreview[0].name}-${spritePreview[1].name}/
-                  //${spritePreview[0].name}-${spritePreview[1].name}-front.png`}
+                  src={`${prefix}${spritePreview[0].id}-${spritePreview[1].id}/${spritePreview[0].id}-${spritePreview[1].id}-front.png`}
                   alt='sprite'
+                  className={classes.preview}
                 />
               </div>
-              <div className='selectionPane'>
-                <div className='selectClothingMenu'>
-                  <Stack spacing={5} direction='row' align='center'>
-                    <Button size='md'>
+              <div className='selectClothingMenu'>
+                <Stack spacing={5} direction='row' align='center'>
+                  <IconButton
+                    aria-label='Misa Original'
+                    size='lg'
+                    icon={
                       <Image
-                        src={'keqing-skin0.png'}
-                        alt='Misa Original Costume'
+                        src={`${prefix}/misa-skin4/misa-skin4-front.png`}
+                        alt='misa'
                         onClick={() => {
                           switchSpriteItems('misa');
                         }}
                       />
-                      Misa Original
-                    </Button>
-                    <Button disabled={isOutfitUnlocked('bday')} size='md'>
+                    }
+                  />
+                  <IconButton
+                    aria-label='Birthday Suit'
+                    size='lg'
+                    //disabled={isOutfitUnlocked('bday')}
+                    icon={
                       <Image
-                        src={'bday-skin1.png'}
-                        alt='Birthday Suit'
+                        src={`${prefix}/misa-skin4/misa-skin4-front.png`}
+                        alt='misa'
                         onClick={() => {
                           switchSpriteItems('bday');
                         }}
                       />
-                      Birthday Suit
-                    </Button>
-                    <Button disabled={isOutfitUnlocked('keqing')} size='md'>
+                    }
+                  />
+                  <IconButton
+                    aria-label='Ness'
+                    size='lg'
+                    //disabled={isOutfitUnlocked('ness')}
+                    icon={
                       <Image
-                        src={'keqing-skin1.png'}
-                        alt='Keqing'
-                        onClick={() => {
-                          switchSpriteItems('keqing');
-                        }}
-                      />
-                      Keqing
-                    </Button>
-                    <Button disabled={isOutfitUnlocked('ness')} size='md'>
-                      <Image
-                        src={'ness-skin1.png'}
-                        alt='Ness'
+                        src={`${prefix}/misa-skin4/misa-skin4-front.png`}
+                        alt='ness'
                         onClick={() => {
                           switchSpriteItems('ness');
                         }}
                       />
-                      Ness
-                    </Button>
-                    <Button disabled={isOutfitUnlocked('xiaofei')} size='md'>
+                    }
+                  />
+                  <IconButton
+                    aria-label='Xiaofei'
+                    size='lg'
+                    //disabled={isOutfitUnlocked('xiaofei')}
+                    icon={
                       <Image
-                        src={'ness-skin1.png'}
-                        alt='Catboy'
+                        src={`${prefix}/misa-skin4/misa-skin4-front.png`}
+                        alt='xiaofei'
                         onClick={() => {
                           switchSpriteItems('xiaofei');
                         }}
                       />
-                      Catboy
-                    </Button>
-                  </Stack>
-                </div>
-                <div className='selectSkinColorMenu'>
-                  <Stack spacing={5} direction='row' align='center'>
-                    <Button size='md'>
+                    }
+                  />
+                  <IconButton
+                    aria-label='Keqing'
+                    size='lg'
+                    //disabled={isOutfitUnlocked('keqing')}
+                    icon={
                       <Image
-                        src={'ness-skin1.png'}
+                        src={`${prefix}/misa-skin4/misa-skin4-front.png`}
+                        alt='keqing'
+                        onClick={() => {
+                          switchSpriteItems('keqing');
+                        }}
+                      />
+                    }
+                  />
+                </Stack>
+              </div>
+              <div className='selectSkinColorMenu'>
+                <Stack spacing={5} direction='row' align='center'>
+                  <IconButton
+                    aria-label='skin color 0'
+                    size='lg'
+                    icon={
+                      <Image
+                        src={`${prefix}/misa-skin0/misa-skin0-front.png`}
                         alt='0 skin color'
                         onClick={() => {
                           switchSpriteItems('skin0');
                         }}
                       />
-                      Skin Color 0
-                    </Button>
-                    <Button size='md'>
+                    }
+                  />
+                  <IconButton
+                    aria-label='skin color 1'
+                    size='lg'
+                    icon={
                       <Image
-                        src={'ness-skin1.png'}
+                        src={`${prefix}/misa-skin1/misa-skin1-front.png`}
                         alt='1 skin color'
                         onClick={() => {
                           switchSpriteItems('skin1');
                         }}
                       />
-                      Skin Color 1
-                    </Button>
-                    <Button size='md'>
+                    }
+                  />
+                  <IconButton
+                    aria-label='skin color 2'
+                    size='lg'
+                    icon={
                       <Image
-                        src={'ness-skin1.png'}
+                        src={`${prefix}/misa-skin2/misa-skin2-front.png`}
                         alt='2 skin color'
                         onClick={() => {
                           switchSpriteItems('skin2');
                         }}
                       />
-                      Skin Color 2
-                    </Button>
-                    <Button size='md'>
+                    }
+                  />
+                  <IconButton
+                    aria-label='skin color 3'
+                    size='lg'
+                    icon={
                       <Image
-                        src={'ness-skin1.png'}
+                        src={`${prefix}/misa-skin3/misa-skin3-front.png`}
                         alt='3 skin color'
                         onClick={() => {
                           switchSpriteItems('skin3');
                         }}
                       />
-                      Skin Color 3
-                    </Button>
-                    <Button size='md'>
+                    }
+                  />
+                  <IconButton
+                    aria-label='skin color 4'
+                    size='lg'
+                    icon={
                       <Image
-                        src={'ness-skin1.png'}
+                        src={`${prefix}/misa-skin4/misa-skin4-front.png`}
                         alt='4 skin color'
                         onClick={() => {
                           switchSpriteItems('skin4');
                         }}
                       />
-                      Skin Color 4
-                    </Button>
-                  </Stack>
-                </div>
+                    }
+                  />
+                </Stack>
+              </div>
+              <div>
                 <Button title='Confirm' onClick={closeWardrobe}></Button>
               </div>
             </VStack>
