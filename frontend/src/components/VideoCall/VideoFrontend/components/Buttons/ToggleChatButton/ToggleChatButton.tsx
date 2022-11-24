@@ -92,10 +92,11 @@ export default function ToggleChatButton() {
         <div className={classes.iconContainer}>
           <ChatIcon />
           <div className={clsx(classes.ring, { [classes.animateRing]: shouldAnimate })} />
-          <div className={clsx(classes.circle, { [classes.hasUnreadMessages]: hasUnreadMessages })} />
+          <div
+            className={clsx(classes.circle, { [classes.hasUnreadMessages]: hasUnreadMessages })}
+          />
         </div>
-      }
-    >
+      }>
       Chat
     </Button>
   );
