@@ -20,23 +20,21 @@ export default class Wardrobe {
   /** The current eye color set in the wardrobe. */
   private _currentOutfit: WardrobeItem;
 
-  /** A map of each item category available to the player and the wardrobe items in that cateogry they currently have unlocked.  */
-  private _inventory: Map<ItemCategory, WardrobeItem[]>;
+  /** A list of the wardrobe items currently unlocked.  */
+  private _inventory: WardrobeItem[];
 
   constructor() {
     this._currency = 0;
-    this._inventory = new Map<ItemCategory, WardrobeItem[]>();
-    this.inventory.set('skin', []);
-    this.inventory.set('outfit', []);
+    this._inventory = [];
     // Add all default items to wardrobe.
     DEFAULT_ITEMS.forEach((item: WardrobeItem) => this.addWardrobeItem(item));
     // Set the default items to the currently worn items in the wardrobe.
-    this._currentSkin = this.inventory
-      .get('skin')
-      ?.find((item: WardrobeItem) => item.id === 'skin1') as WardrobeItem;
-    this._currentOutfit = this.inventory
-      .get('outfit')
-      ?.find((item: WardrobeItem) => item.id === 'misa') as WardrobeItem;
+    this._currentSkin = this.inventory.find(
+      (item: WardrobeItem) => item.id === 'skin1',
+    ) as WardrobeItem;
+    this._currentOutfit = this.inventory.find(
+      (item: WardrobeItem) => item.id === 'misa',
+    ) as WardrobeItem;
   }
 
   // Returns the currency in the wardrobe.
@@ -63,7 +61,7 @@ export default class Wardrobe {
     if (this._itemIsInInventory(skin) && skin.category === 'skin') {
       this._currentSkin = skin;
     } else {
-      throw new Error('Item not in inventory  or invalid');
+      throw new Error('Item not in inventory or invalid');
     }
   }
 
@@ -82,7 +80,7 @@ export default class Wardrobe {
   }
 
   // Returns the inventory of the player this wardrobe corresponds to.
-  get inventory(): Map<ItemCategory, WardrobeItem[]> {
+  get inventory(): WardrobeItem[] {
     return this._inventory;
   }
 
@@ -103,29 +101,19 @@ export default class Wardrobe {
   public addWardrobeItem(newItem: WardrobeItem): boolean {
     // If the item is not already in the inventory, add the item
     if (!this._itemIsInInventory(newItem)) {
-      // Get the array of WardrobeItems corresponding to the category of the newItem.
-      if (this.inventory.get(newItem.category) !== undefined) {
-        this.inventory.get(newItem.category)?.push(newItem);
-        return true;
-      }
-      throw new Error('Item category not found');
-    } else {
-      return false;
+      this.inventory.push(newItem);
+      return true;
     }
+    // Return false if item is already within the inventory.
+    return false;
   }
 
   /** Checks if the given item is currently in the wardrobe inventory */
   private _itemIsInInventory(item: WardrobeItem): boolean {
-    // Get the array of WardrobeItems corresponding to the category of the newItem.
-    const itemArray: WardrobeItem[] | undefined = this.inventory.get(item.category);
-
-    if (itemArray !== undefined) {
-      // Check if the newItem is already in the array, if not, push it to the array and return true.
-      if (itemArray.find(i => i.name === item.name) === undefined) {
-        return false;
-      }
-      return true;
+    // Check if the newItem is already in the inventory
+    if (this.inventory.find(i => i.name === item.name) === undefined) {
+      return false;
     }
-    throw new Error('Item category not found');
+    return true;
   }
 }

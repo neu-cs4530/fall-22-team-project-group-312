@@ -469,11 +469,8 @@ describe('TownController', () => {
       // Run to instantiate ourPlayer.
       townJoinResponse = await mockTownControllerConnection(testController, mockSocket);
     });
-    it('Gets access to the inventory and the lists of items within it', () => {
-      const outfitList = testController.ourPlayer.wardrobe.inventory.get('outfit');
-      const skinList = testController.ourPlayer.wardrobe.inventory.get('skin');
-      expect(outfitList).not.toBe(undefined);
-      expect(skinList).not.toBe(undefined);
+    it('Gets access to the inventory', () => {
+      expect(testController.ourPlayer.wardrobe.inventory).not.toBe(undefined);
     });
   });
 });
