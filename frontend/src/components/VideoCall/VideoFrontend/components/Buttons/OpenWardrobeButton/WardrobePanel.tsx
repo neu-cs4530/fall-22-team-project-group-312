@@ -1,6 +1,5 @@
 import {
   Button,
-  IconButton,
   Image,
   Modal,
   ModalBody,
@@ -8,8 +7,10 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Stack,
   StackDivider,
+  Tab,
+  TabList,
+  Tabs,
   VStack,
 } from '@chakra-ui/react';
 import { makeStyles } from '@material-ui/core/styles';
@@ -111,7 +112,7 @@ function WardrobePanel({
           <ModalHeader>Changing Room</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <VStack divider={<StackDivider borderColor='gray.200' />} spacing={15} align='stretch'>
+            <VStack divider={<StackDivider borderColor='gray.200' />} spacing={15} align='center'>
               <div className='previewPane'>
                 <Image
                   src={`${prefix}${spritePreview[0].id}-${spritePreview[1].id}/${spritePreview[0].id}-${spritePreview[1].id}-front.png`}
@@ -119,12 +120,10 @@ function WardrobePanel({
                   className={classes.preview}
                 />
               </div>
-              <div className='selectClothingMenu'>
-                <Stack spacing={5} direction='row' align='center'>
-                  <IconButton
-                    aria-label='Misa Original'
-                    size='lg'
-                    icon={
+              <div className='selectClothingPane'>
+                <Tabs aria-label='selectClothingMenu'>
+                  <TabList>
+                    <Tab>
                       <Image
                         src={`${prefix}/misa-skin4/misa-skin4-front.png`}
                         alt='misa'
@@ -132,27 +131,17 @@ function WardrobePanel({
                           switchSpriteItems('misa');
                         }}
                       />
-                    }
-                  />
-                  <IconButton
-                    aria-label='Birthday Suit'
-                    size='lg'
-                    //disabled={isOutfitUnlocked('bday')}
-                    icon={
+                    </Tab>
+                    <Tab /**isDisabled={isOutfitUnlocked('bday')} */>
                       <Image
                         src={`${prefix}/misa-skin4/misa-skin4-front.png`}
-                        alt='misa'
+                        alt='bday'
                         onClick={() => {
                           switchSpriteItems('bday');
                         }}
                       />
-                    }
-                  />
-                  <IconButton
-                    aria-label='Ness'
-                    size='lg'
-                    //disabled={isOutfitUnlocked('ness')}
-                    icon={
+                    </Tab>
+                    <Tab /** isDisabled={isOutfitUnlocked('bday')} */>
                       <Image
                         src={`${prefix}/misa-skin4/misa-skin4-front.png`}
                         alt='ness'
@@ -160,13 +149,8 @@ function WardrobePanel({
                           switchSpriteItems('ness');
                         }}
                       />
-                    }
-                  />
-                  <IconButton
-                    aria-label='Xiaofei'
-                    size='lg'
-                    //disabled={isOutfitUnlocked('xiaofei')}
-                    icon={
+                    </Tab>
+                    <Tab /** isDisabled={isOutfitUnlocked('bday')} */>
                       <Image
                         src={`${prefix}/misa-skin4/misa-skin4-front.png`}
                         alt='xiaofei'
@@ -174,13 +158,8 @@ function WardrobePanel({
                           switchSpriteItems('xiaofei');
                         }}
                       />
-                    }
-                  />
-                  <IconButton
-                    aria-label='Keqing'
-                    size='lg'
-                    //disabled={isOutfitUnlocked('keqing')}
-                    icon={
+                    </Tab>
+                    <Tab /** isDisabled={isOutfitUnlocked('keqing')} */>
                       <Image
                         src={`${prefix}/misa-skin4/misa-skin4-front.png`}
                         alt='keqing'
@@ -188,16 +167,14 @@ function WardrobePanel({
                           switchSpriteItems('keqing');
                         }}
                       />
-                    }
-                  />
-                </Stack>
+                    </Tab>
+                  </TabList>
+                </Tabs>
               </div>
               <div className='selectSkinColorMenu'>
-                <Stack spacing={5} direction='row' align='center'>
-                  <IconButton
-                    aria-label='skin color 0'
-                    size='lg'
-                    icon={
+                <Tabs>
+                  <TabList>
+                    <Tab>
                       <Image
                         src={`${prefix}/misa-skin0/misa-skin0-front.png`}
                         alt='0 skin color'
@@ -205,12 +182,8 @@ function WardrobePanel({
                           switchSpriteItems('skin0');
                         }}
                       />
-                    }
-                  />
-                  <IconButton
-                    aria-label='skin color 1'
-                    size='lg'
-                    icon={
+                    </Tab>
+                    <Tab>
                       <Image
                         src={`${prefix}/misa-skin1/misa-skin1-front.png`}
                         alt='1 skin color'
@@ -218,12 +191,8 @@ function WardrobePanel({
                           switchSpriteItems('skin1');
                         }}
                       />
-                    }
-                  />
-                  <IconButton
-                    aria-label='skin color 2'
-                    size='lg'
-                    icon={
+                    </Tab>
+                    <Tab>
                       <Image
                         src={`${prefix}/misa-skin2/misa-skin2-front.png`}
                         alt='2 skin color'
@@ -231,12 +200,8 @@ function WardrobePanel({
                           switchSpriteItems('skin2');
                         }}
                       />
-                    }
-                  />
-                  <IconButton
-                    aria-label='skin color 3'
-                    size='lg'
-                    icon={
+                    </Tab>
+                    <Tab>
                       <Image
                         src={`${prefix}/misa-skin3/misa-skin3-front.png`}
                         alt='3 skin color'
@@ -244,12 +209,8 @@ function WardrobePanel({
                           switchSpriteItems('skin3');
                         }}
                       />
-                    }
-                  />
-                  <IconButton
-                    aria-label='skin color 4'
-                    size='lg'
-                    icon={
+                    </Tab>
+                    <Tab>
                       <Image
                         src={`${prefix}/misa-skin4/misa-skin4-front.png`}
                         alt='4 skin color'
@@ -257,12 +218,14 @@ function WardrobePanel({
                           switchSpriteItems('skin4');
                         }}
                       />
-                    }
-                  />
-                </Stack>
+                    </Tab>
+                  </TabList>
+                </Tabs>
               </div>
               <div>
-                <Button title='Confirm' onClick={closeWardrobe}></Button>
+                <Button title='Confirm' onClick={closeWardrobe}>
+                  Confirm
+                </Button>
               </div>
             </VStack>
           </ModalBody>
