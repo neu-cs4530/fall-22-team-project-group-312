@@ -100,6 +100,8 @@ export interface ViewingArea {
 
 export interface ServerToClientEvents {
   playerMoved: (movedPlayer: Player) => void;
+  // New ServerToClient event for a changed wardrobe.
+  playerWardrobeChanged: (wardrobePlayer: Player) => void;
   playerDisconnect: (disconnectedPlayer: Player) => void;
   playerJoined: (newPlayer: Player) => void;
   initialize: (initialData: TownJoinResponse) => void;
@@ -113,5 +115,6 @@ export interface ClientToServerEvents {
   chatMessage: (message: ChatMessage) => void;
   playerMovement: (movementData: PlayerLocation) => void;
   interactableUpdate: (update: Interactable) => void;
-  playerWardobeChange: (newWardrobe: WardrobeModel) => void;
+  // New ClientToServer event for a changed wardrobe.
+  playerWardobeChange: (newWardrobe: Wardrobe) => void;
 }

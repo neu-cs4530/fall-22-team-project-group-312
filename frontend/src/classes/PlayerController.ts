@@ -4,6 +4,7 @@ import { Player as PlayerModel, PlayerLocation, WardrobeModel } from '../types/C
 
 export type PlayerEvents = {
   movement: (newLocation: PlayerLocation) => void;
+  wardrobeChange: (newWardrobe: WardrobeModel) => void;
 };
 
 export type PlayerGameObjects = {
@@ -58,7 +59,7 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
     this._wardrobe = newWardrobe;
     // Uses the movement emitter and update location method to signal a wardrobe change.
     this._updateGameComponentLocation();
-    this.emit('movement', this.location);
+    this.emit('wardrobeChange', this.wardrobe);
   }
 
   toPlayerModel(): PlayerModel {
@@ -80,7 +81,6 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
       label.setY(sprite.body.position.y - 20);
       const currentSprite = this.wardrobe.currentOutfit.id + '-' + this.wardrobe.currentSkin.id;
       if (this.location.moving) {
-        // sprite.anims.play(`misa-${this.location.rotation}-walk`, true);
         sprite.anims.play(`${currentSprite}-${this.location.rotation}-walk`, true);
       } else {
         sprite.anims.stop();
