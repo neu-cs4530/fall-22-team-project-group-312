@@ -63,7 +63,6 @@ function WardrobePanel({
    * @param itemID the id of the item(outfit or skin color) the player selected
    */
   async function switchSpriteItems(itemID: string): Promise<void> {
-    console.log('hi');
     if (
       itemID.startsWith('skin') &&
       coveyTownController.ourPlayer.wardrobe.inventory instanceof Map
@@ -71,15 +70,16 @@ function WardrobePanel({
       const currentOutfit = spritePreview[0];
       const newSpritePreview: WardrobeItem[] = [
         currentOutfit,
-        town.ourPlayer.wardrobe.inventory.find(
+        coveyTownController.ourPlayer.wardrobe.inventory.find(
           (item: WardrobeItem) => item.id === itemID,
         ) as WardrobeItem,
       ];
+      console.log(newSpritePreview);
       setSpritePreview(newSpritePreview);
     } else {
       const currentSkin = spritePreview[1];
       const newSpritePreview: WardrobeItem[] = [
-        town.ourPlayer.wardrobe.inventory.find(
+        coveyTownController.ourPlayer.wardrobe.inventory.find(
           (item: WardrobeItem) => item.id === itemID,
         ) as WardrobeItem,
         currentSkin,
@@ -88,11 +88,12 @@ function WardrobePanel({
     }
   }
 
-  function isOutfitUnlocked(itemID: string): boolean {
-    console.log('wadrobe: ', town.ourPlayer.wardrobe);
-    console.log('inventory: ', town.ourPlayer.wardrobe.inventory);
-    return town.ourPlayer.wardrobe.inventory.find(o => o.name === itemID) !== undefined;
+  function isOutfitLocked(itemID: string): boolean {
+    return (
+      coveyTownController.ourPlayer.wardrobe.inventory.find(o => o.id === itemID) === undefined
+    );
   }
+  console.log(isOutfitLocked('bday'));
 
   const prefix = 'assets/atlas/';
   /**
@@ -132,7 +133,7 @@ function WardrobePanel({
                         }}
                       />
                     </Tab>
-                    <Tab /** isDisabled={isOutfitUnlocked('bday')} */>
+                    <Tab isDisabled={isOutfitLocked('bday')}>
                       <Image
                         src={`${prefix}/misa-skin4/misa-skin4-front.png`}
                         alt='bday'
@@ -141,7 +142,7 @@ function WardrobePanel({
                         }}
                       />
                     </Tab>
-                    <Tab /** isDisabled={isOutfitUnlocked('bday')} */>
+                    <Tab isDisabled={isOutfitLocked('ness')}>
                       <Image
                         src={`${prefix}/misa-skin4/misa-skin4-front.png`}
                         alt='ness'
@@ -150,7 +151,7 @@ function WardrobePanel({
                         }}
                       />
                     </Tab>
-                    <Tab /** isDisabled={isOutfitUnlocked('bday')} */>
+                    <Tab isDisabled={isOutfitLocked('xiaofei')}>
                       <Image
                         src={`${prefix}/misa-skin4/misa-skin4-front.png`}
                         alt='xiaofei'
@@ -159,7 +160,7 @@ function WardrobePanel({
                         }}
                       />
                     </Tab>
-                    <Tab /** isDisabled={isOutfitUnlocked('keqing')} */>
+                    <Tab isDisabled={isOutfitLocked('keqing')}>
                       <Image
                         src={`${prefix}/misa-skin4/misa-skin4-front.png`}
                         alt='keqing'
