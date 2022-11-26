@@ -63,10 +63,7 @@ function WardrobePanel({
    * @param itemID the id of the item(outfit or skin color) the player selected
    */
   async function switchSpriteItems(itemID: string): Promise<void> {
-    if (
-      itemID.startsWith('skin') &&
-      coveyTownController.ourPlayer.wardrobe.inventory instanceof Map
-    ) {
+    if (itemID.startsWith('skin')) {
       const currentOutfit = spritePreview[0];
       const newSpritePreview: WardrobeItem[] = [
         currentOutfit,
@@ -126,7 +123,7 @@ function WardrobePanel({
                   <TabList>
                     <Tab>
                       <Image
-                        src={`${prefix}/misa-skin4/misa-skin4-front.png`}
+                        src={`${prefix}/outfit-previews/misa-preview.png`}
                         alt='misa'
                         onClick={() => {
                           switchSpriteItems('misa');
@@ -135,7 +132,7 @@ function WardrobePanel({
                     </Tab>
                     <Tab isDisabled={isOutfitLocked('bday')}>
                       <Image
-                        src={`${prefix}/misa-skin4/misa-skin4-front.png`}
+                        src={`${prefix}/outfit-previews/preview-bday.png`}
                         alt='bday'
                         onClick={() => {
                           switchSpriteItems('bday');
@@ -144,25 +141,25 @@ function WardrobePanel({
                     </Tab>
                     <Tab isDisabled={isOutfitLocked('ness')}>
                       <Image
-                        src={`${prefix}/misa-skin4/misa-skin4-front.png`}
+                        src={`${prefix}/outfit-previews/preview-ness.png`}
                         alt='ness'
                         onClick={() => {
                           switchSpriteItems('ness');
                         }}
                       />
                     </Tab>
-                    <Tab isDisabled={isOutfitLocked('xiaofei')}>
+                    <Tab isDisabled={isOutfitLocked('xiaohei')}>
                       <Image
-                        src={`${prefix}/misa-skin4/misa-skin4-front.png`}
-                        alt='xiaofei'
+                        src={`${prefix}/outfit-previews/preview-xiaohei.png`}
+                        alt='xiaohei'
                         onClick={() => {
-                          switchSpriteItems('xiaofei');
+                          switchSpriteItems('xiaohei');
                         }}
                       />
                     </Tab>
                     <Tab isDisabled={isOutfitLocked('keqing')}>
                       <Image
-                        src={`${prefix}/misa-skin4/misa-skin4-front.png`}
+                        src={`${prefix}/outfit-previews/preview-keqing.png`}
                         alt='keqing'
                         onClick={() => {
                           switchSpriteItems('keqing');
