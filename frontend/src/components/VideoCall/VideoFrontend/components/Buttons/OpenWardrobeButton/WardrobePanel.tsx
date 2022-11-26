@@ -16,7 +16,6 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import TownController from '../../../../../../classes/TownController';
-import useTownController from '../../../../../../hooks/useTownController';
 import { WardrobeItem } from '../../../../../../types/CoveyTownSocket';
 
 const useStyles = makeStyles({
@@ -43,10 +42,10 @@ function WardrobePanel({
   onClose: any;
   coveyTownController: TownController;
 }) {
-  const classes = useStyles();
-  const town = useTownController();
-  const initalOutfit = town.ourPlayer.wardrobe.currentOutfit;
-  const initialSkin = town.ourPlayer.wardrobe.currentSkin;
+  const initalOutfit = coveyTownController.ourPlayer.wardrobe.currentOutfit;
+  const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
+  const classes = useStyles(makeStyles);
+  console.log(coveyTownController.ourPlayer.wardrobe);
 
   const [spritePreview, setSpritePreview] = useState<WardrobeItem[]>([initalOutfit, initialSkin]);
   useEffect(() => {
@@ -65,11 +64,14 @@ function WardrobePanel({
    */
   async function switchSpriteItems(itemID: string): Promise<void> {
     console.log('hi');
-    if (itemID.startsWith('skin')) {
+    if (
+      itemID.startsWith('skin') &&
+      coveyTownController.ourPlayer.wardrobe.inventory instanceof Map
+    ) {
       const currentOutfit = spritePreview[0];
       const newSpritePreview: WardrobeItem[] = [
         currentOutfit,
-        town.ourPlayer.wardrobe.inventory
+        coveyTownController.ourPlayer.wardrobe.inventory
           .get('skin')
           ?.find((item: WardrobeItem) => item.id === itemID) as WardrobeItem,
       ];
@@ -77,7 +79,7 @@ function WardrobePanel({
     } else {
       const currentSkin = spritePreview[1];
       const newSpritePreview: WardrobeItem[] = [
-        town.ourPlayer.wardrobe.inventory
+        coveyTownController.ourPlayer.wardrobe.inventory
           .get('skin')
           ?.find((item: WardrobeItem) => item.id === itemID) as WardrobeItem,
         currentSkin,
@@ -87,10 +89,12 @@ function WardrobePanel({
   }
 
   function isOutfitUnlocked(itemID: string): boolean {
-    console.log('wadrobe: ', town.ourPlayer.wardrobe);
-    console.log('inventory: ', town.ourPlayer.wardrobe.inventory);
+    console.log('wadrobe: ', coveyTownController.ourPlayer.wardrobe);
+    console.log('inventory: ', coveyTownController.ourPlayer.wardrobe.inventory);
     return (
-      town.ourPlayer.wardrobe.inventory.get('outfit')?.find(o => o.name === itemID) !== undefined
+      coveyTownController.ourPlayer.wardrobe.inventory
+        .get('outfit')
+        ?.find(o => o.name === itemID) !== undefined
     );
   }
 
@@ -132,7 +136,7 @@ function WardrobePanel({
                         }}
                       />
                     </Tab>
-                    <Tab /**isDisabled={isOutfitUnlocked('bday')} */>
+                    <Tab /** isDisabled={isOutfitUnlocked('bday')} */>
                       <Image
                         src={`${prefix}/misa-skin4/misa-skin4-front.png`}
                         alt='bday'
