@@ -16,7 +16,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import TownController from '../../../../../../classes/TownController';
-import { WardrobeItem } from '../../../../../../types/CoveyTownSocket';
+import { WardrobeItem, WardrobeModel } from '../../../../../../types/CoveyTownSocket';
 
 const useStyles = makeStyles({
   preview: {
@@ -45,18 +45,17 @@ function WardrobePanel({
   const initalOutfit = coveyTownController.ourPlayer.wardrobe.currentOutfit;
   const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
   const classes = useStyles(makeStyles);
-  console.log(coveyTownController.ourPlayer.wardrobe);
 
   const [spritePreview, setSpritePreview] = useState<WardrobeItem[]>([initalOutfit, initialSkin]);
   useEffect(() => {
-    console.log('Sprite preview changed.');
+    console.log(
+      'Sprite preview has changed to ' + spritePreview[0].id + ' and ' + spritePreview[1].id,
+    );
   });
-
   const closeWardrobe = useCallback(() => {
     onClose();
     coveyTownController.unPause();
   }, [onClose, coveyTownController]);
-
   /**
    * Switches the sprite preview to one with the newly selected item and the
    * other currently selected item.
@@ -71,7 +70,6 @@ function WardrobePanel({
           (item: WardrobeItem) => item.id === itemID,
         ) as WardrobeItem,
       ];
-      console.log(newSpritePreview);
       setSpritePreview(newSpritePreview);
     } else {
       const currentSkin = spritePreview[1];
@@ -90,7 +88,6 @@ function WardrobePanel({
       coveyTownController.ourPlayer.wardrobe.inventory.find(o => o.id === itemID) === undefined
     );
   }
-  console.log(isOutfitLocked('bday'));
 
   const prefix = 'assets/atlas/';
   /**
@@ -221,7 +218,17 @@ function WardrobePanel({
                 </Tabs>
               </div>
               <div>
-                <Button title='Confirm' onClick={closeWardrobe}>
+                <Button
+                  title='Confirm'
+                  onClick={() => {
+                    const newWardrobe: WardrobeModel = {
+                      currentOutfit: spritePreview[0],
+                      currentSkin: spritePreview[1],
+                      inventory: coveyTownController.ourPlayer.wardrobe.inventory,
+                      currency: coveyTownController.ourPlayer.wardrobe.currency,
+                    };
+                    coveyTownController.emitWardobeChange(newWardrobe);
+                  }}>
                   Confirm
                 </Button>
               </div>
