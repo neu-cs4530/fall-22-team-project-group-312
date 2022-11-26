@@ -28,14 +28,12 @@ describe('Player', () => {
       expect(playerWardrobe.currentSkin.id).toBe('skin1');
     });
     it('Ensures the wardrobe inventory is defined and filled when set as a Player property', () => {
-      expect(playerWardrobe.inventory.get('skin')).not.toBe(undefined);
-      expect(playerWardrobe.inventory.get('outfit')).not.toBe(undefined);
-      expect(playerWardrobe.inventory.get('skin')?.length).toEqual(5);
-      expect(playerWardrobe.inventory.get('outfit')?.length).toEqual(1);
+      expect(playerWardrobe.inventory).not.toBe(undefined);
+      expect(playerWardrobe.inventory).not.toBe(undefined);
+      expect(playerWardrobe.inventory.length).toEqual(6);
     });
   });
   describe('toPlayerModel', () => {
-    // TODO: fix this
     it('Checks that toPlayerModel() properly copies the player wardrobe', () => {
       const newModel: PlayerModel = testPlayer.toPlayerModel();
       expect(testPlayer.wardrobe.toModel()).toEqual(newModel.wardrobe);

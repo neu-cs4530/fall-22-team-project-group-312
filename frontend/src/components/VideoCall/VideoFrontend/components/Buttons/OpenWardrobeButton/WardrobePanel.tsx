@@ -71,17 +71,17 @@ function WardrobePanel({
       const currentOutfit = spritePreview[0];
       const newSpritePreview: WardrobeItem[] = [
         currentOutfit,
-        coveyTownController.ourPlayer.wardrobe.inventory
-          .get('skin')
-          ?.find((item: WardrobeItem) => item.id === itemID) as WardrobeItem,
+        town.ourPlayer.wardrobe.inventory.find(
+          (item: WardrobeItem) => item.id === itemID,
+        ) as WardrobeItem,
       ];
       setSpritePreview(newSpritePreview);
     } else {
       const currentSkin = spritePreview[1];
       const newSpritePreview: WardrobeItem[] = [
-        coveyTownController.ourPlayer.wardrobe.inventory
-          .get('skin')
-          ?.find((item: WardrobeItem) => item.id === itemID) as WardrobeItem,
+        town.ourPlayer.wardrobe.inventory.find(
+          (item: WardrobeItem) => item.id === itemID,
+        ) as WardrobeItem,
         currentSkin,
       ];
       setSpritePreview(newSpritePreview);
@@ -89,13 +89,9 @@ function WardrobePanel({
   }
 
   function isOutfitUnlocked(itemID: string): boolean {
-    console.log('wadrobe: ', coveyTownController.ourPlayer.wardrobe);
-    console.log('inventory: ', coveyTownController.ourPlayer.wardrobe.inventory);
-    return (
-      coveyTownController.ourPlayer.wardrobe.inventory
-        .get('outfit')
-        ?.find(o => o.name === itemID) !== undefined
-    );
+    console.log('wadrobe: ', town.ourPlayer.wardrobe);
+    console.log('inventory: ', town.ourPlayer.wardrobe.inventory);
+    return town.ourPlayer.wardrobe.inventory.find(o => o.name === itemID) !== undefined;
   }
 
   const prefix = 'assets/atlas/';
