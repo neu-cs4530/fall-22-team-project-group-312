@@ -60,6 +60,10 @@ export type TownEvents = {
    */
   playerMoved: (movedPlayer: PlayerController) => void;
   /**
+   * An event that indicates a player has had their wardrobe changed. Dispatched after updating the player's wardrobe/
+   */
+  playerWardrobeChanged: (wardrobePlayer: PlayerController) => void;
+  /**
    * An event that indicates that the set of conversation areas has changed. This event is dispatched
    * when a conversation area is created, or when the set of active conversations has changed. This event is dispatched
    * after updating the town controller's record of conversation areas.
@@ -399,6 +403,23 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         this.emit('playerMoved', newPlayer);
       }
     });
+    this._socket.on('playerWardrobeChanged', wardrobePlayer => {
+      const playerToUpdate = this.players.find(eachPlayer => eachPlayer.id === wardrobePlayer.id);
+      if (playerToUpdate) {
+        if (playerToUpdate === this._ourPlayer) {
+          // Do something? Do nothing? In the location part it doesn't update their own x,y so I'm thinking we don't update
+          // our own wardrobe
+        } else {
+          playerToUpdate.wardrobe = wardrobePlayer.wardrobe;
+        }
+        this.emit('playerWardrobeChanged', playerToUpdate);
+      } else {
+        //TODO: It should not be possible to receive a playerWardrobeChange event for a player that is not already in the players array, right?
+        const newPlayer = PlayerController.fromPlayerModel(wardrobePlayer);
+        this._players = this.players.concat(newPlayer);
+        this.emit('playerWardrobeChanged', newPlayer);
+      }
+    });
 
     /**
      * When an interactable's state changes, push that update into the relevant controller, which is assumed
@@ -450,7 +471,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
   }
 
   /**
-   * Emit a wardrobe chagne event for the current player, and updating the current wardrobe state
+   * Emit a wardrobe change event for the current player, and updating the current wardrobe state
    * by notifying the townService that the player's current wardrobe has changed.
    * @param newWardrobe the new Wardrobe set of outfit/skin that the player has chosen
    */
@@ -459,7 +480,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     const ourPlayer = this._ourPlayer;
     assert(ourPlayer);
     ourPlayer.wardrobe = newWardrobe;
-    this.emit('playerMoved', ourPlayer);
+    this.emit('playerWardrobeChanged', ourPlayer);
   }
 
   /**

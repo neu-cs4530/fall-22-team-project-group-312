@@ -23,6 +23,7 @@ import {
   SocketData,
   ViewingArea,
 } from './types/CoveyTownSocket';
+import Wardrobe from './lib/Wardrobe';
 
 /**
  * Create a new conversation area using some random defaults
@@ -159,6 +160,12 @@ export class MockedPlayer {
   moveTo(x: number, y: number, rotation: Direction = 'front', moving = false): void {
     const onMovementListener = getEventListener(this.socket, 'playerMovement');
     onMovementListener({ x, y, rotation, moving });
+  }
+
+  // New test util to test wardrobeChange event.
+  changeWardrobe(wardrobe: Wardrobe): void {
+    const onWardrobeChangeListener = getEventListener(this.socket, 'playerWardobeChange');
+    onWardrobeChangeListener({ wardrobe });
   }
 }
 
