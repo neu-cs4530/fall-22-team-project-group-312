@@ -120,7 +120,7 @@ function WardrobePanel({
                   <TabList>
                     <Tab>
                       <Image
-                        src={`${prefix}/outfit-previews/misa-preview.png`}
+                        src={`${prefix}/outfit-previews/preview-misa.png`}
                         alt='misa'
                         onClick={() => {
                           switchSpriteItems('misa');
