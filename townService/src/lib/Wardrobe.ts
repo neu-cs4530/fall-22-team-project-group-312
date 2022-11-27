@@ -1,5 +1,5 @@
 import { DEFAULT_ITEMS, UNLOCKABLE_ITEMS } from './WardrobeItem';
-import { WardrobeItem, ItemCategory, WardrobeModel } from '../types/CoveyTownSocket';
+import { WardrobeItem, ItemCategory, WardrobeModel, ItemID } from '../types/CoveyTownSocket';
 
 export const CURRENCY_GAIN_FROM_CHAT = 1;
 export const CURRENCY_GAIN_RATE_FROM_INTERACTABLE_AREA = 2;
@@ -8,9 +8,9 @@ export const CURRENCY_GAIN_RATE_FROM_PROXIMITY = 1;
 
 export interface WardrobeJSON {
   currency: number;
-  currentSkin: WardrobeItem;
-  currentOutfit: WardrobeItem;
-  inventory: WardrobeItem[];
+  currentSkinID: ItemID;
+  currentOutfitID: ItemID;
+  inventory: ItemID[];
 }
 
 /**
@@ -52,19 +52,34 @@ export default class Wardrobe {
       return undefined;
     }
     const wardrobe = new Wardrobe();
-    wardrobe.currency = json.currency;
-    wardrobe._currentSkin = json.currentSkin;
-    wardrobe._currentOutfit = json.currentOutfit;
-    json.inventory.forEach(item => wardrobe.addWardrobeItem(item));
+    json.inventory.forEach(newItemId => {
+      const newItem = UNLOCKABLE_ITEMS.find(item => item.id === newItemId);
+      if (newItem === undefined) {
+        throw new Error('Invalid item in inventory');
+      }
+      wardrobe.addWardrobeItem(newItem);
+    });
+    const currentSkin = wardrobe.inventory.find(item => item.id === json.currentSkinID);
+    if (currentSkin === undefined) {
+      throw new Error('Invalid skin equipped');
+    }
+    wardrobe.currentSkin = currentSkin;
+    const currentOutfit = wardrobe.inventory.find(item => item.id === json.currentOutfitID);
+    if (currentOutfit === undefined) {
+      throw new Error('Invalid outfit equipped');
+    }
+    wardrobe.currentOutfit = currentOutfit;
     return wardrobe;
   }
 
-  public exportWardrobe(): string {
+  public exportWardrobeToJSON(): string {
     return JSON.stringify({
       currency: this._currency,
-      currentSkin: this._currentSkin,
-      currentOutfit: this.currentOutfit,
-      inventory: this._inventory.get('outfit') as WardrobeItem[],
+      currentSkinID: this._currentSkin.id,
+      currentOutfitID: this.currentOutfit.id,
+      inventory: this._inventory
+        .filter(item => DEFAULT_ITEMS.find(i => i.id === item.id) === undefined)
+        .map(item => item.id),
     });
   }
 
@@ -142,7 +157,7 @@ export default class Wardrobe {
   /** Checks if the given item is currently in the wardrobe inventory */
   private _itemIsInInventory(item: WardrobeItem): boolean {
     // Check if the newItem is already in the inventory
-    if (this.inventory.find(i => i.name === item.name) === undefined) {
+    if (this.inventory.find(i => i.id === item.id) === undefined) {
       return false;
     }
     return true;

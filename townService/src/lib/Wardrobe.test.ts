@@ -1,9 +1,13 @@
 import Wardrobe from './Wardrobe';
-import { DEFAULT_ITEMS } from './WardrobeItem';
+import { DEFAULT_ITEMS, UNLOCKABLE_ITEMS } from './WardrobeItem';
 import { WardrobeItem } from '../types/CoveyTownSocket';
 
 describe('Wardrobe', () => {
   // A valid Wardrobe and WardrobeItem(s) to be reused within the tests
+  // wardobe with no items unlocked
+  let emptyWardrobe: Wardrobe;
+  // wardrobe with all items unlocked
+  let fullWardrobe: Wardrobe;
   let testWardrobe: Wardrobe;
   let testSkin: WardrobeItem;
   let testOutfit: WardrobeItem;
@@ -37,6 +41,14 @@ describe('Wardrobe', () => {
     // Add test items to wardrobe.
     testWardrobe.addWardrobeItem(testSkin);
     testWardrobe.addWardrobeItem(testOutfit);
+
+    emptyWardrobe = new Wardrobe();
+    fullWardrobe = new Wardrobe();
+    // add all unlockable items
+    UNLOCKABLE_ITEMS.forEach(item => fullWardrobe.addWardrobeItem(item));
+    fullWardrobe.currency = 1000;
+    fullWardrobe.currentOutfit = UNLOCKABLE_ITEMS[0];
+    fullWardrobe.currentSkin = DEFAULT_ITEMS[2];
   });
 
   describe('constructor', () => {
@@ -139,15 +151,15 @@ describe('Wardrobe', () => {
     });
   });
 
-  describe('exportWardrobe', () => {
-    it('returns the correct item with no unlocked items', () => {
-      expect(new Wardrobe().exportWardrobe()).toEqual(
-        '{"currency":0,' +
-          '"currentSkin":{"name":"0","category":"skin","spriteLocation":""},' +
-          '"currentOutfit":{"name":"defualt outfit","category":"outfit","spriteLocation":""},' +
-          '"inventory":[' +
-          '{"name":"defualt outfit","category":"outfit","spriteLocation":""}]' +
-          '}',
+  describe('exportWardrobeToJSON', () => {
+    it('returns the correct string with no unlocked items', () => {
+      expect(emptyWardrobe.exportWardrobeToJSON()).toEqual(
+        '{"currency":0,"currentSkinID":"skin1","currentOutfitID":"misa","inventory":[]}',
+      );
+    });
+    it('returns the correct string with all unlocked items', () => {
+      expect(fullWardrobe.exportWardrobeToJSON()).toEqual(
+        '{"currency":1000,"currentSkinID":"skin1","currentOutfitID":"bday","inventory":["bday","keqing","ness","xiaohei"]}',
       );
     });
   });
