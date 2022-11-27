@@ -462,4 +462,15 @@ describe('TownController', () => {
     emitEventAndExpectListenerFiring('townClosing', undefined, 'disconnect');
     expect(mockLoginController.setTownController).toBeCalledWith(null);
   });
+  describe('Wardrobe interactions', () => {
+    let townJoinResponse: TownJoinResponse;
+
+    beforeEach(async () => {
+      // Run to instantiate ourPlayer.
+      townJoinResponse = await mockTownControllerConnection(testController, mockSocket);
+    });
+    it('Gets access to the inventory', () => {
+      expect(testController.ourPlayer.wardrobe.inventory).not.toBe(undefined);
+    });
+  });
 });

@@ -15,6 +15,7 @@ import {
   PlayerLocation,
   TownSettingsUpdate,
   ViewingArea as ViewingAreaModel,
+  WardrobeModel,
 } from '../types/CoveyTownSocket';
 import { isConversationArea, isViewingArea } from '../types/TypeUtils';
 import ConversationAreaController from './ConversationAreaController';
@@ -445,6 +446,19 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     const ourPlayer = this._ourPlayer;
     assert(ourPlayer);
     ourPlayer.location = newLocation;
+    this.emit('playerMoved', ourPlayer);
+  }
+
+  /**
+   * Emit a wardrobe chagne event for the current player, and updating the current wardrobe state
+   * by notifying the townService that the player's current wardrobe has changed.
+   * @param newWardrobe the new Wardrobe set of outfit/skin that the player has chosen
+   */
+  public emitWardobeChange(newWardrobe: WardrobeModel) {
+    this._socket.emit('playerWardobeChange', newWardrobe);
+    const ourPlayer = this._ourPlayer;
+    assert(ourPlayer);
+    ourPlayer.wardrobe = newWardrobe;
     this.emit('playerMoved', ourPlayer);
   }
 

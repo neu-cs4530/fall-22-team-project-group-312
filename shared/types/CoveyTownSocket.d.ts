@@ -56,8 +56,8 @@ export interface Player {
   currentSkin: WardrobeItem;
   /** The current outfit set in the wardrobe. */
   currentOutfit: WardrobeItem;
-  /** A map of each item category available to the player and the wardrobe items in that cateogry they currently have unlocked.  */
-  inventory: Map<ItemCategory, WardrobeItem[]>;
+  /** A list of the wardrobe items currently unlocked.  */
+  inventory: WardrobeItem[];
 }
 
 export type XY = { x: number, y: number };
@@ -113,4 +113,5 @@ export interface ClientToServerEvents {
   chatMessage: (message: ChatMessage) => void;
   playerMovement: (movementData: PlayerLocation) => void;
   interactableUpdate: (update: Interactable) => void;
+  playerWardobeChange: (newWardrobe: WardrobeModel) => void;
 }

@@ -8,6 +8,7 @@ describe('PlayerController', () => {
   // Create a listener for the movement event
   let testPlayer: PlayerController;
   const mockListeners = mock<PlayerEvents>();
+  let testOutfit: WardrobeItem;
   beforeEach(() => {
     const playerLocation: PlayerLocation = {
       moving: false,
@@ -19,17 +20,17 @@ describe('PlayerController', () => {
     testPlayer = new PlayerController(nanoid(), nanoid(), playerLocation, playerWardrobe);
     mockClear(mockListeners.movement);
     testPlayer.addListener('movement', mockListeners.movement);
+    testOutfit = {
+      id: 'testoutfit',
+      name: 'test outfit',
+      category: 'outfit',
+    };
   });
 
   describe('Wardrobe', () => {
     it('Checks that the wardrobe is set and the movement event is properly emitted', () => {
       // Create a new wardrobe.
       const newWardrobe = new Wardrobe();
-      const testOutfit: WardrobeItem = {
-        id: 'testoutfit',
-        name: 'test outfit',
-        category: 'outfit',
-      };
       newWardrobe.addWardrobeItem(testOutfit);
       // Set the wardrobe
       testPlayer.wardrobe = newWardrobe;
@@ -38,7 +39,12 @@ describe('PlayerController', () => {
       expect(mockListeners.movement).toHaveBeenCalledWith(testPlayer.location);
     });
     it('Checks that changing the wardrobe to one with new set clothing changes the player sprite', () => {
-      //testPlayer.gameObjects?.sprite.texture.key
+      const newWardrobe = new Wardrobe();
+      newWardrobe.addWardrobeItem(testOutfit);
+      newWardrobe.currentOutfit = testOutfit;
+      testPlayer.wardrobe = newWardrobe;
+      // The setter should have now updated the sprite key of the player sprite
+      expect(testPlayer.wardrobe.currentOutfit.id).toEqual('testoutfit');
     });
   });
 });
