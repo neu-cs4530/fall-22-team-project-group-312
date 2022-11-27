@@ -138,25 +138,78 @@ describe('Gacha System tests', () => {
     // it('Is able to produce duplicate items on consecutive pulls');
   });
   describe('Test interaction with Player inventory', () => {
-    it('Can cost nothing');
-    it('Costs players CoveyCoins per pull');
-    it('Does not allow a Player with insufficient funds to pull');
-    it('Adds new items to the player inventory');
-    it('Does not change clothing in the inventory on duplicate pulls');
-    it('Partially refunds players for duplicate pulls');
+    it('Can cost nothing', () => {
+      const gachapon: GachaPicker = new GachaPicker(allItemsPool, free, 0);
+      testPlayer.wardrobe.currency = 1;
+      const oldBalance = testPlayer.wardrobe.currency;
+      gachapon.pull(testPlayer);
+      expect(testPlayer.wardrobe.currency).toEqual(oldBalance);
+    });
+    it('Costs players CoveyCoins per pull', () => {
+      const gachapon: GachaPicker = new GachaPicker(allItemsPool, fiveCoins, 0);
+      testPlayer.wardrobe.currency = fiveCoins + 20;
+      const oldBalance = testPlayer.wardrobe.currency;
+      gachapon.pull(testPlayer);
+      expect(testPlayer.wardrobe.currency).toEqual(oldBalance - 5);
+    });
+    it('Does not allow a Player with insufficient funds to pull', () => {
+      const gachapon: GachaPicker = new GachaPicker(nessPool, fiveCoins, 0);
+      testPlayer.wardrobe.currency = 0;
+      const oldBalance = testPlayer.wardrobe.currency;
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(false);
+
+      gachapon.pull(testPlayer);
+      expect(testPlayer.wardrobe.currency).toEqual(oldBalance);
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(false);
+    });
+    it('Adds new items to the player inventory', () => {
+      const gachapon: GachaPicker = new GachaPicker(nessPool, free, 0);
+      testPlayer.wardrobe.currency = 10;
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(false);
+      const originalOutfits: WardrobeItem[] = testPlayer.wardrobe.inventory.get('outfit');
+
+      gachapon.pull(testPlayer);
+
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(true);
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toEqual(
+        originalOutfits.length + 1,
+      );
+    });
+    it('Does not change clothing in the inventory on duplicate pulls', () => {
+      const gachapon: GachaPicker = new GachaPicker(nessPool, free, 0);
+      testPlayer.wardrobe.currency = 10;
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(false);
+      const originalOutfits: WardrobeItem[] =
+        testPlayer.wardrobe.inventory.get('outfit') === undefined
+          ? []
+          : testPlayer.wardrobe.inventory.get('outfit');
+
+      gachapon.pull(testPlayer);
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(true);
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toEqual(
+        originalOutfits.length + 1,
+      );
+
+      gachapon.pull(testPlayer);
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(true);
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toEqual(
+        originalOutfits.length + 1,
+      );
+    });
+    it('Refunds players for duplicate pulls', () => {
+      const testCost = 10;
+      const testRefund = 0.1;
+      const gachapon: GachaPicker = new GachaPicker(nessPool, testCost, testRefund);
+      testPlayer.wardrobe.currency = testCost * 3;
+      const startingBalance = testPlayer.wardrobe.currency;
+      gachapon.pull(testPlayer);
+      const balanceAfterFirstPull = testPlayer.wardrobe.currency;
+      gachapon.pull(testPlayer);
+      const balanceAfterRefund = testPlayer.wardrobe.currency;
+
+      expect(balanceAfterFirstPull).toEqual(startingBalance - testCost);
+      expect(balanceAfterRefund).toEqual(balanceAfterFirstPull + testCost * testRefund);
+    });
     it('Emits a message on a successful pull');
-    it('Throws an error on a failed pull');
   });
 });
-
-// test cases:
-/**
- * - shouldn't be able to pull anything from an empty pool
- * - should be able to pull an item from a non-empty pool
- * - pulling an item should decrease currency
- * - should be able to pull duplicate items in the same pull
- * - should be able to pull the same item twice in two consecutive pulls
- * - should add new items to the player's inventory/wardrobe
- * - duplicate items should not affect the player's inventory
- * - should partially refund players when they get duplicates
- */
