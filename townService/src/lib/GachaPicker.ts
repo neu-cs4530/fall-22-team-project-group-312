@@ -103,7 +103,5 @@ export default class GachaPicker {
         player.wardrobe.inventory.get('outfit')?.push(pulledItem);
       }
     }
-
-    throw new Error('Not enough currency to pull.');
   }
 }
