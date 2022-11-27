@@ -11,6 +11,15 @@ describe('Gacha System tests', () => {
   let keqing: WardrobeItem;
   let bday: WardrobeItem;
   let xiaohei: WardrobeItem;
+  let testPlayer: Player;
+
+  const free = 0;
+  const fiveCoins = 5;
+
+  let emptyPool: WardrobeItem[];
+  let nessPool: WardrobeItem[];
+  let nonEmptyPool: WardrobeItem[];
+  let allItemsPool: WardrobeItem[];
   beforeEach(() => {
     misa = {
       name: 'misa',
@@ -47,24 +56,89 @@ describe('Gacha System tests', () => {
       x: 0,
       y: 0,
       rotation: 'right',
-      moving: false
-    }
+      moving: false,
+    };
     const testWardrobe = new Wardrobe();
 
-    const testPlayer: Player = new Player(nanoid(), mock<TownEmitter>());
-    };
+    testPlayer = new Player(nanoid(), mock<TownEmitter>());
+    emptyPool = [];
+    nessPool = [ness];
+    nonEmptyPool = [misa, ness, keqing];
+    allItemsPool = [misa, ness, keqing, bday, xiaohei];
+  });
+
+  describe('Test getters', () => {
+    it('Gets the pull cost when free', () => {
+      const gachapon: GachaPicker = new GachaPicker(emptyPool, free, 0);
+      expect(gachapon.pullCost).toBe(0);
+    });
+    it('Gets the pull cost when not free', () => {
+      const gachapon: GachaPicker = new GachaPicker(emptyPool, 10, 0);
+      expect(gachapon.pullCost).toBe(10);
+    });
+    it('Gets an empty item pool', () => {
+      const gachapon: GachaPicker = new GachaPicker(emptyPool, free, 0);
+      expect(gachapon.itemPool.length).toBe(0);
+    });
+    it('Gets a non-empty item pool', () => {
+      const gachapon: GachaPicker = new GachaPicker(allItemsPool, free, 0);
+      expect(gachapon.itemPool.length).toBe(5);
+      expect(gachapon.itemPool.includes(misa)).toBe(true);
+      expect(gachapon.itemPool.includes(ness)).toBe(true);
+      expect(gachapon.itemPool.includes(xiaohei)).toBe(true);
+      expect(gachapon.itemPool.includes(keqing)).toBe(true);
+      expect(gachapon.itemPool.includes(bday)).toBe(true);
+    });
+    it('Gets the refund percent when no refund', () => {
+      const gachapon: GachaPicker = new GachaPicker(allItemsPool, free, 0);
+      expect(gachapon.refundPercent).toBe(0);
+    });
+    it('Gets the refund percent as a decimal', () => {
+      const gachapon: GachaPicker = new GachaPicker(allItemsPool, 10, 0.1);
+      expect(gachapon.pullCost).toEqual(0.1);
+    });
+  });
+  describe('Modifying the pool', () => {
+    it('Adds a new item to an empty pull pool', () => {
+      const gachapon: GachaPicker = new GachaPicker(emptyPool, free, 0);
+      expect(gachapon.itemPool.length).toBe(0);
+      gachapon.addItemToPool(ness);
+      expect(gachapon.itemPool.length).toBe(1);
+      expect(gachapon.itemPool).toContain(ness);
+    });
+    it('Adds a new item to a non-empty pool', () => {
+      const gachapon: GachaPicker = new GachaPicker(nonEmptyPool, free, 0);
+      expect(gachapon.itemPool.length).toBe(0);
+      gachapon.addItemToPool(ness);
+      expect(gachapon.itemPool.length).toBe(1);
+      expect(gachapon.itemPool).toContain(ness);
+    });
+    it('Pulling after adding the new item can retrieve the new item', () => {
+      const gachapon: GachaPicker = new GachaPicker(emptyPool, free, 0);
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toBe(6);
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(false);
+      gachapon.addItemToPool(ness);
+      gachapon.pull(testPlayer);
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toBe(7);
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(true);
+    });
   });
   describe('Test item obtainability', () => {
-    it('Produces nothing if the pull pool is empty');
-    it('Produces an item from the pool', () => {
-      
-      const pullableTestItemPool: WardrobeItem[] = [misa, ness, keqing, bday, xiaohei];
-
-      const gachapon: GachaPicker = new GachaPicker(pullableTestItemPool, 10, 0.4);
+    it('Does not change the player wardrobe if the pull pool is empty', () => {
+      const testPool: WardrobeItem[] = [];
+      const originalOutfits: WardrobeItem[] =
+        testPlayer.wardrobe.inventory.get('outfit') === undefined
+          ? []
+          : testPlayer.wardrobe.inventory.get('outfit');
+      const gachapon: GachaPicker = new GachaPicker(testPool, free, 0);
+      gachapon.pull(testPlayer);
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toBe(originalOutfits.length);
+      expect(testPlayer.wardrobe.inventory.get('outfit')).toEqual(originalOutfits);
     });
-    it('Is able to produce duplicate items on consecutive pulls');
+    // it('Is able to produce duplicate items on consecutive pulls');
   });
   describe('Test interaction with Player inventory', () => {
+    it('Can cost nothing');
     it('Costs players CoveyCoins per pull');
     it('Does not allow a Player with insufficient funds to pull');
     it('Adds new items to the player inventory');
