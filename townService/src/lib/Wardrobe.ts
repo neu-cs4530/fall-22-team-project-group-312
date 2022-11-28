@@ -44,14 +44,15 @@ export default class Wardrobe {
     ) as WardrobeItem;
   }
 
-  public static getWardrobeFromJSON(jsonString: string): Wardrobe | undefined {
+  public static getWardrobeFromJSON(jsonString: string): Wardrobe {
     let json: WardrobeJSON;
     try {
       json = JSON.parse(jsonString) as WardrobeJSON;
     } catch {
-      return undefined;
+      throw new Error('Invalid string format for json');
     }
     const wardrobe = new Wardrobe();
+    wardrobe.currency = json.currency;
     json.inventory.forEach(newItemId => {
       const newItem = UNLOCKABLE_ITEMS.find(item => item.id === newItemId);
       if (newItem === undefined) {
