@@ -546,15 +546,16 @@ describe('Town', () => {
       const newWardrobe = new Wardrobe();
       // Add a test item to differentiate the wardrobes.
       newWardrobe.addWardrobeItem(testWardrobeItem);
+      const newWardrobeModel = newWardrobe.toModel();
 
       beforeEach(() => {
-        playerTestData.changeWardrobe(newWardrobe);
+        playerTestData.changeWardrobe(newWardrobeModel);
       });
 
       it('Emits a playerWardrobeChange event', () => {
         const lastEmittedWardrobeChange = getLastEmittedEvent(townEmitter, 'playerWardrobeChanged');
         expect(lastEmittedWardrobeChange.id).toEqual(playerTestData.player?.id);
-        expect(lastEmittedWardrobeChange.wardrobe).toEqual(newWardrobe);
+        expect(lastEmittedWardrobeChange.wardrobe).toEqual(newWardrobeModel);
       });
       it("Updates the player's wardrobe", () => {
         expect(player.wardrobe).toEqual(newWardrobe);
