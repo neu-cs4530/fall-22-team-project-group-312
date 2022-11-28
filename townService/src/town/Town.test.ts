@@ -3,7 +3,8 @@ import { DeepMockProxy, mockClear, mockDeep, mockReset } from 'jest-mock-extende
 import { nanoid } from 'nanoid';
 import Player from '../lib/Player';
 import TwilioVideo from '../lib/TwilioVideo';
-import { CURRENCY_GAIN_FROM_CHAT } from '../lib/Wardrobe';
+import Wardrobe, { CURRENCY_GAIN_FROM_CHAT } from '../lib/Wardrobe';
+
 import {
   ClientEventTypes,
   expectArraysToContainSameMembers,
@@ -18,6 +19,7 @@ import {
   PlayerLocation,
   TownEmitter,
   ViewingArea as ViewingAreaModel,
+  WardrobeItem,
 } from '../types/CoveyTownSocket';
 import ConversationArea from './ConversationArea';
 import Town from './Town';
@@ -27,6 +29,11 @@ jest.spyOn(TwilioVideo, 'getInstance').mockReturnValue(mockTwilioVideo);
 
 type TestMapDict = {
   [key in string]: ITiledMap;
+};
+const testWardrobeItem: WardrobeItem = {
+  id: 'newItem',
+  name: 'newItem',
+  category: 'outfit',
 };
 const testingMaps: TestMapDict = {
   twoConv: {
@@ -385,6 +392,7 @@ describe('Town', () => {
         'chatMessage',
         'playerMovement',
         'interactableUpdate',
+        'playerWardobeChange',
       ];
       expectedEvents.forEach(eachEvent =>
         expect(getEventListener(playerTestData.socket, eachEvent)).toBeDefined(),
@@ -532,6 +540,25 @@ describe('Town', () => {
       });
       it("Updates the player's location", () => {
         expect(player.location).toEqual(newLocation);
+      });
+    });
+    describe('playerWardrobeChange', () => {
+      const newWardrobe = new Wardrobe();
+      // Add a test item to differentiate the wardrobes.
+      newWardrobe.addWardrobeItem(testWardrobeItem);
+      const newWardrobeModel = newWardrobe.toModel();
+
+      beforeEach(() => {
+        playerTestData.changeWardrobe(newWardrobeModel);
+      });
+
+      it('Emits a playerWardrobeChange event', () => {
+        const lastEmittedWardrobeChange = getLastEmittedEvent(townEmitter, 'playerWardrobeChanged');
+        expect(lastEmittedWardrobeChange.id).toEqual(playerTestData.player?.id);
+        expect(lastEmittedWardrobeChange.wardrobe).toEqual(newWardrobeModel);
+      });
+      it("Updates the player's wardrobe", () => {
+        expect(player.wardrobe).toEqual(newWardrobe);
       });
     });
     describe('interactableUpdate', () => {

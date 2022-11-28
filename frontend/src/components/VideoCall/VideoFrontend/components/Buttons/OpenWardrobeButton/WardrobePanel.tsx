@@ -12,6 +12,7 @@ import {
   TabList,
   Tabs,
   VStack,
+  Heading,
 } from '@chakra-ui/react';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -33,7 +34,6 @@ const useStyles = makeStyles({
  */
 function WardrobePanel({
   isOpen,
-  onOpen,
   onClose,
   coveyTownController,
 }: {
@@ -116,11 +116,14 @@ function WardrobePanel({
                 />
               </div>
               <div className='selectClothingPane'>
+                <Heading as='h5' size='sm'>
+                  Select Outfit
+                </Heading>
                 <Tabs aria-label='selectClothingMenu'>
                   <TabList>
                     <Tab>
                       <Image
-                        src={`${prefix}/outfit-previews/misa-preview.png`}
+                        src={`${prefix}/outfit-previews/preview-misa.png`}
                         alt='misa'
                         onClick={() => {
                           switchSpriteItems('misa');
@@ -167,11 +170,14 @@ function WardrobePanel({
                 </Tabs>
               </div>
               <div className='selectSkinColorMenu'>
+                <Heading as='h5' size='sm'>
+                  Select Skin Color
+                </Heading>
                 <Tabs>
                   <TabList>
                     <Tab>
                       <Image
-                        src={`${prefix}/misa-skin0/misa-skin0-front.png`}
+                        src={`${prefix}/outfit-previews/preview-skin0.png`}
                         alt='0 skin color'
                         onClick={() => {
                           switchSpriteItems('skin0');
@@ -180,7 +186,7 @@ function WardrobePanel({
                     </Tab>
                     <Tab>
                       <Image
-                        src={`${prefix}/misa-skin1/misa-skin1-front.png`}
+                        src={`${prefix}/outfit-previews/preview-skin1.png`}
                         alt='1 skin color'
                         onClick={() => {
                           switchSpriteItems('skin1');
@@ -189,7 +195,7 @@ function WardrobePanel({
                     </Tab>
                     <Tab>
                       <Image
-                        src={`${prefix}/misa-skin2/misa-skin2-front.png`}
+                        src={`${prefix}outfit-previews/preview-skin2.png`}
                         alt='2 skin color'
                         onClick={() => {
                           switchSpriteItems('skin2');
@@ -198,7 +204,7 @@ function WardrobePanel({
                     </Tab>
                     <Tab>
                       <Image
-                        src={`${prefix}/misa-skin3/misa-skin3-front.png`}
+                        src={`${prefix}outfit-previews/preview-skin3.png`}
                         alt='3 skin color'
                         onClick={() => {
                           switchSpriteItems('skin3');
@@ -207,7 +213,7 @@ function WardrobePanel({
                     </Tab>
                     <Tab>
                       <Image
-                        src={`${prefix}/misa-skin4/misa-skin4-front.png`}
+                        src={`${prefix}outfit-previews/preview-skin4.png`}
                         alt='4 skin color'
                         onClick={() => {
                           switchSpriteItems('skin4');

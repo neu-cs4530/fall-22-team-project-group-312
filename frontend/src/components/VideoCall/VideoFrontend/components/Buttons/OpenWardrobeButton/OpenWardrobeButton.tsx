@@ -1,16 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import Button from '@material-ui/core/Button';
-import ReactDOM from 'react-dom';
+import React, { useCallback } from 'react';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
-import {
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { useDisclosure } from '@chakra-ui/react';
 import useTownController from '../../../../../../hooks/useTownController';
 import WardrobePanel from './WardrobePanel';
 

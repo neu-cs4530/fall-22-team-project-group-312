@@ -18,8 +18,8 @@ describe('PlayerController', () => {
     };
     const playerWardrobe = new Wardrobe();
     testPlayer = new PlayerController(nanoid(), nanoid(), playerLocation, playerWardrobe);
-    mockClear(mockListeners.movement);
-    testPlayer.addListener('movement', mockListeners.movement);
+    mockClear(mockListeners.wardrobeChange);
+    testPlayer.addListener('wardrobeChange', mockListeners.wardrobeChange);
     testOutfit = {
       id: 'testoutfit',
       name: 'test outfit',
@@ -35,8 +35,8 @@ describe('PlayerController', () => {
       // Set the wardrobe
       testPlayer.wardrobe = newWardrobe;
       expect(testPlayer.wardrobe).toEqual(newWardrobe);
-      // Movement listener should be called
-      expect(mockListeners.movement).toHaveBeenCalledWith(testPlayer.location);
+      // Wardrobe listener should be called
+      expect(mockListeners.wardrobeChange).toHaveBeenCalledWith(testPlayer.wardrobe);
     });
     it('Checks that changing the wardrobe to one with new set clothing changes the player sprite', () => {
       const newWardrobe = new Wardrobe();

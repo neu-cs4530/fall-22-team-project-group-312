@@ -1,5 +1,5 @@
 import { DEFAULT_ITEMS, UNLOCKABLE_ITEMS } from './WardrobeItem';
-import { WardrobeItem, ItemCategory, WardrobeModel, ItemID } from '../types/CoveyTownSocket';
+import { WardrobeItem, WardrobeModel, ItemID } from '../types/CoveyTownSocket';
 
 export const CURRENCY_GAIN_FROM_CHAT = 1;
 export const CURRENCY_GAIN_RATE_FROM_INTERACTABLE_AREA = 2;
@@ -131,6 +131,10 @@ export default class Wardrobe {
     return this._inventory;
   }
 
+  /**
+   * Converts a Wardrobe to a WardrobeModel suitable for emitters and PlayerController.
+   * @returns A WardrobeModel object based on the wardrobe
+   */
   public toModel(): WardrobeModel {
     return {
       currency: this.currency,
@@ -138,6 +142,17 @@ export default class Wardrobe {
       currentOutfit: this.currentOutfit,
       inventory: this.inventory,
     };
+  }
+
+  /**
+   * Updates this wardrobe based on the given WardrobeModel
+   * @param model A WardrobeModel object that this Wardrobe will update to match.
+   */
+  public updateFromModel(model: WardrobeModel) {
+    this.currency = model.currency;
+    this.currentOutfit = model.currentOutfit;
+    this.currentSkin = model.currentSkin;
+    this._inventory = model.inventory;
   }
 
   /**

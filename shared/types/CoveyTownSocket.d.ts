@@ -61,6 +61,12 @@ export interface Player {
   inventory: WardrobeItem[];
 }
 
+// Represents all skin color options the player could possibly have
+export const SKIN_COLORS: string[] = ['skin0', 'skin1', 'skin2', 'skin3'];
+
+// Represents all outfit options the player could possiby have
+export const OUTFITS: string[] = ['misa', 'bday', 'keqing', 'ness', 'xiaohei'];
+
 export type XY = { x: number, y: number };
 
 export interface PlayerLocation {
@@ -101,6 +107,8 @@ export interface ViewingArea {
 
 export interface ServerToClientEvents {
   playerMoved: (movedPlayer: Player) => void;
+  // New ServerToClient event for a changed wardrobe.
+  playerWardrobeChanged: (wardrobePlayer: Player) => void;
   playerDisconnect: (disconnectedPlayer: Player) => void;
   playerJoined: (newPlayer: Player) => void;
   initialize: (initialData: TownJoinResponse) => void;
@@ -114,5 +122,6 @@ export interface ClientToServerEvents {
   chatMessage: (message: ChatMessage) => void;
   playerMovement: (movementData: PlayerLocation) => void;
   interactableUpdate: (update: Interactable) => void;
+  // New ClientToServer event for a changed wardrobe.
   playerWardobeChange: (newWardrobe: WardrobeModel) => void;
 }

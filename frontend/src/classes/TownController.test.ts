@@ -17,6 +17,7 @@ import {
   PlayerLocation,
   ServerToClientEvents,
   TownJoinResponse,
+  WardrobeItem,
 } from '../types/CoveyTownSocket';
 import { isConversationArea, isViewingArea } from '../types/TypeUtils';
 import PlayerController from './PlayerController';
@@ -37,6 +38,13 @@ jest.mock('socket.io-client', () => {
     io: () => mockSocket,
   };
 });
+
+// For testing wardrobe changes
+const testWardrobeItem: WardrobeItem = {
+  id: 'newItem',
+  name: 'newItem',
+  category: 'outfit',
+};
 
 describe('TownController', () => {
   let mockLoginController: MockProxy<LoginController>;
@@ -457,17 +465,27 @@ describe('TownController', () => {
         PlayerController.fromPlayerModel(testPlayer),
       );
     });
+    it('Emits playerWardrobeChanged events when players change their wardrobe', async () => {
+      const newWardrobe = new Wardrobe();
+      // Add a test item to differentiate the wardrobes.
+      newWardrobe.addWardrobeItem(testWardrobeItem);
+      testPlayer.wardrobe = newWardrobe.toModel();
+      emitEventAndExpectListenerFiring(
+        'playerWardrobeChanged',
+        testPlayer,
+        'playerWardrobeChanged',
+        PlayerController.fromPlayerModel(testPlayer),
+      );
+    });
   });
   it('Disconnects the socket and clears the coveyTownController when disconnection', async () => {
     emitEventAndExpectListenerFiring('townClosing', undefined, 'disconnect');
     expect(mockLoginController.setTownController).toBeCalledWith(null);
   });
   describe('Wardrobe interactions', () => {
-    let townJoinResponse: TownJoinResponse;
-
     beforeEach(async () => {
       // Run to instantiate ourPlayer.
-      townJoinResponse = await mockTownControllerConnection(testController, mockSocket);
+      await mockTownControllerConnection(testController, mockSocket);
     });
     it('Gets access to the inventory', () => {
       expect(testController.ourPlayer.wardrobe.inventory).not.toBe(undefined);
