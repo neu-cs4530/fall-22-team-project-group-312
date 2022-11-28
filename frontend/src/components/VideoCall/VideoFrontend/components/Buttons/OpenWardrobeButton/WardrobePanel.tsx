@@ -34,7 +34,6 @@ const useStyles = makeStyles({
  */
 function WardrobePanel({
   isOpen,
-  onOpen,
   onClose,
   coveyTownController,
 }: {

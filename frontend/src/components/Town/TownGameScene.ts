@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import PlayerController from '../../classes/PlayerController';
 import TownController from '../../classes/TownController';
 import { PlayerLocation } from '../../types/CoveyTownSocket';
+// import does not work fixing later
+// import { SKIN_COLORS, OUTFITS } from '../../../../../../types/CoveyTownSocket';
 import { Callback } from '../VideoCall/VideoFrontend/types';
 import Interactable from './Interactable';
 import ConversationArea from './interactables/ConversationArea';
@@ -119,57 +121,22 @@ export default class TownGameScene extends Phaser.Scene {
       '16_Grocery_store_32x32',
       this._resourcePathPrefix + '/assets/tilesets/16_Grocery_store_32x32.png',
     );
+    // Represents all skin color options the player could possibly have
+    const skinColors: string[] = ['skin0', 'skin1', 'skin2', 'skin3', 'skin4'];
+
+    // Represents all outfit options the player could possiby have
+    const outfits: string[] = ['misa', 'bday', 'keqing', 'ness', 'xiaohei'];
     this.load.tilemapTiledJSON('map', this._resourcePathPrefix + '/assets/tilemaps/indoors.json');
-    this.load.atlas(
-      'atlas',
-      this._resourcePathPrefix + '/assets/atlas/atlas.png',
-      this._resourcePathPrefix + '/assets/atlas/atlas.json',
-    );
-    this.load.atlas(
-      'misa-skin0',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin0.png',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin0.json',
-    );
-    this.load.atlas(
-      'misa-skin1',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin1.png',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin1.json',
-    );
-    this.load.atlas(
-      'misa-skin2',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin2.png',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin2.json',
-    );
-    this.load.atlas(
-      'misa-skin3',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin3.png',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin3.json',
-    );
-    this.load.atlas(
-      'misa-skin4',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin4.png',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin4.json',
-    );
-    this.load.atlas(
-      'keqing-skin0',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin0.png',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin0.json',
-    );
-    this.load.atlas(
-      'keqing-skin1',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin1.png',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin1.json',
-    );
-    this.load.atlas(
-      'keqing-skin2',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin2.png',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin2.json',
-    );
-    this.load.atlas(
-      'keqing-skin3',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin3.png',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin3.json',
-    );
+    for (const outfit in outfits) {
+      for (const skin in skinColors) {
+        const spriteAtlas = outfits[outfit] + '-' + skinColors[skin];
+        this.load.atlas(
+          spriteAtlas,
+          this._resourcePathPrefix + `/assets/atlas/${spriteAtlas}.png`,
+          this._resourcePathPrefix + `/assets/atlas/${spriteAtlas}.json`,
+        );
+      }
+    }
     this.load.atlas(
       'keqing-skin4',
       this._resourcePathPrefix + '/assets/atlas/keqing-skin4.png',
@@ -478,34 +445,18 @@ export default class TownGameScene extends Phaser.Scene {
     // Create the player's walking animations from the texture matching the players wardrobe. These are stored in the global
     // animation manager so any sprite can access them.
     const { anims } = this;
-    const listOfAnimations: string[] = [
-      'misa-skin0',
-      'misa-skin1',
-      'misa-skin2',
-      'misa-skin3',
-      'misa-skin4',
-      'keqing-skin0',
-      'keqing-skin1',
-      'keqing-skin2',
-      'keqing-skin3',
-      'keqing-skin4',
-      'bday-skin0',
-      'bday-skin1',
-      'bday-skin2',
-      'bday-skin3',
-      'bday-skin4',
-      'ness-skin0',
-      'ness-skin1',
-      'ness-skin2',
-      'ness-skin3',
-      'ness-skin4',
-      'xiaohei-skin0',
-      'xiaohei-skin1',
-      'xiaohei-skin2',
-      'xiaohei-skin3',
-      'xiaohei-skin4',
-    ];
+    const listOfAnimations: string[] = [];
+    // Represents all skin color options the player could possibly have
+    const skinColors: string[] = ['skin0', 'skin1', 'skin2', 'skin3', 'skin4'];
 
+    // Represents all outfit options the player could possiby have
+    const outfits: string[] = ['misa', 'bday', 'keqing', 'ness', 'xiaohei'];
+    for (const outfit in outfits) {
+      for (const skin in skinColors) {
+        const spriteAnimation = outfits[outfit] + '-' + skinColors[skin];
+        listOfAnimations.push(spriteAnimation);
+      }
+    }
     listOfAnimations.forEach(texture => {
       anims.create({
         // key: 'misa-left-walk',
