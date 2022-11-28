@@ -13,6 +13,7 @@ import {
   Tabs,
   VStack,
   Heading,
+  useToast,
 } from '@chakra-ui/react';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -45,6 +46,7 @@ function WardrobePanel({
   const initalOutfit = coveyTownController.ourPlayer.wardrobe.currentOutfit;
   const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
   const classes = useStyles(makeStyles);
+  const toast = useToast();
 
   const [spritePreview, setSpritePreview] = useState<WardrobeItem[]>([initalOutfit, initialSkin]);
   useEffect(() => {
@@ -234,6 +236,12 @@ function WardrobePanel({
                       currency: coveyTownController.ourPlayer.wardrobe.currency,
                     };
                     coveyTownController.emitWardobeChange(newWardrobe);
+                    toast({
+                      title: 'Wardrobe changed! Please move the character to see the changes.',
+                      variant: 'solid',
+                      status: 'success',
+                      isClosable: true,
+                    });
                   }}>
                   Confirm
                 </Button>
