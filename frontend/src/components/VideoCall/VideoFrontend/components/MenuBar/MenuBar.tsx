@@ -12,6 +12,7 @@ import ToggleAudioButton from '../Buttons/ToggleAudioButton/ToggleAudioButton';
 import ToggleChatButton from '../Buttons/ToggleChatButton/ToggleChatButton';
 import ToggleVideoButton from '../Buttons/ToggleVideoButton/ToggleVideoButton';
 import ToggleScreenShareButton from '../Buttons/ToogleScreenShareButton/ToggleScreenShareButton';
+import OpenGachaButton from '../Buttons/OpenGachaButton/OpenGachaButton';
 import TownSettings from '../../../../Login/TownSettings';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -86,6 +87,7 @@ export default function MenuBar() {
               <ToggleAudioButton disabled={isReconnecting} />
               <ToggleVideoButton disabled={isReconnecting} />
               {!isSharingScreen && !isMobile && <ToggleScreenShareButton disabled={isReconnecting} />}
+              <OpenGachaButton />
               <Hidden smDown>
                 <Menu />
                 <TownSettings />

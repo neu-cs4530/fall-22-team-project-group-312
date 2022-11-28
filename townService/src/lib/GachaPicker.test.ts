@@ -112,26 +112,27 @@ describe('Gacha System tests', () => {
       expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(false);
       gachapon.addItemToPool(ness);
       gachapon.pull(testPlayer);
-      // expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toBe(2);
-      // expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(misa)).toBe(true);
-      expect(testPlayer.wardrobe.inventory.get('outfit')).toEqual([]);
+
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toBe(2);
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(misa)).toBe(true);
+      // expect(testPlayer.wardrobe.inventory.get('outfit')).toEqual([]);
       expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(true);
     });
   });
-  // describe('Test item obtainability', () => {
-  //   it('Does not change the player wardrobe if the pull pool is empty', () => {
-  //     const testPool: WardrobeItem[] = [];
-  //     const originalOutfits: WardrobeItem[] =
-  //       testPlayer.wardrobe.inventory.get('outfit') === undefined
-  //         ? []
-  //         : testPlayer.wardrobe.inventory.get('outfit');
-  //     const gachapon: GachaPicker = new GachaPicker(testPool, free, 0);
-  //     gachapon.pull(testPlayer);
-  //     expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toBe(originalOutfits.length);
-  //     expect(testPlayer.wardrobe.inventory.get('outfit')).toEqual(originalOutfits);
-  //   });
-  //   // it('Is able to produce duplicate items on consecutive pulls');
-  // });
+  describe('Test item obtainability', () => {
+    it('Does not change the player wardrobe if the pull pool is empty', () => {
+      const testPool: WardrobeItem[] = [];
+      const originalOutfits: WardrobeItem[] =
+        testPlayer.wardrobe.inventory.get('outfit') === undefined
+          ? []
+          : testPlayer.wardrobe.inventory.get('outfit');
+      const gachapon: GachaPicker = new GachaPicker(testPool, free, 0);
+      gachapon.pull(testPlayer);
+      expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toBe(originalOutfits.length);
+      expect(testPlayer.wardrobe.inventory.get('outfit')).toEqual(originalOutfits);
+    });
+    // it('Is able to produce duplicate items on consecutive pulls');
+  });
   describe('Test interaction with Player inventory', () => {
     it('Can cost nothing', () => {
       const gachapon: GachaPicker = new GachaPicker(allItemsPool, free, 0);

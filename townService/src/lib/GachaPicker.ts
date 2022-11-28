@@ -1,4 +1,5 @@
-import { Player, WardrobeItem } from '../types/CoveyTownSocket';
+import { WardrobeItem } from '../types/CoveyTownSocket';
+import Player from './Player';
 
 export const PULL_COST = 1000;
 
@@ -89,25 +90,23 @@ export default class GachaPicker {
    * If the player already has the item they pulled, partially refund
    * the cost of the pull. Otherwise, add the item to their inventory
    *
-   * Emits the change to the frontend.
+   * Assumes the player has enough currency to make the pull.
+   *
+   * Emits the pulled item to the frontend.
    * @param player the player pulling from the gacha pool
    */
-  public pull(player: Player): void {
-    if (player.wardrobe.currency > this._pullCost) {
-      player.wardrobe.currency -= this._pullCost;
-      const pulledItem: WardrobeItem = this._getOneItem();
-      if (GachaPicker._playerHasGivenItem(player, pulledItem)) {
-        // refund
-        player.wardrobe.currency += this._pullCost * this._refundPercent;
-        // emit
-      } else {
-        // adds it to the player's inventory
-        const newWardrobe = player.wardrobe.inventory.get('outfit');
-        if (newWardrobe !== undefined) {
-          newWardrobe.push(pulledItem);
-          player.wardrobe.inventory.set('outfit', newWardrobe);
-        }
-      }
+  public pull(player: Player): WardrobeItem {
+    player.wardrobe.currency -= this._pullCost;
+    const pulledItem: WardrobeItem = this._getOneItem();
+    if (GachaPicker._playerHasGivenItem(player, pulledItem)) {
+      // refund
+      player.wardrobe.currency += this._pullCost * this._refundPercent;
+      // emit
+    } else {
+      // adds it to the player's inventory
+      player.wardrobe.addWardrobeItem(pulledItem);
     }
+
+    return pulledItem;
   }
 }

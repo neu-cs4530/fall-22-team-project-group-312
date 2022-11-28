@@ -26,7 +26,7 @@ export default function OpenGachaButton() {
   return (
     <>
       <MenuItem data-testid='openMenuButton' onClick={openWardrobe}>
-        <Typography variant='body1'>Changing Room</Typography>
+        <Typography variant='body1'>Get More Outfits</Typography>
       </MenuItem>
       <GachaPanel
         isOpen={isOpen}
