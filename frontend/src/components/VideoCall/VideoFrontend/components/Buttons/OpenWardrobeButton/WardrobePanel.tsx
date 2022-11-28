@@ -171,7 +171,7 @@ function WardrobePanel({
                   <TabList>
                     <Tab>
                       <Image
-                        src={`${prefix}/misa-skin0/misa-skin0-front.png`}
+                        src={`${prefix}/outfit-previews/preview-skin0.png`}
                         alt='0 skin color'
                         onClick={() => {
                           switchSpriteItems('skin0');
@@ -180,7 +180,7 @@ function WardrobePanel({
                     </Tab>
                     <Tab>
                       <Image
-                        src={`${prefix}/misa-skin1/misa-skin1-front.png`}
+                        src={`${prefix}/outfit-previews/preview-skin1.png`}
                         alt='1 skin color'
                         onClick={() => {
                           switchSpriteItems('skin1');
@@ -189,7 +189,7 @@ function WardrobePanel({
                     </Tab>
                     <Tab>
                       <Image
-                        src={`${prefix}/misa-skin2/misa-skin2-front.png`}
+                        src={`${prefix}outfit-previews/preview-skin2.png`}
                         alt='2 skin color'
                         onClick={() => {
                           switchSpriteItems('skin2');
@@ -198,7 +198,7 @@ function WardrobePanel({
                     </Tab>
                     <Tab>
                       <Image
-                        src={`${prefix}/misa-skin3/misa-skin3-front.png`}
+                        src={`${prefix}outfit-previews/preview-skin3.png`}
                         alt='3 skin color'
                         onClick={() => {
                           switchSpriteItems('skin3');
@@ -207,7 +207,7 @@ function WardrobePanel({
                     </Tab>
                     <Tab>
                       <Image
-                        src={`${prefix}/misa-skin4/misa-skin4-front.png`}
+                        src={`${prefix}outfit-previews/preview-skin4.png`}
                         alt='4 skin color'
                         onClick={() => {
                           switchSpriteItems('skin4');
