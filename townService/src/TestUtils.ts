@@ -22,8 +22,8 @@ import {
   ServerToClientEvents,
   SocketData,
   ViewingArea,
+  WardrobeModel,
 } from './types/CoveyTownSocket';
-import Wardrobe from './lib/Wardrobe';
 
 /**
  * Create a new conversation area using some random defaults
@@ -163,9 +163,9 @@ export class MockedPlayer {
   }
 
   // New test util to test wardrobeChange event.
-  changeWardrobe(wardrobe: Wardrobe): void {
+  changeWardrobe(wardrobeModel: WardrobeModel): void {
     const onWardrobeChangeListener = getEventListener(this.socket, 'playerWardobeChange');
-    onWardrobeChangeListener({ wardrobe });
+    onWardrobeChangeListener(wardrobeModel);
   }
 }
 
