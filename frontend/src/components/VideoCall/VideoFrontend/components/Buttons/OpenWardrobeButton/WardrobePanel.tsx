@@ -12,6 +12,7 @@ import {
   TabList,
   Tabs,
   VStack,
+  Heading,
 } from '@chakra-ui/react';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -116,6 +117,9 @@ function WardrobePanel({
                 />
               </div>
               <div className='selectClothingPane'>
+                <Heading as='h5' size='sm'>
+                  Select Outfit
+                </Heading>
                 <Tabs aria-label='selectClothingMenu'>
                   <TabList>
                     <Tab>
@@ -167,6 +171,9 @@ function WardrobePanel({
                 </Tabs>
               </div>
               <div className='selectSkinColorMenu'>
+                <Heading as='h5' size='sm'>
+                  Select Skin Color
+                </Heading>
                 <Tabs>
                   <TabList>
                     <Tab>
