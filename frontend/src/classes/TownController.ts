@@ -15,6 +15,7 @@ import {
   PlayerLocation,
   TownSettingsUpdate,
   ViewingArea as ViewingAreaModel,
+  WardrobeModel,
 } from '../types/CoveyTownSocket';
 import { isConversationArea, isViewingArea } from '../types/TypeUtils';
 import ConversationAreaController from './ConversationAreaController';
@@ -58,6 +59,10 @@ export type TownEvents = {
    * the new location can be found on the PlayerController.
    */
   playerMoved: (movedPlayer: PlayerController) => void;
+  /**
+   * An event that indicates a player has had their wardrobe changed. Dispatched after updating the player's wardrobe/
+   */
+  playerWardrobeChanged: (wardrobePlayer: PlayerController) => void;
   /**
    * An event that indicates that the set of conversation areas has changed. This event is dispatched
    * when a conversation area is created, or when the set of active conversations has changed. This event is dispatched
@@ -398,6 +403,23 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         this.emit('playerMoved', newPlayer);
       }
     });
+    this._socket.on('playerWardrobeChanged', wardrobePlayer => {
+      const playerToUpdate = this.players.find(eachPlayer => eachPlayer.id === wardrobePlayer.id);
+      if (playerToUpdate) {
+        if (playerToUpdate === this._ourPlayer) {
+          // Do something? Do nothing? In the location part it doesn't update their own x,y so I'm thinking we don't update
+          // our own wardrobe
+        } else {
+          playerToUpdate.wardrobe = wardrobePlayer.wardrobe;
+        }
+        this.emit('playerWardrobeChanged', playerToUpdate);
+      } else {
+        //TODO: It should not be possible to receive a playerWardrobeChange event for a player that is not already in the players array, right?
+        const newPlayer = PlayerController.fromPlayerModel(wardrobePlayer);
+        this._players = this.players.concat(newPlayer);
+        this.emit('playerWardrobeChanged', newPlayer);
+      }
+    });
 
     /**
      * When an interactable's state changes, push that update into the relevant controller, which is assumed
@@ -446,6 +468,19 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     assert(ourPlayer);
     ourPlayer.location = newLocation;
     this.emit('playerMoved', ourPlayer);
+  }
+
+  /**
+   * Emit a wardrobe change event for the current player, and updating the current wardrobe state
+   * by notifying the townService that the player's current wardrobe has changed.
+   * @param newWardrobe the new Wardrobe set of outfit/skin that the player has chosen
+   */
+  public emitWardobeChange(newWardrobe: WardrobeModel) {
+    this._socket.emit('playerWardobeChange', newWardrobe);
+    const ourPlayer = this._ourPlayer;
+    assert(ourPlayer);
+    ourPlayer.wardrobe = newWardrobe;
+    this.emit('playerWardrobeChanged', ourPlayer);
   }
 
   /**

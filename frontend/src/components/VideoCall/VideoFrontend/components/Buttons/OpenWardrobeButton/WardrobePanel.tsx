@@ -7,14 +7,24 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Stack,
   StackDivider,
+  Tab,
+  TabList,
+  Tabs,
   VStack,
+  Heading,
 } from '@chakra-ui/react';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import TownController from '../../../../../../classes/TownController';
-import useTownController from '../../../../../../hooks/useTownController';
-import { WardrobeItem } from '../../../../../../types/CoveyTownSocket';
+import { WardrobeItem, WardrobeModel } from '../../../../../../types/CoveyTownSocket';
+
+const useStyles = makeStyles({
+  preview: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 /**
  * The wardrobe panel inside the pop up modal. This shows all the available outfits and
@@ -24,7 +34,6 @@ import { WardrobeItem } from '../../../../../../types/CoveyTownSocket';
  */
 function WardrobePanel({
   isOpen,
-  onOpen,
   onClose,
   coveyTownController,
 }: {
@@ -33,56 +42,54 @@ function WardrobePanel({
   onClose: any;
   coveyTownController: TownController;
 }) {
-  const town = useTownController();
-  const initalOutfit = town.ourPlayer.wardrobe.currentOutfit;
-  const initialSkin = town.ourPlayer.wardrobe.currentSkin;
+  const initalOutfit = coveyTownController.ourPlayer.wardrobe.currentOutfit;
+  const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
+  const classes = useStyles(makeStyles);
 
   const [spritePreview, setSpritePreview] = useState<WardrobeItem[]>([initalOutfit, initialSkin]);
   useEffect(() => {
-    console.log('Sprite preview changed.');
+    console.log(
+      'Sprite preview has changed to ' + spritePreview[0].id + ' and ' + spritePreview[1].id,
+    );
   });
-
   const closeWardrobe = useCallback(() => {
     onClose();
     coveyTownController.unPause();
   }, [onClose, coveyTownController]);
-
   /**
    * Switches the sprite preview to one with the newly selected item and the
    * other currently selected item.
    * @param itemID the id of the item(outfit or skin color) the player selected
    */
-  function switchSpriteItems(itemID: string): void {
+  async function switchSpriteItems(itemID: string): Promise<void> {
     if (itemID.startsWith('skin')) {
       const currentOutfit = spritePreview[0];
       const newSpritePreview: WardrobeItem[] = [
         currentOutfit,
-        town.ourPlayer.wardrobe.inventory
-          .get('skin')
-          ?.find((item: WardrobeItem) => item.id === itemID) as WardrobeItem,
+        coveyTownController.ourPlayer.wardrobe.inventory.find(
+          (item: WardrobeItem) => item.id === itemID,
+        ) as WardrobeItem,
       ];
       setSpritePreview(newSpritePreview);
     } else {
       const currentSkin = spritePreview[1];
       const newSpritePreview: WardrobeItem[] = [
-        town.ourPlayer.wardrobe.inventory
-          .get('skin')
-          ?.find((item: WardrobeItem) => item.id === itemID) as WardrobeItem,
+        coveyTownController.ourPlayer.wardrobe.inventory.find(
+          (item: WardrobeItem) => item.id === itemID,
+        ) as WardrobeItem,
         currentSkin,
       ];
       setSpritePreview(newSpritePreview);
     }
   }
 
-  function isOutfitUnlocked(itemID: string): boolean {
-    console.log('wadrobe: ', town.ourPlayer.wardrobe);
-    console.log('inventory: ', town.ourPlayer.wardrobe.inventory);
+  function isOutfitLocked(itemID: string): boolean {
     return (
-      town.ourPlayer.wardrobe.inventory.get('outfit')?.find(o => o.name === itemID) !== undefined
+      coveyTownController.ourPlayer.wardrobe.inventory.find(o => o.id === itemID) === undefined
     );
   }
 
-  const prefix = 'frontend/public/assets/atlas/';
+  const prefix = 'assets/atlas/';
   /**
    * modal
    * left side of the preview png
@@ -100,124 +107,136 @@ function WardrobePanel({
           <ModalHeader>Changing Room</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <VStack divider={<StackDivider borderColor='gray.200' />} spacing={8} align='stretch'>
+            <VStack divider={<StackDivider borderColor='gray.200' />} spacing={15} align='center'>
               <div className='previewPane'>
                 <Image
-                  src={`${prefix}${spritePreview[0].name}-${spritePreview[1].name}/
-                  //${spritePreview[0].name}-${spritePreview[1].name}-front.png`}
+                  src={`${prefix}${spritePreview[0].id}-${spritePreview[1].id}/${spritePreview[0].id}-${spritePreview[1].id}-front.png`}
                   alt='sprite'
+                  className={classes.preview}
                 />
               </div>
-              <div className='selectionPane'>
-                <div className='selectClothingMenu'>
-                  <Stack spacing={5} direction='row' align='center'>
-                    <Button size='md'>
+              <div className='selectClothingPane'>
+                <Heading as='h5' size='sm'>
+                  Select Outfit
+                </Heading>
+                <Tabs aria-label='selectClothingMenu'>
+                  <TabList>
+                    <Tab>
                       <Image
-                        src={'keqing-skin0.png'}
-                        alt='Misa Original Costume'
+                        src={`${prefix}/outfit-previews/preview-misa.png`}
+                        alt='misa'
                         onClick={() => {
                           switchSpriteItems('misa');
                         }}
                       />
-                      Misa Original
-                    </Button>
-                    <Button disabled={isOutfitUnlocked('bday')} size='md'>
+                    </Tab>
+                    <Tab isDisabled={isOutfitLocked('bday')}>
                       <Image
-                        src={'bday-skin1.png'}
-                        alt='Birthday Suit'
+                        src={`${prefix}/outfit-previews/preview-bday.png`}
+                        alt='bday'
                         onClick={() => {
                           switchSpriteItems('bday');
                         }}
                       />
-                      Birthday Suit
-                    </Button>
-                    <Button disabled={isOutfitUnlocked('keqing')} size='md'>
+                    </Tab>
+                    <Tab isDisabled={isOutfitLocked('ness')}>
                       <Image
-                        src={'keqing-skin1.png'}
-                        alt='Keqing'
-                        onClick={() => {
-                          switchSpriteItems('keqing');
-                        }}
-                      />
-                      Keqing
-                    </Button>
-                    <Button disabled={isOutfitUnlocked('ness')} size='md'>
-                      <Image
-                        src={'ness-skin1.png'}
-                        alt='Ness'
+                        src={`${prefix}/outfit-previews/preview-ness.png`}
+                        alt='ness'
                         onClick={() => {
                           switchSpriteItems('ness');
                         }}
                       />
-                      Ness
-                    </Button>
-                    <Button disabled={isOutfitUnlocked('xiaofei')} size='md'>
+                    </Tab>
+                    <Tab isDisabled={isOutfitLocked('xiaohei')}>
                       <Image
-                        src={'ness-skin1.png'}
-                        alt='Catboy'
+                        src={`${prefix}/outfit-previews/preview-xiaohei.png`}
+                        alt='xiaohei'
                         onClick={() => {
-                          switchSpriteItems('xiaofei');
+                          switchSpriteItems('xiaohei');
                         }}
                       />
-                      Catboy
-                    </Button>
-                  </Stack>
-                </div>
-                <div className='selectSkinColorMenu'>
-                  <Stack spacing={5} direction='row' align='center'>
-                    <Button size='md'>
+                    </Tab>
+                    <Tab isDisabled={isOutfitLocked('keqing')}>
                       <Image
-                        src={'ness-skin1.png'}
+                        src={`${prefix}/outfit-previews/preview-keqing.png`}
+                        alt='keqing'
+                        onClick={() => {
+                          switchSpriteItems('keqing');
+                        }}
+                      />
+                    </Tab>
+                  </TabList>
+                </Tabs>
+              </div>
+              <div className='selectSkinColorMenu'>
+                <Heading as='h5' size='sm'>
+                  Select Skin Color
+                </Heading>
+                <Tabs>
+                  <TabList>
+                    <Tab>
+                      <Image
+                        src={`${prefix}/outfit-previews/preview-skin0.png`}
                         alt='0 skin color'
                         onClick={() => {
                           switchSpriteItems('skin0');
                         }}
                       />
-                      Skin Color 0
-                    </Button>
-                    <Button size='md'>
+                    </Tab>
+                    <Tab>
                       <Image
-                        src={'ness-skin1.png'}
+                        src={`${prefix}/outfit-previews/preview-skin1.png`}
                         alt='1 skin color'
                         onClick={() => {
                           switchSpriteItems('skin1');
                         }}
                       />
-                      Skin Color 1
-                    </Button>
-                    <Button size='md'>
+                    </Tab>
+                    <Tab>
                       <Image
-                        src={'ness-skin1.png'}
+                        src={`${prefix}outfit-previews/preview-skin2.png`}
                         alt='2 skin color'
                         onClick={() => {
                           switchSpriteItems('skin2');
                         }}
                       />
-                      Skin Color 2
-                    </Button>
-                    <Button size='md'>
+                    </Tab>
+                    <Tab>
                       <Image
-                        src={'ness-skin1.png'}
+                        src={`${prefix}outfit-previews/preview-skin3.png`}
                         alt='3 skin color'
                         onClick={() => {
                           switchSpriteItems('skin3');
                         }}
                       />
-                      Skin Color 3
-                    </Button>
-                    <Button size='md'>
+                    </Tab>
+                    <Tab>
                       <Image
-                        src={'ness-skin1.png'}
+                        src={`${prefix}outfit-previews/preview-skin4.png`}
                         alt='4 skin color'
                         onClick={() => {
                           switchSpriteItems('skin4');
                         }}
                       />
-                      Skin Color 4
-                    </Button>
-                  </Stack>
-                </div>
-                <Button title='Confirm' onClick={closeWardrobe}></Button>
+                    </Tab>
+                  </TabList>
+                </Tabs>
+              </div>
+              <div>
+                <Button
+                  title='Confirm'
+                  onClick={() => {
+                    const newWardrobe: WardrobeModel = {
+                      currentOutfit: spritePreview[0],
+                      currentSkin: spritePreview[1],
+                      inventory: coveyTownController.ourPlayer.wardrobe.inventory,
+                      currency: coveyTownController.ourPlayer.wardrobe.currency,
+                    };
+                    coveyTownController.emitWardobeChange(newWardrobe);
+                  }}>
+                  Confirm
+                </Button>
               </div>
             </VStack>
           </ModalBody>

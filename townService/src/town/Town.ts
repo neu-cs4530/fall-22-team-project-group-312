@@ -4,7 +4,7 @@ import { BroadcastOperator } from 'socket.io';
 import IVideoClient from '../lib/IVideoClient';
 import Player from '../lib/Player';
 import TwilioVideo from '../lib/TwilioVideo';
-import { CURRENCY_GAIN_FROM_CHAT } from '../lib/Wardrobe';
+import Wardrobe, { CURRENCY_GAIN_FROM_CHAT } from '../lib/Wardrobe';
 import { isViewingArea } from '../TestUtils';
 import {
   ChatMessage,
@@ -15,6 +15,7 @@ import {
   ServerToClientEvents,
   SocketData,
   ViewingArea as ViewingAreaModel,
+  WardrobeModel,
 } from '../types/CoveyTownSocket';
 import ConversationArea from './ConversationArea';
 import InteractableArea from './InteractableArea';
@@ -141,6 +142,12 @@ export default class Town {
       this._updatePlayerLocation(newPlayer, movementData);
     });
 
+    // Register an event listener for the client socket: if the client updates
+    // their wardrobe, inform the CoveyTownController
+    socket.on('playerWardobeChange', (wardrobeData: WardrobeModel) => {
+      this._updatePlayerWardrobe(newPlayer, wardrobeData);
+    });
+
     // Set up a listener to process updates to interactables.
     // Currently only knows how to process updates for ViewingArea's, and
     // ignores any other updates for any other kind of interactable.
@@ -208,6 +215,16 @@ export default class Town {
     player.location = location;
 
     this._broadcastEmitter.emit('playerMoved', player.toPlayerModel());
+  }
+
+  /**
+   * Updates the wardrobe of a player within the town.
+   * @param player The player whos wardrobe needs to be updated
+   * @param wardrobe The new wardrobe object for the player
+   */
+  private _updatePlayerWardrobe(player: Player, wardrobe: WardrobeModel): void {
+    player.wardrobe.updateFromModel(wardrobe);
+    this._broadcastEmitter.emit('playerWardrobeChanged', player.toPlayerModel());
   }
 
   /**

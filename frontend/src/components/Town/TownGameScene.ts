@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import PlayerController from '../../classes/PlayerController';
 import TownController from '../../classes/TownController';
 import { PlayerLocation } from '../../types/CoveyTownSocket';
+// import does not work fixing later
+// import { SKIN_COLORS, OUTFITS } from '../../../../../../types/CoveyTownSocket';
 import { Callback } from '../VideoCall/VideoFrontend/types';
 import Interactable from './Interactable';
 import ConversationArea from './interactables/ConversationArea';
@@ -119,47 +121,22 @@ export default class TownGameScene extends Phaser.Scene {
       '16_Grocery_store_32x32',
       this._resourcePathPrefix + '/assets/tilesets/16_Grocery_store_32x32.png',
     );
+    // Represents all skin color options the player could possibly have
+    const skinColors: string[] = ['skin0', 'skin1', 'skin2', 'skin3', 'skin4'];
+
+    // Represents all outfit options the player could possiby have
+    const outfits: string[] = ['misa', 'bday', 'keqing', 'ness', 'xiaohei'];
     this.load.tilemapTiledJSON('map', this._resourcePathPrefix + '/assets/tilemaps/indoors.json');
-    this.load.atlas(
-      'atlas',
-      this._resourcePathPrefix + '/assets/atlas/atlas.png',
-      this._resourcePathPrefix + '/assets/atlas/atlas.json',
-    );
-    this.load.atlas(
-      'misa-skin0',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin0.png',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin0.json',
-    );
-    this.load.atlas(
-      'misa-skin1',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin1.png',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin1.json',
-    );
-    this.load.atlas(
-      'misa-skin4',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin4.png',
-      this._resourcePathPrefix + '/assets/atlas/misa-skin4.json',
-    );
-    this.load.atlas(
-      'keqing-skin0',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin0.png',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin0.json',
-    );
-    this.load.atlas(
-      'keqing-skin1',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin1.png',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin1.json',
-    );
-    this.load.atlas(
-      'keqing-skin2',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin2.png',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin2.json',
-    );
-    this.load.atlas(
-      'keqing-skin3',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin3.png',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin3.json',
-    );
+    for (const outfit in outfits) {
+      for (const skin in skinColors) {
+        const spriteAtlas = outfits[outfit] + '-' + skinColors[skin];
+        this.load.atlas(
+          spriteAtlas,
+          this._resourcePathPrefix + `/assets/atlas/${spriteAtlas}.png`,
+          this._resourcePathPrefix + `/assets/atlas/${spriteAtlas}.json`,
+        );
+      }
+    }
     this.load.atlas(
       'keqing-skin4',
       this._resourcePathPrefix + '/assets/atlas/keqing-skin4.png',
@@ -238,6 +215,7 @@ export default class TownGameScene extends Phaser.Scene {
     const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
     const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
     const playerTexture = outfitId + '-' + skinId;
+    console.log(playerTexture);
     if (gameObjects && this._cursors) {
       const speed = 175;
 
@@ -467,57 +445,71 @@ export default class TownGameScene extends Phaser.Scene {
     // Create the player's walking animations from the texture matching the players wardrobe. These are stored in the global
     // animation manager so any sprite can access them.
     const { anims } = this;
-    anims.create({
-      // key: 'misa-left-walk',
-      key: `${playerTexture}-left-walk`,
-      frames: anims.generateFrameNames(playerTexture, {
-        // prefix: 'misa-left-walk.',
-        prefix: `${playerTexture}-left-walk.`,
-        start: 0,
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-    anims.create({
-      // key: 'misa-right-walk',
-      key: `${playerTexture}-right-walk`,
-      frames: anims.generateFrameNames(playerTexture, {
-        // prefix: 'misa-right-walk.',
-        prefix: `${playerTexture}-right-walk.`,
-        start: 0,
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-    anims.create({
-      // key: 'misa-front-walk',
-      key: `${playerTexture}-front-walk`,
-      frames: anims.generateFrameNames(playerTexture, {
-        // prefix: 'misa-front-walk.',
-        prefix: `${playerTexture}-front-walk.`,
-        start: 0,
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-    anims.create({
-      // key: 'misa-back-walk',
-      key: `${playerTexture}-back-walk`,
-      frames: anims.generateFrameNames(playerTexture, {
-        // prefix: 'misa-back-walk.',
-        prefix: `${playerTexture}-back-walk.`,
-        start: 0,
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 10,
-      repeat: -1,
+    const listOfAnimations: string[] = [];
+    // Represents all skin color options the player could possibly have
+    const skinColors: string[] = ['skin0', 'skin1', 'skin2', 'skin3', 'skin4'];
+
+    // Represents all outfit options the player could possiby have
+    const outfits: string[] = ['misa', 'bday', 'keqing', 'ness', 'xiaohei'];
+    for (const outfit in outfits) {
+      for (const skin in skinColors) {
+        const spriteAnimation = outfits[outfit] + '-' + skinColors[skin];
+        listOfAnimations.push(spriteAnimation);
+      }
+    }
+    listOfAnimations.forEach(texture => {
+      anims.create({
+        // key: 'misa-left-walk',
+        key: `${texture}-left-walk`,
+        frames: anims.generateFrameNames(texture, {
+          // prefix: 'misa-left-walk.',
+          prefix: `${texture}-left-walk.`,
+          start: 0,
+          end: 3,
+          zeroPad: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+      anims.create({
+        // key: 'misa-right-walk',
+        key: `${texture}-right-walk`,
+        frames: anims.generateFrameNames(texture, {
+          // prefix: 'misa-right-walk.',
+          prefix: `${texture}-right-walk.`,
+          start: 0,
+          end: 3,
+          zeroPad: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+      anims.create({
+        // key: 'misa-front-walk',
+        key: `${texture}-front-walk`,
+        frames: anims.generateFrameNames(texture, {
+          // prefix: 'misa-front-walk.',
+          prefix: `${texture}-front-walk.`,
+          start: 0,
+          end: 3,
+          zeroPad: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+      anims.create({
+        // key: 'misa-back-walk',
+        key: `${texture}-back-walk`,
+        frames: anims.generateFrameNames(texture, {
+          // prefix: 'misa-back-walk.',
+          prefix: `${texture}-back-walk.`,
+          start: 0,
+          end: 3,
+          zeroPad: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
     });
 
     const camera = this.cameras.main;
