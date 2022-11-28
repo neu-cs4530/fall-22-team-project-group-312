@@ -136,6 +136,16 @@ export default class TownGameScene extends Phaser.Scene {
       this._resourcePathPrefix + '/assets/atlas/misa-skin1.json',
     );
     this.load.atlas(
+      'misa-skin2',
+      this._resourcePathPrefix + '/assets/atlas/misa-skin2.png',
+      this._resourcePathPrefix + '/assets/atlas/misa-skin2.json',
+    );
+    this.load.atlas(
+      'misa-skin3',
+      this._resourcePathPrefix + '/assets/atlas/misa-skin3.png',
+      this._resourcePathPrefix + '/assets/atlas/misa-skin3.json',
+    );
+    this.load.atlas(
       'misa-skin4',
       this._resourcePathPrefix + '/assets/atlas/misa-skin4.png',
       this._resourcePathPrefix + '/assets/atlas/misa-skin4.json',
@@ -436,7 +446,6 @@ export default class TownGameScene extends Phaser.Scene {
     const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
     const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
     const playerTexture = outfitId + '-' + skinId;
-    console.log(playerTexture);
     const sprite = this.physics.add
       .sprite(spawnPoint.x, spawnPoint.y, playerTexture, playerTexture + '-front')
       .setSize(30, 40)
@@ -469,57 +478,87 @@ export default class TownGameScene extends Phaser.Scene {
     // Create the player's walking animations from the texture matching the players wardrobe. These are stored in the global
     // animation manager so any sprite can access them.
     const { anims } = this;
-    anims.create({
-      // key: 'misa-left-walk',
-      key: `${playerTexture}-left-walk`,
-      frames: anims.generateFrameNames(playerTexture, {
-        // prefix: 'misa-left-walk.',
-        prefix: `${playerTexture}-left-walk.`,
-        start: 0,
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-    anims.create({
-      // key: 'misa-right-walk',
-      key: `${playerTexture}-right-walk`,
-      frames: anims.generateFrameNames(playerTexture, {
-        // prefix: 'misa-right-walk.',
-        prefix: `${playerTexture}-right-walk.`,
-        start: 0,
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-    anims.create({
-      // key: 'misa-front-walk',
-      key: `${playerTexture}-front-walk`,
-      frames: anims.generateFrameNames(playerTexture, {
-        // prefix: 'misa-front-walk.',
-        prefix: `${playerTexture}-front-walk.`,
-        start: 0,
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-    anims.create({
-      // key: 'misa-back-walk',
-      key: `${playerTexture}-back-walk`,
-      frames: anims.generateFrameNames(playerTexture, {
-        // prefix: 'misa-back-walk.',
-        prefix: `${playerTexture}-back-walk.`,
-        start: 0,
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 10,
-      repeat: -1,
+    const listOfAnimations: string[] = [
+      'misa-skin0',
+      'misa-skin1',
+      'misa-skin2',
+      'misa-skin3',
+      'misa-skin4',
+      'keqing-skin0',
+      'keqing-skin1',
+      'keqing-skin2',
+      'keqing-skin3',
+      'keqing-skin4',
+      'bday-skin0',
+      'bday-skin1',
+      'bday-skin2',
+      'bday-skin3',
+      'bday-skin4',
+      'ness-skin0',
+      'ness-skin1',
+      'ness-skin2',
+      'ness-skin3',
+      'ness-skin4',
+      'xiaohei-skin0',
+      'xiaohei-skin1',
+      'xiaohei-skin2',
+      'xiaohei-skin3',
+      'xiaohei-skin4',
+    ];
+
+    listOfAnimations.forEach(texture => {
+      anims.create({
+        // key: 'misa-left-walk',
+        key: `${texture}-left-walk`,
+        frames: anims.generateFrameNames(texture, {
+          // prefix: 'misa-left-walk.',
+          prefix: `${texture}-left-walk.`,
+          start: 0,
+          end: 3,
+          zeroPad: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+      anims.create({
+        // key: 'misa-right-walk',
+        key: `${texture}-right-walk`,
+        frames: anims.generateFrameNames(texture, {
+          // prefix: 'misa-right-walk.',
+          prefix: `${texture}-right-walk.`,
+          start: 0,
+          end: 3,
+          zeroPad: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+      anims.create({
+        // key: 'misa-front-walk',
+        key: `${texture}-front-walk`,
+        frames: anims.generateFrameNames(texture, {
+          // prefix: 'misa-front-walk.',
+          prefix: `${texture}-front-walk.`,
+          start: 0,
+          end: 3,
+          zeroPad: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+      anims.create({
+        // key: 'misa-back-walk',
+        key: `${texture}-back-walk`,
+        frames: anims.generateFrameNames(texture, {
+          // prefix: 'misa-back-walk.',
+          prefix: `${texture}-back-walk.`,
+          start: 0,
+          end: 3,
+          zeroPad: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
     });
 
     const camera = this.cameras.main;
