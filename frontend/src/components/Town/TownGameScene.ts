@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import PlayerController from '../../classes/PlayerController';
 import TownController from '../../classes/TownController';
 import { PlayerLocation } from '../../types/CoveyTownSocket';
+// import does not work fixing later
+// import { SKIN_COLORS, OUTFITS } from '../../../../../../types/CoveyTownSocket';
 import { Callback } from '../VideoCall/VideoFrontend/types';
 import Interactable from './Interactable';
 import ConversationArea from './interactables/ConversationArea';
@@ -119,11 +121,26 @@ export default class TownGameScene extends Phaser.Scene {
       '16_Grocery_store_32x32',
       this._resourcePathPrefix + '/assets/tilesets/16_Grocery_store_32x32.png',
     );
+    // Represents all skin color options the player could possibly have
+    const skinColors: string[] = ['skin0', 'skin1', 'skin2', 'skin3', 'skin4'];
+
+    // Represents all outfit options the player could possiby have
+    const outfits: string[] = ['misa', 'bday', 'keqing', 'ness', 'xiaohei'];
     this.load.tilemapTiledJSON('map', this._resourcePathPrefix + '/assets/tilemaps/indoors.json');
+    for (const outfit in outfits) {
+      for (const skin in skinColors) {
+        const spriteAtlas = outfits[outfit] + '-' + skinColors[skin];
+        this.load.atlas(
+          spriteAtlas,
+          this._resourcePathPrefix + `/assets/atlas/${spriteAtlas}.png`,
+          this._resourcePathPrefix + `/assets/atlas/${spriteAtlas}.json`,
+        );
+      }
+    }
     this.load.atlas(
-      'atlas',
-      this._resourcePathPrefix + '/assets/atlas/atlas.png',
-      this._resourcePathPrefix + '/assets/atlas/atlas.json',
+      'keqing-skin4',
+      this._resourcePathPrefix + '/assets/atlas/keqing-skin4.png',
+      this._resourcePathPrefix + '/assets/atlas/keqing-skin4.json',
     );
   }
 
@@ -195,6 +212,10 @@ export default class TownGameScene extends Phaser.Scene {
       return;
     }
     const gameObjects = this.coveyTownController.ourPlayer.gameObjects;
+    const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
+    const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
+    const playerTexture = outfitId + '-' + skinId;
+    console.log(playerTexture);
     if (gameObjects && this._cursors) {
       const speed = 175;
 
@@ -208,31 +229,33 @@ export default class TownGameScene extends Phaser.Scene {
       switch (primaryDirection) {
         case 'left':
           body.setVelocityX(-speed);
-          gameObjects.sprite.anims.play('misa-left-walk', true);
+          // gameObjects.sprite.anims.play('misa-left-walk', true);
+          gameObjects.sprite.anims.play(`${playerTexture}-left-walk`, true);
           break;
         case 'right':
           body.setVelocityX(speed);
-          gameObjects.sprite.anims.play('misa-right-walk', true);
+          gameObjects.sprite.anims.play(`${playerTexture}-right-walk`, true);
           break;
         case 'front':
           body.setVelocityY(speed);
-          gameObjects.sprite.anims.play('misa-front-walk', true);
+          gameObjects.sprite.anims.play(`${playerTexture}-front-walk`, true);
           break;
         case 'back':
           body.setVelocityY(-speed);
-          gameObjects.sprite.anims.play('misa-back-walk', true);
+          gameObjects.sprite.anims.play(`${playerTexture}-back-walk`, true);
           break;
         default:
           // Not moving
           gameObjects.sprite.anims.stop();
           // If we were moving, pick and idle frame to use
           if (prevVelocity.x < 0) {
-            gameObjects.sprite.setTexture('atlas', 'misa-left');
+            gameObjects.sprite.setTexture(playerTexture, `${playerTexture}-left`);
           } else if (prevVelocity.x > 0) {
-            gameObjects.sprite.setTexture('atlas', 'misa-right');
+            gameObjects.sprite.setTexture(playerTexture, `${playerTexture}-right`);
           } else if (prevVelocity.y < 0) {
-            gameObjects.sprite.setTexture('atlas', 'misa-back');
-          } else if (prevVelocity.y > 0) gameObjects.sprite.setTexture('atlas', 'misa-front');
+            gameObjects.sprite.setTexture(playerTexture, `${playerTexture}-back`);
+          } else if (prevVelocity.y > 0)
+            gameObjects.sprite.setTexture(playerTexture, `${playerTexture}-front`);
           break;
       }
 
@@ -387,8 +410,11 @@ export default class TownGameScene extends Phaser.Scene {
     // Create a sprite with physics enabled via the physics system. The image used for the sprite
     // has a bit of whitespace, so I'm using setSize & setOffset to control the size of the
     // player's body.
+    const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
+    const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
+    const playerTexture = outfitId + '-' + skinId;
     const sprite = this.physics.add
-      .sprite(spawnPoint.x, spawnPoint.y, 'atlas', 'misa-front')
+      .sprite(spawnPoint.x, spawnPoint.y, playerTexture, playerTexture + '-front')
       .setSize(30, 40)
       .setOffset(0, 24)
       .setDepth(6);
@@ -416,52 +442,74 @@ export default class TownGameScene extends Phaser.Scene {
     this.physics.add.collider(sprite, aboveLayer);
     this.physics.add.collider(sprite, onTheWallsLayer);
 
-    // Create the player's walking animations from the texture atlas. These are stored in the global
+    // Create the player's walking animations from the texture matching the players wardrobe. These are stored in the global
     // animation manager so any sprite can access them.
     const { anims } = this;
-    anims.create({
-      key: 'misa-left-walk',
-      frames: anims.generateFrameNames('atlas', {
-        prefix: 'misa-left-walk.',
-        start: 0,
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-    anims.create({
-      key: 'misa-right-walk',
-      frames: anims.generateFrameNames('atlas', {
-        prefix: 'misa-right-walk.',
-        start: 0,
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-    anims.create({
-      key: 'misa-front-walk',
-      frames: anims.generateFrameNames('atlas', {
-        prefix: 'misa-front-walk.',
-        start: 0,
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-    anims.create({
-      key: 'misa-back-walk',
-      frames: anims.generateFrameNames('atlas', {
-        prefix: 'misa-back-walk.',
-        start: 0,
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 10,
-      repeat: -1,
+    const listOfAnimations: string[] = [];
+    // Represents all skin color options the player could possibly have
+    const skinColors: string[] = ['skin0', 'skin1', 'skin2', 'skin3', 'skin4'];
+
+    // Represents all outfit options the player could possiby have
+    const outfits: string[] = ['misa', 'bday', 'keqing', 'ness', 'xiaohei'];
+    for (const outfit in outfits) {
+      for (const skin in skinColors) {
+        const spriteAnimation = outfits[outfit] + '-' + skinColors[skin];
+        listOfAnimations.push(spriteAnimation);
+      }
+    }
+    listOfAnimations.forEach(texture => {
+      anims.create({
+        // key: 'misa-left-walk',
+        key: `${texture}-left-walk`,
+        frames: anims.generateFrameNames(texture, {
+          // prefix: 'misa-left-walk.',
+          prefix: `${texture}-left-walk.`,
+          start: 0,
+          end: 3,
+          zeroPad: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+      anims.create({
+        // key: 'misa-right-walk',
+        key: `${texture}-right-walk`,
+        frames: anims.generateFrameNames(texture, {
+          // prefix: 'misa-right-walk.',
+          prefix: `${texture}-right-walk.`,
+          start: 0,
+          end: 3,
+          zeroPad: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+      anims.create({
+        // key: 'misa-front-walk',
+        key: `${texture}-front-walk`,
+        frames: anims.generateFrameNames(texture, {
+          // prefix: 'misa-front-walk.',
+          prefix: `${texture}-front-walk.`,
+          start: 0,
+          end: 3,
+          zeroPad: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+      anims.create({
+        // key: 'misa-back-walk',
+        key: `${texture}-back-walk`,
+        frames: anims.generateFrameNames(texture, {
+          // prefix: 'misa-back-walk.',
+          prefix: `${texture}-back-walk.`,
+          start: 0,
+          end: 3,
+          zeroPad: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
     });
 
     const camera = this.cameras.main;
@@ -482,6 +530,8 @@ export default class TownGameScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setDepth(30);
 
+    // TODO: add covey coins display
+
     this._ready = true;
     this.updatePlayers(this.coveyTownController.players);
     // Call any listeners that are waiting for the game to be initialized
@@ -491,9 +541,10 @@ export default class TownGameScene extends Phaser.Scene {
   }
 
   createPlayerSprites(player: PlayerController) {
+    const playerTexture = player.wardrobe.currentOutfit.id + '-' + player.wardrobe.currentSkin.id;
     if (!player.gameObjects) {
       const sprite = this.physics.add
-        .sprite(player.location.x, player.location.y, 'atlas', 'misa-front')
+        .sprite(player.location.x, player.location.y, playerTexture, `${playerTexture}-front`)
         .setSize(30, 40)
         .setOffset(0, 24);
       const label = this.add.text(

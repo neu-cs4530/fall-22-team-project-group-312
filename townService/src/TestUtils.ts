@@ -22,6 +22,7 @@ import {
   ServerToClientEvents,
   SocketData,
   ViewingArea,
+  WardrobeModel,
 } from './types/CoveyTownSocket';
 
 /**
@@ -159,6 +160,12 @@ export class MockedPlayer {
   moveTo(x: number, y: number, rotation: Direction = 'front', moving = false): void {
     const onMovementListener = getEventListener(this.socket, 'playerMovement');
     onMovementListener({ x, y, rotation, moving });
+  }
+
+  // New test util to test wardrobeChange event.
+  changeWardrobe(wardrobeModel: WardrobeModel): void {
+    const onWardrobeChangeListener = getEventListener(this.socket, 'playerWardobeChange');
+    onWardrobeChangeListener(wardrobeModel);
   }
 }
 

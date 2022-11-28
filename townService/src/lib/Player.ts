@@ -26,7 +26,7 @@ export default class Player {
 
   /** The Player's wardrobe, containing their currency, each item they currently have equipped,
    * and a map of all their unlocked items. */
-  private _wardrobe: Wardrobe;
+  public wardrobe: Wardrobe;
 
   constructor(userName: string, townEmitter: TownEmitter) {
     this.location = {
@@ -39,7 +39,7 @@ export default class Player {
     this._id = nanoid();
     this._sessionToken = nanoid();
     this.townEmitter = townEmitter;
-    this._wardrobe = new Wardrobe();
+    this.wardrobe = new Wardrobe();
   }
 
   get userName(): string {
@@ -62,17 +62,12 @@ export default class Player {
     return this._sessionToken;
   }
 
-  // Gets the player's current wardrobe.
-  get wardrobe(): Wardrobe {
-    return this._wardrobe;
-  }
-
   toPlayerModel(): PlayerModel {
     return {
       id: this._id,
       location: this.location,
       userName: this._userName,
-      wardrobe: this._wardrobe,
+      wardrobe: this.wardrobe.toModel(),
     };
   }
 }

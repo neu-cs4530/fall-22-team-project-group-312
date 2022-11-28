@@ -1,0 +1,172 @@
+{"frames": {
+
+"bday-skin2-back-walk.000":
+{
+	"frame": {"x":1,"y":1,"w":30,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":12,"w":30,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-back-walk.001":
+{
+	"frame": {"x":33,"y":1,"w":30,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":12,"w":30,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-back-walk.002":
+{
+	"frame": {"x":1,"y":1,"w":30,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":12,"w":30,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-back-walk.003":
+{
+	"frame": {"x":65,"y":1,"w":30,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":12,"w":30,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-back":
+{
+	"frame": {"x":1,"y":1,"w":30,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":12,"w":30,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-front-walk.000":
+{
+	"frame": {"x":97,"y":1,"w":30,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":12,"w":30,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-front-walk.001":
+{
+	"frame": {"x":129,"y":1,"w":30,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":12,"w":30,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-front-walk.002":
+{
+	"frame": {"x":97,"y":1,"w":30,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":12,"w":30,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-front-walk.003":
+{
+	"frame": {"x":161,"y":1,"w":30,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":12,"w":30,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-front":
+{
+	"frame": {"x":97,"y":1,"w":30,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":12,"w":30,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-left-walk.000":
+{
+	"frame": {"x":193,"y":1,"w":28,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":12,"w":28,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-left-walk.001":
+{
+	"frame": {"x":253,"y":1,"w":28,"h":50},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":14,"w":28,"h":50},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-left-walk.002":
+{
+	"frame": {"x":193,"y":1,"w":28,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":12,"w":28,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-left-walk.003":
+{
+	"frame": {"x":283,"y":1,"w":28,"h":50},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":14,"w":28,"h":50},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-left":
+{
+	"frame": {"x":193,"y":1,"w":28,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":12,"w":28,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-right-walk.000":
+{
+	"frame": {"x":223,"y":1,"w":28,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":12,"w":28,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-right-walk.001":
+{
+	"frame": {"x":313,"y":1,"w":28,"h":50},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":14,"w":28,"h":50},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-right-walk.002":
+{
+	"frame": {"x":223,"y":1,"w":28,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":12,"w":28,"h":52},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-right-walk.003":
+{
+	"frame": {"x":343,"y":1,"w":28,"h":50},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":14,"w":28,"h":50},
+	"sourceSize": {"w":32,"h":64}
+},
+"bday-skin2-right":
+{
+	"frame": {"x":223,"y":1,"w":28,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":12,"w":28,"h":52},
+	"sourceSize": {"w":32,"h":64}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "bday-skin2.png",
+	"format": "RGBA8888",
+	"size": {"w":372,"h":54},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:5afe44a254f410f55d38adb150cf48f7:e6307a51d5ec0f7f85e1bad7e6a3ea5c:4d53b3872a8d8057a14ec36ad8e834c6$"
+}
+}

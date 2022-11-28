@@ -1,0 +1,172 @@
+{"frames": {
+
+"xiaohei-skin0-back-walk.000":
+{
+	"frame": {"x":0,"y":0,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-back-walk.001":
+{
+	"frame": {"x":0,"y":64,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-back-walk.002":
+{
+	"frame": {"x":0,"y":128,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-back-walk.003":
+{
+	"frame": {"x":0,"y":192,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-back":
+{
+	"frame": {"x":0,"y":256,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-front-walk.000":
+{
+	"frame": {"x":0,"y":320,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-front-walk.001":
+{
+	"frame": {"x":0,"y":384,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-front-walk.002":
+{
+	"frame": {"x":0,"y":448,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-front-walk.003":
+{
+	"frame": {"x":0,"y":512,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-front":
+{
+	"frame": {"x":0,"y":576,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-left-walk.000":
+{
+	"frame": {"x":0,"y":640,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-left-walk.001":
+{
+	"frame": {"x":0,"y":704,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-left-walk.002":
+{
+	"frame": {"x":0,"y":768,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-left-walk.003":
+{
+	"frame": {"x":0,"y":832,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-left":
+{
+	"frame": {"x":0,"y":896,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-right-walk.000":
+{
+	"frame": {"x":0,"y":960,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-right-walk.001":
+{
+	"frame": {"x":0,"y":1024,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-right-walk.002":
+{
+	"frame": {"x":0,"y":1088,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-right-walk.003":
+{
+	"frame": {"x":0,"y":1152,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+},
+"xiaohei-skin0-right":
+{
+	"frame": {"x":0,"y":1216,"w":32,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
+	"sourceSize": {"w":32,"h":64}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "xiaohei-skin0.png",
+	"format": "RGBA8888",
+	"size": {"w":32,"h":1280},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:5f051e4f43514231c5ec87a09831f396:c1a32e3872485160bd4be8ff433f91ac:aa5ca82269e7edcd3d8febe66b315f76$"
+}
+}

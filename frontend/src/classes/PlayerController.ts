@@ -1,9 +1,10 @@
 import EventEmitter from 'events';
 import TypedEmitter from 'typed-emitter';
-import { Player as PlayerModel, PlayerLocation, Wardrobe } from '../types/CoveyTownSocket';
+import { Player as PlayerModel, PlayerLocation, WardrobeModel } from '../types/CoveyTownSocket';
 
 export type PlayerEvents = {
   movement: (newLocation: PlayerLocation) => void;
+  wardrobeChange: (newWardrobe: WardrobeModel) => void;
 };
 
 export type PlayerGameObjects = {
@@ -14,7 +15,7 @@ export type PlayerGameObjects = {
 export default class PlayerController extends (EventEmitter as new () => TypedEmitter<PlayerEvents>) {
   private _location: PlayerLocation;
 
-  private _wardrobe: Wardrobe;
+  private _wardrobe: WardrobeModel;
 
   private readonly _id: string;
 
@@ -22,7 +23,7 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
 
   public gameObjects?: PlayerGameObjects;
 
-  constructor(id: string, userName: string, location: PlayerLocation, wardrobe: Wardrobe) {
+  constructor(id: string, userName: string, location: PlayerLocation, wardrobe: WardrobeModel) {
     super();
     this._id = id;
     this._userName = userName;
@@ -49,16 +50,16 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
   }
 
   // Returns the player's current wardrobe.
-  get wardrobe(): Wardrobe {
+  get wardrobe(): WardrobeModel {
     return this._wardrobe;
   }
 
   // Change the player's wardrobe. Emit an update signaling this change.
-  set wardrobe(newWardrobe: Wardrobe) {
+  set wardrobe(newWardrobe: WardrobeModel) {
     this._wardrobe = newWardrobe;
     // Uses the movement emitter and update location method to signal a wardrobe change.
     this._updateGameComponentLocation();
-    this.emit('movement', this.location);
+    this.emit('wardrobeChange', this.wardrobe);
   }
 
   toPlayerModel(): PlayerModel {
@@ -78,19 +79,14 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
       sprite.setY(this.location.y);
       label.setX(sprite.body.position.x);
       label.setY(sprite.body.position.y - 20);
+      const currentSprite = this.wardrobe.currentOutfit.id + '-' + this.wardrobe.currentSkin.id;
       if (this.location.moving) {
-        sprite.anims.play(`misa-${this.location.rotation}-walk`, true);
+        sprite.anims.play(`${currentSprite}-${this.location.rotation}-walk`, true);
       } else {
         sprite.anims.stop();
-        sprite.setTexture('atlas', `misa-${this.location.rotation}`);
+        sprite.setTexture(currentSprite, `${currentSprite}-${this.location.rotation}`);
       }
     }
-  }
-
-  /* Creates and stores sprite objects based on the currently equipped wardrobe items
-  of the player. */
-  private async _generateSprite() {
-    // Signifies the folder where each sprite is held
   }
 
   static fromPlayerModel(modelPlayer: PlayerModel): PlayerController {
