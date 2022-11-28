@@ -5,6 +5,7 @@ import IVideoClient from '../lib/IVideoClient';
 import Player from '../lib/Player';
 import TwilioVideo from '../lib/TwilioVideo';
 import { CURRENCY_GAIN_FROM_CHAT } from '../lib/Wardrobe';
+import { PULL_COST } from '../lib/GachaPicker';
 import { isViewingArea } from '../TestUtils';
 import {
   ChatMessage,

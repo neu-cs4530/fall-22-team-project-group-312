@@ -58,6 +58,14 @@ export interface Wardrobe {
   inventory: Map<ItemCategory, WardrobeItem[]>;
 }
 
+export interface GachaPicker {
+  id: string;
+  pool: WardrobeItem[];
+  pullCost: number;
+  refundPercent: number;
+  // pull: (pullingPlayer: Player) => void;
+}
+
 export type XY = { x: number; y: number };
 
 export interface PlayerLocation {
@@ -105,10 +113,12 @@ export interface ServerToClientEvents {
   townClosing: () => void;
   chatMessage: (message: ChatMessage) => void;
   interactableUpdate: (interactable: Interactable) => void;
+  playerPulled: (pullingPlayer: Player) => void;
 }
 
 export interface ClientToServerEvents {
   chatMessage: (message: ChatMessage) => void;
   playerMovement: (movementData: PlayerLocation) => void;
   interactableUpdate: (update: Interactable) => void;
+  playerPull: (pullingPlayer: PlayerModel) => void;
 }

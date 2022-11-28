@@ -1,5 +1,7 @@
 import { Player, WardrobeItem } from '../types/CoveyTownSocket';
 
+export const PULL_COST = 1000;
+
 /**
  * A class to represent the randomized gacha pull system for getting new outfits.
  */
@@ -93,14 +95,18 @@ export default class GachaPicker {
   public pull(player: Player): void {
     if (player.wardrobe.currency > this._pullCost) {
       player.wardrobe.currency -= this._pullCost;
-      const pulledItem = this._getOneItem();
+      const pulledItem: WardrobeItem = this._getOneItem();
       if (GachaPicker._playerHasGivenItem(player, pulledItem)) {
         // refund
         player.wardrobe.currency += this._pullCost * this._refundPercent;
         // emit
       } else {
         // adds it to the player's inventory
-        player.wardrobe.inventory.get('outfit')?.push(pulledItem);
+        const newWardrobe = player.wardrobe.inventory.get('outfit');
+        if (newWardrobe !== undefined) {
+          newWardrobe.push(pulledItem);
+          player.wardrobe.inventory.set('outfit', newWardrobe);
+        }
       }
     }
   }
