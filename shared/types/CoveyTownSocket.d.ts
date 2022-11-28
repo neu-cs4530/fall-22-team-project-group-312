@@ -122,5 +122,5 @@ export interface ClientToServerEvents {
   playerMovement: (movementData: PlayerLocation) => void;
   interactableUpdate: (update: Interactable) => void;
   // New ClientToServer event for a changed wardrobe.
-  playerWardobeChange: (newWardrobe: Wardrobe) => void;
+  playerWardobeChange: (newWardrobe: WardrobeModel) => void;
 }

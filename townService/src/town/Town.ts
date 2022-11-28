@@ -144,7 +144,7 @@ export default class Town {
 
     // Register an event listener for the client socket: if the client updates
     // their wardrobe, inform the CoveyTownController
-    socket.on('playerWardobeChange', (wardrobeData: Wardrobe) => {
+    socket.on('playerWardobeChange', (wardrobeData: WardrobeModel) => {
       this._updatePlayerWardrobe(newPlayer, wardrobeData);
     });
 
@@ -222,8 +222,8 @@ export default class Town {
    * @param player The player whos wardrobe needs to be updated
    * @param wardrobe The new wardrobe object for the player
    */
-  private _updatePlayerWardrobe(player: Player, wardrobe: Wardrobe): void {
-    player.wardrobe = wardrobe;
+  private _updatePlayerWardrobe(player: Player, wardrobe: WardrobeModel): void {
+    player.wardrobe.updateFromModel(wardrobe);
     this._broadcastEmitter.emit('playerWardrobeChanged', player.toPlayerModel());
   }
 
