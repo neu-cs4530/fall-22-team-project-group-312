@@ -67,24 +67,26 @@ function WardrobePanel({
    * @param itemID the id of the item (outfit or skin color) the player selected
    */
   async function switchSpriteItems(itemID: string): Promise<void> {
-    if (itemID.startsWith('skin')) {
-      const currentOutfit = spritePreview[0];
-      const newSpritePreview: WardrobeItem[] = [
-        currentOutfit,
-        coveyTownController.ourPlayer.wardrobe.inventory.find(
-          (item: WardrobeItem) => item.id === itemID,
-        ) as WardrobeItem,
-      ];
-      setSpritePreview(newSpritePreview);
-    } else {
-      const currentSkin = spritePreview[1];
-      const newSpritePreview: WardrobeItem[] = [
-        coveyTownController.ourPlayer.wardrobe.inventory.find(
-          (item: WardrobeItem) => item.id === itemID,
-        ) as WardrobeItem,
-        currentSkin,
-      ];
-      setSpritePreview(newSpritePreview);
+    if (spritePreview[0].id !== itemID && spritePreview[1].id !== itemID) {
+      if (itemID.startsWith('skin')) {
+        const currentOutfit = spritePreview[0];
+        const newSpritePreview: WardrobeItem[] = [
+          currentOutfit,
+          coveyTownController.ourPlayer.wardrobe.inventory.find(
+            (item: WardrobeItem) => item.id === itemID,
+          ) as WardrobeItem,
+        ];
+        await setSpritePreview(newSpritePreview);
+      } else {
+        const currentSkin = spritePreview[1];
+        const newSpritePreview: WardrobeItem[] = [
+          coveyTownController.ourPlayer.wardrobe.inventory.find(
+            (item: WardrobeItem) => item.id === itemID,
+          ) as WardrobeItem,
+          currentSkin,
+        ];
+        await setSpritePreview(newSpritePreview);
+      }
     }
   }
   /**
