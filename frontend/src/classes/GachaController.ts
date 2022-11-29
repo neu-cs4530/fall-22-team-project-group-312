@@ -1,7 +1,12 @@
 import EventEmitter from 'events';
 import { useEffect, useState } from 'react';
 import TypedEmitter from 'typed-emitter';
-import { GachaPicker as GachaModel, RarityMapping, WardrobeItem } from '../types/CoveyTownSocket';
+import {
+  GachaPicker as GachaModel,
+  RarityMapping,
+  WardrobeItem,
+  WardrobeModel,
+} from '../types/CoveyTownSocket';
 import PlayerController from './PlayerController';
 
 export type GachaEvents = {
@@ -67,31 +72,17 @@ export default class GachaController extends (EventEmitter as new () => TypedEmi
     return this._rarityMapping;
   }
 
-  // returns a random item from the selection pool, accounting for item rarity
+  // returns a random item from the selection pool, disregarding rarity
   // assumes there's at least one item in the pool
   private _getOneItem(): WardrobeItem {
-    const rarityList: number[] = [];
-    for (let i = 0; i < this._itemPool.length; i++) {
-      const rarityIndex = i > 0 ? i - 1 : 0;
-      rarityList.push(this._rarityMapping[this._itemPool[i].rarity] + rarityList[rarityIndex]);
-    }
+    const max = this._itemPool.length;
+    const randomValue = Math.floor(Math.random() * max);
 
-    let indexOfPulledItem = 0;
-    const randomValue = Math.random() * rarityList[rarityList.length - 1];
-
-    for (indexOfPulledItem; indexOfPulledItem < this._itemPool.length; indexOfPulledItem++) {
-      if (this._rarityMapping[this._itemPool[indexOfPulledItem].rarity] > randomValue) {
-        break;
-      }
-    }
-    if (indexOfPulledItem >= 0 && indexOfPulledItem < this._itemPool.length) {
-      return this._itemPool[indexOfPulledItem];
-    }
-    return this._itemPool[0];
+    return this._itemPool[randomValue];
   }
 
   /**
-   * Returns a random iterm from the list of items. Randomization is affected by item weight.
+   * Returns a random iterm from the list of items. Randomization is not affected by item rarity.
    * Players are not guaranteed to receive different items on every pull.
    * If a player lacks sufficient currency to make a pull, throw an error message.
    *
@@ -108,16 +99,28 @@ export default class GachaController extends (EventEmitter as new () => TypedEmi
    * @throws an error if the pull pool is empty
    */
   public pull(player: PlayerController): WardrobeItem {
+    let newCurrency = player.wardrobe.currency;
+    const newInventory = player.wardrobe.inventory;
     if (this._itemPool.length > 0) {
-      player.wardrobe.currency -= this._pullCost;
+      newCurrency -= this._pullCost;
       const pulledItem: WardrobeItem = this._getOneItem();
-      const playerHasGivenItem = player.wardrobe.addWardrobeItem(pulledItem);
-      if (!playerHasGivenItem) {
-        // refund
-        player.wardrobe.currency += Math.round(this._pullCost * this._refundPercent);
-      }
-      // emit
+      const pulledItemIsNew = newInventory.find(item => {
+        item.id = pulledItem.id;
+      });
 
+      if (pulledItemIsNew) {
+        // refund
+        newCurrency += Math.round(this._pullCost * this._refundPercent);
+      } else {
+        newInventory.push(pulledItem);
+      }
+      const newWardrobeModel: WardrobeModel = {
+        currency: newCurrency,
+        currentSkin: player.wardrobe.currentSkin,
+        currentOutfit: player.wardrobe.currentOutfit,
+        inventory: newInventory,
+      };
+      player.emit('wardrobeChange', newWardrobeModel);
       return pulledItem;
     }
     throw new Error('No items in the pool.');

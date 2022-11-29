@@ -1,10 +1,12 @@
 import { ITiledMap, ITiledMapObjectLayer } from '@jonbell/tiled-map-type-guard';
 import { nanoid } from 'nanoid';
 import { BroadcastOperator } from 'socket.io';
+import GachaPicker from '../lib/GachaPicker';
 import IVideoClient from '../lib/IVideoClient';
 import Player from '../lib/Player';
 import TwilioVideo from '../lib/TwilioVideo';
 import Wardrobe, { CURRENCY_GAIN_FROM_CHAT } from '../lib/Wardrobe';
+import { UNLOCKABLE_ITEMS } from '../lib/WardrobeItem';
 import { isViewingArea } from '../TestUtils';
 import {
   ChatMessage,
@@ -12,6 +14,7 @@ import {
   CoveyTownSocket,
   Interactable,
   PlayerLocation,
+  RarityMapping,
   ServerToClientEvents,
   SocketData,
   ViewingArea as ViewingAreaModel,
@@ -21,6 +24,18 @@ import ConversationArea from './ConversationArea';
 import InteractableArea from './InteractableArea';
 import ViewingArea from './ViewingArea';
 
+// Represents the default pull cost for GachaPickers
+export const PULL_COST = 1000;
+
+// Represents the default refund percentage for GachaPickers
+export const REFUND_PERCENT = 0.1;
+
+/** Represents the default rarity mapping for GachaPickers */
+export const defaultRarityMapping: RarityMapping = {
+  common: 10,
+  rare: 5,
+  ultraRare: 1,
+};
 /**
  * The Town class implements the logic for each town: managing the various events that
  * can occur (e.g. joining a town, moving, leaving a town)
@@ -90,6 +105,8 @@ export default class Town {
 
   private _connectedSockets: Set<CoveyTownSocket> = new Set();
 
+  private _gachaRoller: GachaPicker;
+
   constructor(
     friendlyName: string,
     isPubliclyListed: boolean,
@@ -102,6 +119,14 @@ export default class Town {
     this._isPubliclyListed = isPubliclyListed;
     this._friendlyName = friendlyName;
     this._broadcastEmitter = broadcastEmitter;
+    this._gachaRoller = new GachaPicker(
+      UNLOCKABLE_ITEMS,
+      PULL_COST,
+      REFUND_PERCENT,
+      broadcastEmitter,
+      defaultRarityMapping,
+      nanoid(),
+    );
   }
 
   /**

@@ -15,8 +15,9 @@ import {
 } from '@chakra-ui/react';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
+import PlayerController from '../../../../../../classes/PlayerController';
 import TownController from '../../../../../../classes/TownController';
-import { WardrobeItem /* WardrobeModel */ } from '../../../../../../types/CoveyTownSocket';
+import { WardrobeItem, WardrobeModel } from '../../../../../../types/CoveyTownSocket';
 
 const useStyles = makeStyles({
   preview: {
@@ -42,53 +43,67 @@ function GachaPanel({
   onClose: any;
   coveyTownController: TownController;
 }) {
-  const initalOutfit = coveyTownController.ourPlayer.wardrobe.currentOutfit;
-  const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
   const classes = useStyles(makeStyles);
 
-  const singlePullCost = 0;
+  const singlePullCost = 10;
 
-  const prefix = 'assets/gacha_anims/';
-  const suffix = '.gif';
-  const floatingBoxGif = prefix + 'gift_bounce' + suffix;
-  const burstBoxGif = prefix + 'gift_burst' + suffix;
+  const animPrefix = 'assets/gacha_anims/';
+  const animSuffix = '.gif';
+
+  const outfitPrefix = 'assets/preview/';
+  const outfitSuffix = '-preview.png';
+
+  const floatingBoxGif = animPrefix + 'gift_bounce' + animSuffix;
+  const burstBoxGif = animPrefix + 'gift_burst' + animSuffix;
   coveyTownController.ourPlayer.wardrobe.currency = 100;
-  const playerHasEnoughCoins = coveyTownController.ourPlayer.wardrobe.currency >= singlePullCost;
 
-  const [image, setImage] = useState<string>(prefix + floatingBoxGif + suffix);
+  const [animImage, setAnimImage] = useState<string>(floatingBoxGif);
+  const [resultImage, setResultImage] = useState<string>('');
+
   const [bounceVisible, setBounceVisible] = useState<boolean>(true);
   const [resultVisible, setResultVisible] = useState<boolean>(false);
 
-  const [pulledItem, setPulledItem] = useState<WardrobeItem>(undefined);
-  // useEffect(() => {
-  //   console.log(
-  //     'Sprite preview has changed to ' + spritePreview[0].id + ' and ' + spritePreview[1].id,
-  //   );
-  // });
+  const [currentWardrobe, setCurrentWardrobe] = useState<WardrobeModel>(
+    coveyTownController.ourPlayer.wardrobe,
+  );
+  const [playerHasEnoughCoins, setPlayerHasEnoughCoins] = useState<boolean>(
+    currentWardrobe.currency >= singlePullCost,
+  );
+  const [currencyDisplay, setCurrencyDisplay] = useState<number>(currentWardrobe.currency);
+
+  const [pulledItem, setPulledItem] = useState<WardrobeItem | undefined>(undefined);
+
   const closeGacha = useCallback(() => {
     onClose();
     coveyTownController.unPause();
   }, [onClose, coveyTownController]);
+
+  useEffect(() => {
+    const updatePlayer = (pullingPlayer: PlayerController) => {
+      setCurrentWardrobe(pullingPlayer.wardrobe);
+      setCurrencyDisplay(pullingPlayer.wardrobe.currency);
+      setPlayerHasEnoughCoins(pullingPlayer.wardrobe.currency >= singlePullCost);
+    };
+    coveyTownController.addListener('playerPulled', updatePlayer);
+    coveyTownController.addListener('playerWardrobeChanged', updatePlayer);
+  }, [coveyTownController, setCurrentWardrobe, setPlayerHasEnoughCoins]);
+
   /**
    * Switches the sprite preview to one with the newly selected item and the
    * other currently selected item.
    * @param itemID the id of the item(outfit or skin color) the player selected
    */
-  async function getSkin(): Promise<void> {
-    const retrievedItem: WardrobeItem = await coveyTownController.gachaPicker.pull(
+  async function doPull(): Promise<void> {
+    const retrievedItem: WardrobeItem = await coveyTownController.gachaRoller.pull(
       coveyTownController.ourPlayer,
     );
-    setImage(prefix + retrievedItem.id + suffix);
+    setResultImage(outfitPrefix + retrievedItem.id + outfitSuffix);
+    setPulledItem(retrievedItem);
+    setResultVisible(true);
+    console.log('Pulled: ' + retrievedItem.id);
   }
 
-  const onPullClick = async () => {
-    setImage(prefix + burstBoxGif + suffix);
-    await getSkin();
-  };
-
-  const onConfirmClick = () => {
-    setImage(prefix + burstBoxGif + suffix);
-  };
+  const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
   /**
    * modal
@@ -107,30 +122,30 @@ function GachaPanel({
           <ModalCloseButton />
           <ModalBody pb={6}>
             <VStack divider={<StackDivider borderColor='gray.200' />} spacing={15} align='center'>
-              <div className='coinDisplay'>{`You have ${coveyTownController.ourPlayer.wardrobe.currency} CoveyCoins.`}</div>
+              <div className='coinDisplay'>{`You have ${currencyDisplay} CoveyCoins.`}</div>
               <div className='previewPane'>
                 <Image
-                  src={`${floatingBoxGif}`}
+                  src={`${animImage}`}
                   alt='sprite'
                   className={classes.preview}
                   visibility={bounceVisible ? 'visible' : 'hidden'}
                 />
               </div>
-              <div className='previewPane'>
-                <p>You got...</p>
-                <Image
-                  src={`${prefix + pulledItem + suffix}`}
-                  alt='sprite'
-                  className={classes.preview}
-                />
-                <p>${pulledItem !== undefined ? pulledItem.name : ''}!</p>
+              <div className='previewPane' hidden={!resultVisible}>
+                You got...
+                <Image src={`${resultImage}`} alt='sprite' className={classes.preview} />
+                <p>{pulledItem !== undefined ? pulledItem.name : ''}!</p>
               </div>
               <div>
                 <Button
                   title={`Click to roll for new items.`}
                   disabled={!playerHasEnoughCoins}
                   onClick={async () => {
-                    onPullClick();
+                    setAnimImage(burstBoxGif);
+                    // await onPullClick();
+                    setResultVisible(false);
+                    await delay(5000);
+                    await doPull();
                     // const newWardrobe: WardrobeModel = {
                     //   currentOutfit: spritePreview[0],
                     //   currentSkin: spritePreview[1],
@@ -138,6 +153,8 @@ function GachaPanel({
                     //   currency: coveyTownController.ourPlayer.wardrobe.currency,
                     // };
                     // coveyTownController.emitWardobeChange(newWardrobe);
+                    setAnimImage(floatingBoxGif);
+                    await delay(5000);
                   }}>
                   {`Roll! (-${singlePullCost} CoveyCoins)`}
                 </Button>

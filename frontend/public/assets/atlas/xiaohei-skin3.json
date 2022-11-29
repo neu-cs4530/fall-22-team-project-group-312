@@ -96,7 +96,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":64},
 	"sourceSize": {"w":32,"h":64}
 },
-"xiaohei-skin3-left-walk.002 2":
+"xiaohei-skin3-left-walk.003":
 {
 	"frame": {"x":0,"y":768,"w":32,"h":64},
 	"rotated": false,

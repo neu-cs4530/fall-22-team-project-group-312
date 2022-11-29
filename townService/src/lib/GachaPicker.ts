@@ -80,31 +80,15 @@ export default class GachaPicker {
     this._id = id;
   }
 
-  // returns a random item from the selection pool, accounting for item rarity
+  // returns a random item from the selection pool without accounting for item rarity
   // assumes there's at least one item in the pool
   private _getOneItem(): WardrobeItem {
-    const rarityList: number[] = [];
-    for (let i = 0; i < this._itemPool.length; i++) {
-      const rarityIndex = i > 0 ? i - 1 : 0;
-      rarityList.push(this._rarityMapping[this._itemPool[i].rarity] + rarityList[rarityIndex]);
-    }
-
-    let indexOfPulledItem = 0;
-    const randomValue = Math.random() * rarityList[rarityList.length - 1];
-
-    for (indexOfPulledItem; indexOfPulledItem < this._itemPool.length; indexOfPulledItem++) {
-      if (this._rarityMapping[this._itemPool[indexOfPulledItem].rarity] > randomValue) {
-        break;
-      }
-    }
-    if (indexOfPulledItem >= 0 && indexOfPulledItem < this._itemPool.length) {
-      return this._itemPool[indexOfPulledItem];
-    }
-    return this._itemPool[0];
+    const max = this._itemPool.length;
+    return this._itemPool[Math.random() * max];
   }
 
   /**
-   * Returns a random iterm from the list of items. Randomization is affected by item weight.
+   * Returns a random iterm from the list of items. Randomization is not affected by item weight.
    * Players are not guaranteed to receive different items on every pull.
    * If a player lacks sufficient currency to make a pull, throw an error message.
    *
@@ -124,9 +108,9 @@ export default class GachaPicker {
     if (this._itemPool.length > 0) {
       player.wardrobe.currency -= this._pullCost;
       const pulledItem: WardrobeItem = this._getOneItem();
-      const playerHasGivenItem = player.wardrobe.addWardrobeItem(pulledItem);
-      if (!playerHasGivenItem) {
-        // refund, rounded to the nearest integer
+      const pulledItemIsNew = player.wardrobe.addWardrobeItem(pulledItem);
+      if (!pulledItemIsNew) {
+        // player already has the item so refund, rounded to the nearest integer
         player.wardrobe.currency += Math.round(this._pullCost * this._refundPercent);
       }
       // emit

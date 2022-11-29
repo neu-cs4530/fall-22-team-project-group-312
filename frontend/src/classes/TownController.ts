@@ -5,7 +5,6 @@ import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import TypedEmitter from 'typed-emitter';
-import { UNLOCKABLE_ITEMS } from '../../../townService/src/lib/WardrobeItem';
 import Interactable from '../components/Town/Interactable';
 import ViewingArea from '../components/Town/interactables/ViewingArea';
 import { LoginController } from '../contexts/LoginControllerContext';
@@ -14,12 +13,11 @@ import useTownController from '../hooks/useTownController';
 import {
   ChatMessage,
   CoveyTownSocket,
-  DEFAULT_RARITY_MAPPING,
   PlayerLocation,
-  PULL_COST,
-  REFUND_PERCENT,
+  RarityMapping,
   TownSettingsUpdate,
   ViewingArea as ViewingAreaModel,
+  WardrobeItem,
   WardrobeModel,
 } from '../types/CoveyTownSocket';
 import { isConversationArea, isViewingArea } from '../types/TypeUtils';
@@ -29,6 +27,25 @@ import PlayerController from './PlayerController';
 import ViewingAreaController from './ViewingAreaController';
 
 const CALCULATE_NEARBY_PLAYERS_DELAY = 300;
+// Represents all other items players can unlock.
+const UNLOCKABLE_ITEMS: WardrobeItem[] = [
+  { id: 'bday', name: 'Birthday Suit', category: 'outfit', rarity: 'ultraRare' },
+  { id: 'keqing', name: 'Keqing', category: 'outfit', rarity: 'rare' },
+  { id: 'ness', name: 'Ness', category: 'outfit', rarity: 'common' },
+  { id: 'xiaohei', name: 'Catboy', category: 'outfit', rarity: 'common' },
+];
+
+const defaultRarityMapping: RarityMapping = {
+  common: 10,
+  rare: 5,
+  ultraRare: 1,
+};
+
+// Represents the default pull cost for GachaPickers
+const PULL_COST = 1000;
+
+// Represents the default refund percentage for GachaPickers
+const REFUND_PERCENT = 0.1;
 
 export type ConnectionProperties = {
   userName: string;
@@ -104,6 +121,12 @@ export type TownEvents = {
    * changed and replaced with the given gacha controller
    */
   gachaponChanged: (newGacha: GachaController) => void;
+
+  /**
+   * An event that indicates that a player is pulling an item from this
+   * town's gacha picker.
+   */
+  playerPulled: (pullingPlayer: PlayerController) => void;
 };
 
 /**
@@ -210,7 +233,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     UNLOCKABLE_ITEMS,
     PULL_COST,
     REFUND_PERCENT,
-    DEFAULT_RARITY_MAPPING,
+    defaultRarityMapping,
     nanoid(),
   );
 
@@ -479,6 +502,28 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         updatedViewingArea?.updateFrom(interactable);
       }
     });
+
+    /**
+     * When a player pulls for an item, push the updated player into the relevant controller,
+     * which is assumed to be represented by a PlayerController that this TownController has.
+     *
+     */
+    this._socket.on('playerPulled', pullingPlayer => {
+      const playerToUpdate = this.players.find(eachPlayer => eachPlayer.id === pullingPlayer.id);
+
+      if (playerToUpdate) {
+        const retrievedItem = this._gachaRoller.pull(playerToUpdate);
+
+        this.emit('playerPulled', playerToUpdate);
+      } else {
+        //TODO: It should not be possible to receive a playerWardrobeChange event for a player that is not already in the players array, right?
+        const newPlayer = PlayerController.fromPlayerModel(pullingPlayer);
+        const retrievedItem = this._gachaRoller.pull(newPlayer);
+
+        this._players = this.players.concat(newPlayer);
+        this.emit('playerPulled', newPlayer);
+      }
+    });
   }
 
   /**
@@ -509,6 +554,18 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     assert(ourPlayer);
     ourPlayer.wardrobe = newWardrobe;
     this.emit('playerWardrobeChanged', ourPlayer);
+  }
+
+  /**
+   * Emit a gacha pull event for the current player, and updating the current wardrobe state
+   * by notifying the townService that the player's current wardrobe has changed.
+   * @param pulledItem the WardrobeItem that the player has pulled from the GachaPicker
+   */
+  public emitGachaPull(wardrobeAfterPull: WardrobeModel) {
+    this._socket.emit('playerWardobeChange', wardrobeAfterPull);
+    const ourPlayer = this._ourPlayer;
+    assert(ourPlayer);
+    this.emit('playerPulled', ourPlayer);
   }
 
   /**
