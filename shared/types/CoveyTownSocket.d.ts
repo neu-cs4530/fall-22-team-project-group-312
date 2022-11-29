@@ -126,7 +126,6 @@ export interface ServerToClientEvents {
   townClosing: () => void;
   chatMessage: (message: ChatMessage) => void;
   interactableUpdate: (interactable: Interactable) => void;
-  playerPulled: (pullingPlayer: Player) => void;
 }
 
 export interface ClientToServerEvents {

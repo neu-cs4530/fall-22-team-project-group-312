@@ -1,4 +1,4 @@
-import { WardrobeItem } from '../types/CoveyTownSocket';
+import { TownEmitter, WardrobeItem } from '../types/CoveyTownSocket';
 import Player from './Player';
 
 export const PULL_COST = 1000;
@@ -12,6 +12,8 @@ export default class GachaPicker {
   private _pullCost: number;
 
   private _refundPercent: number;
+
+  private _townEmitter: TownEmitter;
 
   // The higher the number, the more likely you are to pull an item of this rarity from the pool
   private _rarityMapping = {
@@ -48,10 +50,16 @@ export default class GachaPicker {
    * @param refundPercent : the percent of a pull that is refunded when a player gets a duplicate,
    * given as a decimal (e.g. 10% = 0.1, 100% = 1)
    */
-  constructor(itemPool: WardrobeItem[], pullCost: number, refundPercent: number) {
+  constructor(
+    itemPool: WardrobeItem[],
+    pullCost: number,
+    refundPercent: number,
+    townEmitter: TownEmitter,
+  ) {
     this._itemPool = itemPool;
     this._pullCost = pullCost;
     this._refundPercent = refundPercent;
+    this._townEmitter = townEmitter;
   }
 
   // returns a random item from the selection pool, accounting for item rarity
@@ -104,7 +112,7 @@ export default class GachaPicker {
         player.wardrobe.currency += this._pullCost * this._refundPercent;
       }
       // emit
-
+      this._townEmitter.emit('playerWardrobeChanged', player.toPlayerModel());
       return pulledItem;
     }
     throw new Error('No items in the pool.');
