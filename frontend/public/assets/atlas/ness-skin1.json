@@ -104,7 +104,7 @@
 	"spriteSourceSize": {"x":0,"y":16,"w":32,"h":48},
 	"sourceSize": {"w":32,"h":64}
 },
-"ness-skin1-left-walk.008":
+"ness-skin1-left-walk.003":
 {
 	"frame": {"x":35,"y":1,"w":32,"h":46},
 	"rotated": false,
