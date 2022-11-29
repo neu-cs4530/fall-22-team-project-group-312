@@ -30,8 +30,11 @@ const useStyles = makeStyles({
 /**
  * The wardrobe panel inside the pop up modal. This shows all the available outfits and
  * skin colors that the player can style their avatar with.
- * @param param0
- * @returns the wardrobe panel.
+ * @param isOpen sees if the pop up modal is open
+ * @param onClose tells the modal what to do when the wardrobe modal is closed
+ * @param coveyTownController the townController to manage communications about the wardrobe from
+ * frontend to backend
+ * @returns the wardrobe panel
  */
 function WardrobePanel({
   isOpen,
@@ -61,7 +64,7 @@ function WardrobePanel({
   /**
    * Switches the sprite preview to one with the newly selected item and the
    * other currently selected item.
-   * @param itemID the id of the item(outfit or skin color) the player selected
+   * @param itemID the id of the item (outfit or skin color) the player selected
    */
   async function switchSpriteItems(itemID: string): Promise<void> {
     if (itemID.startsWith('skin')) {
@@ -84,7 +87,12 @@ function WardrobePanel({
       setSpritePreview(newSpritePreview);
     }
   }
-
+  /**
+   * Checks if the outfit is locked, meaning checking if the item is inside the current player's
+   * inventory.
+   * @param itemID the ID of the outfit that must be checked for inside the player's inventory
+   * @returns true if the outfit is not inside the player's inventory and false if it isn't
+   */
   function isOutfitLocked(itemID: string): boolean {
     return (
       coveyTownController.ourPlayer.wardrobe.inventory.find(o => o.id === itemID) === undefined
@@ -92,15 +100,6 @@ function WardrobePanel({
   }
 
   const prefix = 'assets/atlas/';
-  /**
-   * modal
-   * left side of the preview png
-   * selection screen on the right
-   * navigation menu (own component)
-   * actual items
-   * confirm button
-   * exit button
-   */
   return (
     <>
       <Modal isOpen={isOpen} onClose={closeWardrobe}>
@@ -127,6 +126,7 @@ function WardrobePanel({
                       <Image
                         src={`${prefix}/outfit-previews/preview-misa.png`}
                         alt='misa'
+                        data-testid='misa'
                         onClick={() => {
                           switchSpriteItems('misa');
                         }}
@@ -136,6 +136,7 @@ function WardrobePanel({
                       <Image
                         src={`${prefix}/outfit-previews/preview-bday.png`}
                         alt='bday'
+                        data-testid='bday'
                         onClick={() => {
                           switchSpriteItems('bday');
                         }}
@@ -145,6 +146,7 @@ function WardrobePanel({
                       <Image
                         src={`${prefix}/outfit-previews/preview-ness.png`}
                         alt='ness'
+                        data-testid='ness'
                         onClick={() => {
                           switchSpriteItems('ness');
                         }}
@@ -154,6 +156,7 @@ function WardrobePanel({
                       <Image
                         src={`${prefix}/outfit-previews/preview-xiaohei.png`}
                         alt='xiaohei'
+                        data-testid='xiaohei'
                         onClick={() => {
                           switchSpriteItems('xiaohei');
                         }}
@@ -163,6 +166,7 @@ function WardrobePanel({
                       <Image
                         src={`${prefix}/outfit-previews/preview-keqing.png`}
                         alt='keqing'
+                        data-testid='keqing'
                         onClick={() => {
                           switchSpriteItems('keqing');
                         }}
@@ -181,6 +185,7 @@ function WardrobePanel({
                       <Image
                         src={`${prefix}/outfit-previews/preview-skin0.png`}
                         alt='0 skin color'
+                        data-testid='skin0'
                         onClick={() => {
                           switchSpriteItems('skin0');
                         }}
@@ -190,6 +195,7 @@ function WardrobePanel({
                       <Image
                         src={`${prefix}/outfit-previews/preview-skin1.png`}
                         alt='1 skin color'
+                        data-testid='skin1'
                         onClick={() => {
                           switchSpriteItems('skin1');
                         }}
@@ -199,6 +205,7 @@ function WardrobePanel({
                       <Image
                         src={`${prefix}outfit-previews/preview-skin2.png`}
                         alt='2 skin color'
+                        data-testid='skin2'
                         onClick={() => {
                           switchSpriteItems('skin2');
                         }}
@@ -208,6 +215,7 @@ function WardrobePanel({
                       <Image
                         src={`${prefix}outfit-previews/preview-skin3.png`}
                         alt='3 skin color'
+                        data-testid='skin3'
                         onClick={() => {
                           switchSpriteItems('skin3');
                         }}
@@ -217,6 +225,7 @@ function WardrobePanel({
                       <Image
                         src={`${prefix}outfit-previews/preview-skin4.png`}
                         alt='4 skin color'
+                        data-testid='skin4'
                         onClick={() => {
                           switchSpriteItems('skin4');
                         }}
@@ -228,6 +237,7 @@ function WardrobePanel({
               <div>
                 <Button
                   title='Confirm'
+                  data-testid='confirmButton'
                   onClick={() => {
                     const newWardrobe: WardrobeModel = {
                       currentOutfit: spritePreview[0],
@@ -236,6 +246,7 @@ function WardrobePanel({
                       currency: coveyTownController.ourPlayer.wardrobe.currency,
                     };
                     coveyTownController.emitWardobeChange(newWardrobe);
+                    closeWardrobe();
                     toast({
                       title: 'Wardrobe changed! Please move the character to see the changes.',
                       variant: 'solid',
