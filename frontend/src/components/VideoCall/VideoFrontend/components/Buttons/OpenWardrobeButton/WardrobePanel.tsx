@@ -1,23 +1,33 @@
 import {
   Button,
+  FormControl,
+  FormHelperText,
+  Heading,
   Image,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
   StackDivider,
   Tab,
   TabList,
   Tabs,
   VStack,
-  Heading,
 } from '@chakra-ui/react';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import TownController from '../../../../../../classes/TownController';
-import { WardrobeItem, WardrobeModel } from '../../../../../../types/CoveyTownSocket';
+import { ItemID, WardrobeItem, WardrobeModel } from '../../../../../../types/CoveyTownSocket';
 
 const useStyles = makeStyles({
   preview: {
@@ -42,15 +52,18 @@ function WardrobePanel({
   onClose: any;
   coveyTownController: TownController;
 }) {
+  const [textInput, setTextInput] = useState<string>('');
   const initalOutfit = coveyTownController.ourPlayer.wardrobe.currentOutfit;
   const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
+  const initialCurrency = coveyTownController.ourPlayer.wardrobe.currency;
+  const initialInventory = coveyTownController.ourPlayer.wardrobe.inventory;
   const classes = useStyles(makeStyles);
 
-  const [spritePreview, setSpritePreview] = useState<WardrobeItem[]>([initalOutfit, initialSkin]);
-  useEffect(() => {
-    console.log(
-      'Sprite preview has changed to ' + spritePreview[0].id + ' and ' + spritePreview[1].id,
-    );
+  const [spritePreview, setSpritePreview] = useState<WardrobeModel>({
+    currency: initialCurrency,
+    currentSkin: initialSkin,
+    currentOutfit: initalOutfit,
+    inventory: initialInventory,
   });
   const closeWardrobe = useCallback(() => {
     onClose();
@@ -61,26 +74,71 @@ function WardrobePanel({
    * other currently selected item.
    * @param itemID the id of the item(outfit or skin color) the player selected
    */
-  async function switchSpriteItems(itemID: string): Promise<void> {
+  async function switchSpriteItems(itemID: ItemID): Promise<void> {
     if (itemID.startsWith('skin')) {
-      const currentOutfit = spritePreview[0];
-      const newSpritePreview: WardrobeItem[] = [
-        currentOutfit,
-        coveyTownController.ourPlayer.wardrobe.inventory.find(
+      const newSpritePreview: WardrobeModel = {
+        currency: spritePreview.currency,
+        currentOutfit: spritePreview.currentOutfit,
+        currentSkin: coveyTownController.ourPlayer.wardrobe.inventory.find(
           (item: WardrobeItem) => item.id === itemID,
         ) as WardrobeItem,
-      ];
+        inventory: spritePreview.inventory,
+      };
       setSpritePreview(newSpritePreview);
     } else {
-      const currentSkin = spritePreview[1];
-      const newSpritePreview: WardrobeItem[] = [
-        coveyTownController.ourPlayer.wardrobe.inventory.find(
+      const newSpritePreview: WardrobeModel = {
+        currency: spritePreview.currency,
+        currentOutfit: coveyTownController.ourPlayer.wardrobe.inventory.find(
           (item: WardrobeItem) => item.id === itemID,
         ) as WardrobeItem,
-        currentSkin,
-      ];
+        currentSkin: spritePreview.currentSkin,
+        inventory: spritePreview.inventory,
+      };
       setSpritePreview(newSpritePreview);
     }
+  }
+
+  // returns false if it is an invalid string input
+  function parseString(input: string): WardrobeModel | undefined {
+    let inputWardrobe: WardrobeModel;
+    try {
+      inputWardrobe = JSON.parse(input) as WardrobeModel;
+    } catch {
+      return undefined;
+    }
+    // if currency in the input is invalid
+    if (inputWardrobe.currency < 0) {
+      return undefined;
+    }
+    // checks if the inventory is invalid
+    if (inputWardrobe.inventory === undefined) {
+      return undefined;
+    }
+    // checks if currentSKin is in the inventory
+    if (
+      inputWardrobe.inventory.find(item => item.id === inputWardrobe.currentSkin.id) === undefined
+    ) {
+      return undefined;
+    }
+    // checks if currentOutift is in the inventory
+    if (
+      inputWardrobe.inventory.find(item => item.id === inputWardrobe.currentOutfit.id) === undefined
+    ) {
+      return undefined;
+    }
+    return inputWardrobe;
+  }
+
+  function importString(input: string): void {
+    const newWardrobe = parseString(input);
+    if (newWardrobe !== undefined) {
+      setSpritePreview(newWardrobe);
+    }
+  }
+
+  // returns the preview as a string
+  function exportString(): string {
+    return JSON.stringify(spritePreview);
   }
 
   function isOutfitLocked(itemID: string): boolean {
@@ -110,7 +168,7 @@ function WardrobePanel({
             <VStack divider={<StackDivider borderColor='gray.200' />} spacing={15} align='center'>
               <div className='previewPane'>
                 <Image
-                  src={`${prefix}${spritePreview[0].id}-${spritePreview[1].id}/${spritePreview[0].id}-${spritePreview[1].id}-front.png`}
+                  src={`${prefix}${spritePreview.currentOutfit.id}-${spritePreview.currentSkin.id}/${spritePreview.currentOutfit.id}-${spritePreview.currentSkin.id}-front.png`}
                   alt='sprite'
                   className={classes.preview}
                 />
@@ -224,16 +282,45 @@ function WardrobePanel({
                 </Tabs>
               </div>
               <div>
+                <Popover>
+                  <PopoverTrigger>
+                    <Button>Export</Button>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <PopoverArrow />
+                    <PopoverCloseButton />
+                    <PopoverHeader>Wardrobe Key!</PopoverHeader>
+                    <PopoverBody>
+                      {`Here is your key for your inventory:\n ${exportString()}\nKeep it somewhere safe.`}
+                    </PopoverBody>
+                  </PopoverContent>
+                </Popover>
+                <Popover>
+                  <PopoverTrigger>
+                    <Button>Import</Button>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <PopoverArrow />
+                    <PopoverCloseButton />
+                    <PopoverHeader>Wardrobe Key!</PopoverHeader>
+                    <FormControl>
+                      <Input value={textInput} onChange={e => setTextInput(e.target.value)}></Input>
+                      <FormHelperText>Paste your key here!</FormHelperText>
+                      <Button
+                        title='Import'
+                        onClick={() => {
+                          importString(textInput);
+                          coveyTownController.emitWardobeChange(spritePreview);
+                        }}>
+                        Import
+                      </Button>
+                    </FormControl>
+                  </PopoverContent>
+                </Popover>
                 <Button
                   title='Confirm'
                   onClick={() => {
-                    const newWardrobe: WardrobeModel = {
-                      currentOutfit: spritePreview[0],
-                      currentSkin: spritePreview[1],
-                      inventory: coveyTownController.ourPlayer.wardrobe.inventory,
-                      currency: coveyTownController.ourPlayer.wardrobe.currency,
-                    };
-                    coveyTownController.emitWardobeChange(newWardrobe);
+                    coveyTownController.emitWardobeChange(spritePreview);
                   }}>
                   Confirm
                 </Button>
