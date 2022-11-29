@@ -1,10 +1,8 @@
 import { ChakraProvider, UseDisclosureReturn } from '@chakra-ui/react';
-import { fireEvent, getByText, render, RenderResult, waitFor } from '@testing-library/react';
+import { fireEvent, render, RenderResult, waitFor } from '@testing-library/react';
 import { keyboard } from '@testing-library/user-event/dist/types/keyboard';
 import { mock, mockClear, MockProxy } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
-import { LEFT } from 'phaser';
-import React from 'react';
 import PlayerController from '../../../../../../classes/PlayerController';
 import TownController from '../../../../../../classes/TownController';
 import TownControllerContext from '../../../../../../contexts/TownControllerContext';
@@ -113,8 +111,7 @@ describe('Wardrobe Panel', () => {
     fireEvent.click(skin0Option);
     fireEvent.click(confirmButton);
     userEvent.keyboard('{ArrowUp/}');
-    // fireEvent.keyPress();
-    fireEvent.keyDown(renderData, { code: 'ArrowUp', key: 'ArrowUp' });
+    userEvent.keyboard('{ArrowUp/}');
 
     await waitFor(() => expect(params.ourPlayer.wardrobe.currentSkin.id).toBe('skin0'));
     await waitFor(() => expect(params.ourPlayer.wardrobe.currentOutfit.id).toBe('misa'));

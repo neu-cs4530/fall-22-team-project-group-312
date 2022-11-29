@@ -2,8 +2,6 @@ import Phaser from 'phaser';
 import PlayerController from '../../classes/PlayerController';
 import TownController from '../../classes/TownController';
 import { PlayerLocation } from '../../types/CoveyTownSocket';
-// import does not work fixing later
-// import { SKIN_COLORS, OUTFITS } from '../../../../../../types/CoveyTownSocket';
 import { Callback } from '../VideoCall/VideoFrontend/types';
 import Interactable from './Interactable';
 import ConversationArea from './interactables/ConversationArea';
@@ -300,6 +298,7 @@ export default class TownGameScene extends Phaser.Scene {
         });
         this.coveyTownController.emitMovement(this._lastLocation);
       }
+      this.coveyTownController.emitWardobeChange(this.coveyTownController.ourPlayer.wardrobe);
     }
   }
 
