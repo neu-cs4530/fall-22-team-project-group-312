@@ -1,9 +1,11 @@
 import assert from 'assert';
 import EventEmitter from 'events';
 import _ from 'lodash';
+import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import TypedEmitter from 'typed-emitter';
+import { UNLOCKABLE_ITEMS } from '../../../townService/src/lib/WardrobeItem';
 import Interactable from '../components/Town/Interactable';
 import ViewingArea from '../components/Town/interactables/ViewingArea';
 import { LoginController } from '../contexts/LoginControllerContext';
@@ -12,13 +14,17 @@ import useTownController from '../hooks/useTownController';
 import {
   ChatMessage,
   CoveyTownSocket,
+  DEFAULT_RARITY_MAPPING,
   PlayerLocation,
+  PULL_COST,
+  REFUND_PERCENT,
   TownSettingsUpdate,
   ViewingArea as ViewingAreaModel,
   WardrobeModel,
 } from '../types/CoveyTownSocket';
 import { isConversationArea, isViewingArea } from '../types/TypeUtils';
 import ConversationAreaController from './ConversationAreaController';
+import GachaController from './GachaController';
 import PlayerController from './PlayerController';
 import ViewingAreaController from './ViewingAreaController';
 
@@ -93,6 +99,11 @@ export type TownEvents = {
    * @param obj the interactable that is being interacted with
    */
   interact: <T extends Interactable>(typeName: T['name'], obj: T) => void;
+  /**
+   * An event that indicates that this town's gacha controller has been
+   * changed and replaced with the given gacha controller
+   */
+  gachaponChanged: (newGacha: GachaController) => void;
 };
 
 /**
@@ -194,6 +205,14 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
   private _interactableEmitter = new EventEmitter();
 
   private _viewingAreas: ViewingAreaController[] = [];
+
+  private _gachaRoller: GachaController = new GachaController(
+    UNLOCKABLE_ITEMS,
+    PULL_COST,
+    REFUND_PERCENT,
+    DEFAULT_RARITY_MAPPING,
+    nanoid(),
+  );
 
   public constructor({ userName, townID, loginController }: ConnectionProperties) {
     super();
@@ -312,6 +331,15 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
   public set viewingAreas(newViewingAreas: ViewingAreaController[]) {
     this._viewingAreas = newViewingAreas;
     this.emit('viewingAreasChanged', newViewingAreas);
+  }
+
+  public get gachaRoller() {
+    return this._gachaRoller;
+  }
+
+  public set gachaRoller(newGachaRoller: GachaController) {
+    this._gachaRoller = newGachaRoller;
+    this.emit('gachaponChanged', newGachaRoller);
   }
 
   /**

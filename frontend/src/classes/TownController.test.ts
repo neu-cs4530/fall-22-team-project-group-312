@@ -44,6 +44,7 @@ const testWardrobeItem: WardrobeItem = {
   id: 'newItem',
   name: 'newItem',
   category: 'outfit',
+  rarity: 'common',
 };
 
 describe('TownController', () => {
@@ -70,7 +71,7 @@ describe('TownController', () => {
    */
   const emitEventAndExpectListenerFiring = <
     ReceivedEventFromSocket extends EventNames<ServerToClientEvents>,
-    ExpectedListenerName extends EventNames<TownEvents>,
+    ExpectedListenerName extends EventNames<TownEvents>
   >(
     receivedEvent: ReceivedEventFromSocket,
     receivedParameter: ReceivedEventParameter<ReceivedEventFromSocket>,

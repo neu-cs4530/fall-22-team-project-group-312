@@ -56,6 +56,10 @@ function GachaPanel({
   const playerHasEnoughCoins = coveyTownController.ourPlayer.wardrobe.currency >= singlePullCost;
 
   const [image, setImage] = useState<string>(prefix + floatingBoxGif + suffix);
+  const [bounceVisible, setBounceVisible] = useState<boolean>(true);
+  const [resultVisible, setResultVisible] = useState<boolean>(false);
+
+  const [pulledItem, setPulledItem] = useState<WardrobeItem>(undefined);
   // useEffect(() => {
   //   console.log(
   //     'Sprite preview has changed to ' + spritePreview[0].id + ' and ' + spritePreview[1].id,
@@ -105,7 +109,21 @@ function GachaPanel({
             <VStack divider={<StackDivider borderColor='gray.200' />} spacing={15} align='center'>
               <div className='coinDisplay'>{`You have ${coveyTownController.ourPlayer.wardrobe.currency} CoveyCoins.`}</div>
               <div className='previewPane'>
-                <Image src={`${floatingBoxGif}`} alt='sprite' className={classes.preview} />
+                <Image
+                  src={`${floatingBoxGif}`}
+                  alt='sprite'
+                  className={classes.preview}
+                  visibility={bounceVisible ? 'visible' : 'hidden'}
+                />
+              </div>
+              <div className='previewPane'>
+                <p>You got...</p>
+                <Image
+                  src={`${prefix + pulledItem + suffix}`}
+                  alt='sprite'
+                  className={classes.preview}
+                />
+                <p>${pulledItem !== undefined ? pulledItem.name : ''}!</p>
               </div>
               <div>
                 <Button

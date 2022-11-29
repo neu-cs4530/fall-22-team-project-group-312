@@ -12,12 +12,8 @@ import ToggleAudioButton from '../Buttons/ToggleAudioButton/ToggleAudioButton';
 import ToggleChatButton from '../Buttons/ToggleChatButton/ToggleChatButton';
 import ToggleVideoButton from '../Buttons/ToggleVideoButton/ToggleVideoButton';
 import ToggleScreenShareButton from '../Buttons/ToogleScreenShareButton/ToggleScreenShareButton';
-<<<<<<< HEAD
 import OpenGachaButton from '../Buttons/OpenGachaButton/OpenGachaButton';
-import TownSettings from '../../../../Login/TownSettings';
-=======
 import Menu from './Menu/Menu';
->>>>>>> main
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

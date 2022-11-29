@@ -37,7 +37,19 @@ export interface Player {
  */
 export type ItemCategory = "skin" | "outfit";
 
+/**
+ * Represents how rare a particular WardrobeItem is
+ */
 export type Rarity = "common" | "rare" | "ultraRare";
+
+/**
+ * Represents a mapping of item rarities to numeric values
+ */
+export type RarityMapping = {
+  common: number;
+  rare: number;
+  ultraRare: number;
+};
 
 /**
  * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
@@ -64,12 +76,31 @@ export interface WardrobeModel {
 }
 
 export interface GachaPicker {
-  id: string;
-  pool: WardrobeItem[];
+  /** The pool of items that can be selected */
+  itemPool: WardrobeItem[];
+  /** How many CoveyCoins are needed to get an item */
   pullCost: number;
+  /** The percent of coins returned to the player after pulling a duplicate item */
   refundPercent: number;
+  /** A mapping of item rarities to numeric values (higher = more common) */
+  rarityMapping: RarityMapping;
+  /** The id of this GachaPicker */
+  id: string;
   // pull: (pullingPlayer: Player) => void;
 }
+
+// Represents the default pull cost for GachaPickers
+export const PULL_COST = 1000;
+
+// Represents the default refund percentage for GachaPickers
+export const REFUND_PERCENT = 0.1;
+
+/** Represents the default rarity mapping for GachaPickers */
+export const DEFAULT_RARITY_MAPPING: RarityMapping = {
+  common: 10,
+  rare: 5,
+  ultraRare: 1,
+};
 
 // Represents all skin color options the player could possibly have
 export const SKIN_COLORS: string[] = ["skin0", "skin1", "skin2", "skin3"];
@@ -126,6 +157,7 @@ export interface ServerToClientEvents {
   townClosing: () => void;
   chatMessage: (message: ChatMessage) => void;
   interactableUpdate: (interactable: Interactable) => void;
+  gachaUpdate: (gachapon: GachaPicker) => void;
 }
 
 export interface ClientToServerEvents {
@@ -134,4 +166,6 @@ export interface ClientToServerEvents {
   interactableUpdate: (update: Interactable) => void;
   // New ClientToServer event for a changed wardrobe.
   playerWardobeChange: (newWardrobe: WardrobeModel) => void;
+  // New ClientToServer event for a gacha pull.
+  playerGachaPull: () => void;
 }

@@ -1,7 +1,10 @@
-import { TownEmitter, WardrobeItem } from '../types/CoveyTownSocket';
+import {
+  RarityMapping,
+  TownEmitter,
+  WardrobeItem,
+  GachaPicker as GachaModel,
+} from '../types/CoveyTownSocket';
 import Player from './Player';
-
-export const PULL_COST = 1000;
 
 /**
  * A class to represent the randomized gacha pull system for getting new outfits.
@@ -16,14 +19,16 @@ export default class GachaPicker {
   private _townEmitter: TownEmitter;
 
   // The higher the number, the more likely you are to pull an item of this rarity from the pool
-  private _rarityMapping = {
-    common: 10,
-    rare: 5,
-    ultraRare: 1,
-  };
+  private _rarityMapping: RarityMapping;
+
+  private _id: string;
 
   public get itemPool(): WardrobeItem[] {
     return this._itemPool;
+  }
+
+  public set itemPool(newPool: WardrobeItem[]) {
+    this._itemPool = newPool;
   }
 
   public get pullCost(): number {
@@ -40,6 +45,15 @@ export default class GachaPicker {
    */
   public addItemToPool(item: WardrobeItem): void {
     this._itemPool.push(item);
+    this._townEmitter.emit('gachaUpdate', this.toGachaModel());
+  }
+
+  public get rarityMapping(): RarityMapping {
+    return this._rarityMapping;
+  }
+
+  public get id(): string {
+    return this._id;
   }
 
   /**
@@ -55,11 +69,15 @@ export default class GachaPicker {
     pullCost: number,
     refundPercent: number,
     townEmitter: TownEmitter,
+    rarityMapping: RarityMapping,
+    id: string,
   ) {
     this._itemPool = itemPool;
     this._pullCost = pullCost;
     this._refundPercent = refundPercent;
     this._townEmitter = townEmitter;
+    this._rarityMapping = rarityMapping;
+    this._id = id;
   }
 
   // returns a random item from the selection pool, accounting for item rarity
@@ -108,13 +126,23 @@ export default class GachaPicker {
       const pulledItem: WardrobeItem = this._getOneItem();
       const playerHasGivenItem = player.wardrobe.addWardrobeItem(pulledItem);
       if (!playerHasGivenItem) {
-        // refund
-        player.wardrobe.currency += this._pullCost * this._refundPercent;
+        // refund, rounded to the nearest integer
+        player.wardrobe.currency += Math.round(this._pullCost * this._refundPercent);
       }
       // emit
       this._townEmitter.emit('playerWardrobeChanged', player.toPlayerModel());
       return pulledItem;
     }
     throw new Error('No items in the pool.');
+  }
+
+  toGachaModel(): GachaModel {
+    return {
+      itemPool: this._itemPool,
+      pullCost: this._pullCost,
+      refundPercent: this._refundPercent,
+      rarityMapping: this._rarityMapping,
+      id: this._id,
+    };
   }
 }
