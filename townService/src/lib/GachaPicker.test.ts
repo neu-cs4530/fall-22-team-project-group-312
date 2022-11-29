@@ -1,9 +1,8 @@
 import { mock } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
-import { ItemCategory, PlayerLocation, TownEmitter, WardrobeItem } from '../types/CoveyTownSocket';
+import { TownEmitter, WardrobeItem } from '../types/CoveyTownSocket';
 import GachaPicker from './GachaPicker';
 import Player from './Player';
-import Wardrobe from './Wardrobe';
 
 describe('Gacha System tests', () => {
   let misa: WardrobeItem;
@@ -22,33 +21,33 @@ describe('Gacha System tests', () => {
   let allItemsPool: WardrobeItem[];
   beforeEach(() => {
     misa = {
-      name: 'misa',
+      id: 'misa',
+      name: 'Default Outfit',
       category: 'outfit',
-      spriteLocation: 'misa',
       rarity: 'common',
     };
     ness = {
-      name: 'ness',
+      id: 'ness',
+      name: 'Ness',
       category: 'outfit',
-      spriteLocation: 'ness',
       rarity: 'common',
     };
     keqing = {
-      name: 'keqing',
+      name: 'Keqing',
       category: 'outfit',
-      spriteLocation: 'keqing',
+      id: 'keqing',
       rarity: 'rare',
     };
     bday = {
       name: 'Birthday Suit',
       category: 'outfit',
-      spriteLocation: 'bday',
+      id: 'bday',
       rarity: 'ultraRare',
     };
     xiaohei = {
       name: 'Cat Boy',
       category: 'outfit',
-      spriteLocation: 'xiaohei',
+      id: 'xiaohei',
       rarity: 'rare',
     };
 
@@ -90,6 +89,7 @@ describe('Gacha System tests', () => {
       expect(gachapon.refundPercent).toEqual(0.1);
     });
   });
+
   describe('Modifying the pool', () => {
     it('Adds a new item to an empty pull pool', () => {
       const gachapon: GachaPicker = new GachaPicker(emptyPool, free, 0);
@@ -107,38 +107,32 @@ describe('Gacha System tests', () => {
     });
     it('Pulling after adding a new item to the pool can retrieve the new item', () => {
       const gachapon: GachaPicker = new GachaPicker(emptyPool, free, 0);
-      expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toBe(1);
-      // expect(testPlayer.wardrobe.inventory.get('outfit')).toEqual([]);
-      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(false);
+      const oldInventorySize = testPlayer.wardrobe.inventory.length;
+
+      expect(testPlayer.wardrobe.inventory.includes(ness)).toBe(false);
+
       gachapon.addItemToPool(ness);
       gachapon.pull(testPlayer);
 
-      expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toBe(2);
-      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(misa)).toBe(true);
-      // expect(testPlayer.wardrobe.inventory.get('outfit')).toEqual([]);
-      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(true);
+      expect(testPlayer.wardrobe.inventory.length).toEqual(oldInventorySize + 1);
+      expect(testPlayer.wardrobe.inventory.includes(ness)).toBe(true);
     });
   });
+
   describe('Test item obtainability', () => {
-    it('Does not change the player wardrobe if the pull pool is empty', () => {
-      const testPool: WardrobeItem[] = [];
-      const originalOutfits: WardrobeItem[] =
-        testPlayer.wardrobe.inventory.get('outfit') === undefined
-          ? []
-          : testPlayer.wardrobe.inventory.get('outfit');
-      const gachapon: GachaPicker = new GachaPicker(testPool, free, 0);
-      gachapon.pull(testPlayer);
-      expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toBe(originalOutfits.length);
-      expect(testPlayer.wardrobe.inventory.get('outfit')).toEqual(originalOutfits);
+    it('Throws an error if the pull pool is empty', () => {
+      const gachapon: GachaPicker = new GachaPicker(emptyPool, free, 0);
+      expect(() => gachapon.pull(testPlayer)).toThrowError();
     });
-    // it('Is able to produce duplicate items on consecutive pulls');
   });
+
   describe('Test interaction with Player inventory', () => {
     it('Can cost nothing', () => {
       const gachapon: GachaPicker = new GachaPicker(allItemsPool, free, 0);
       testPlayer.wardrobe.currency = 1;
       const oldBalance = testPlayer.wardrobe.currency;
       gachapon.pull(testPlayer);
+
       expect(testPlayer.wardrobe.currency).toEqual(oldBalance);
     });
     it('Costs players CoveyCoins per pull', () => {
@@ -146,66 +140,68 @@ describe('Gacha System tests', () => {
       testPlayer.wardrobe.currency = fiveCoins + 20;
       const oldBalance = testPlayer.wardrobe.currency;
       gachapon.pull(testPlayer);
-      expect(testPlayer.wardrobe.currency).toEqual(oldBalance - 5);
+
+      expect(testPlayer.wardrobe.currency).toEqual(oldBalance - fiveCoins);
     });
-    it('Does not allow a Player with insufficient funds to pull', () => {
-      const gachapon: GachaPicker = new GachaPicker(nessPool, fiveCoins, 0);
-      testPlayer.wardrobe.currency = 0;
-      const oldBalance = testPlayer.wardrobe.currency;
-      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(false);
+    it('Does not remove other items in the player inventory', () => {
+      const gachapon: GachaPicker = new GachaPicker(nessPool, free, 0);
+      const oldInventoryLength = testPlayer.wardrobe.inventory.length;
+      const result = gachapon.pull(testPlayer);
+      const newInventory = testPlayer.wardrobe.inventory;
 
-      gachapon.pull(testPlayer);
-      expect(testPlayer.wardrobe.currency).toEqual(oldBalance);
-      expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(false);
+      expect(newInventory.length).toEqual(oldInventoryLength + 1);
     });
-    // it('Adds new items to the player inventory', () => {
-    //   const gachapon: GachaPicker = new GachaPicker(nessPool, free, 0);
-    //   testPlayer.wardrobe.currency = 10;
-    //   expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(false);
-    //   const originalOutfits: WardrobeItem[] = testPlayer.wardrobe.inventory.get('outfit');
+    it('Adds new items to the player inventory', () => {
+      const gachapon: GachaPicker = new GachaPicker(nessPool, free, 0);
+      testPlayer.wardrobe.currency = 10;
+      expect(testPlayer.wardrobe.inventory.includes(ness)).toBe(false);
+      const originalInventoryLength = testPlayer.wardrobe.inventory.length;
 
-    //   gachapon.pull(testPlayer);
+      const result = gachapon.pull(testPlayer);
 
-    //   expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(true);
-    //   expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toEqual(
-    //     originalOutfits.length + 1,
-    //   );
-    // });
-    // it('Does not change clothing in the inventory on duplicate pulls', () => {
-    //   const gachapon: GachaPicker = new GachaPicker(nessPool, free, 0);
-    //   testPlayer.wardrobe.currency = 10;
-    //   expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(false);
-    //   const originalOutfits: WardrobeItem[] =
-    //     testPlayer.wardrobe.inventory.get('outfit') === undefined
-    //       ? []
-    //       : testPlayer.wardrobe.inventory.get('outfit');
+      expect(testPlayer.wardrobe.inventory.includes(result)).toBe(true);
+      expect(testPlayer.wardrobe.inventory.length).toEqual(originalInventoryLength + 1);
+    });
+    it('Does not change clothing in the inventory on duplicate pulls', () => {
+      const gachapon: GachaPicker = new GachaPicker(nessPool, free, 0);
+      testPlayer.wardrobe.currency = 10;
+      const originalInventoryLength = testPlayer.wardrobe.inventory.length;
 
-    //   gachapon.pull(testPlayer);
-    //   expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(true);
-    //   expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toEqual(
-    //     originalOutfits.length + 1,
-    //   );
+      const firstPull = gachapon.pull(testPlayer);
+      expect(testPlayer.wardrobe.inventory.includes(firstPull)).toBe(true);
+      expect(testPlayer.wardrobe.inventory.length).toEqual(originalInventoryLength + 1);
 
-    //   gachapon.pull(testPlayer);
-    //   expect(testPlayer.wardrobe.inventory.get('outfit')?.includes(ness)).toBe(true);
-    //   expect(testPlayer.wardrobe.inventory.get('outfit')?.length).toEqual(
-    //     originalOutfits.length + 1,
-    //   );
-    // });
+      const secondPull = gachapon.pull(testPlayer);
+      expect(testPlayer.wardrobe.inventory.includes(firstPull)).toBe(true);
+      expect(testPlayer.wardrobe.inventory.length).toEqual(originalInventoryLength + 1);
+    });
+    it('Does not refund players on non-duplicate pulls', () => {
+      const testCost = 10;
+      const testRefund = 0.1;
+      const gachapon: GachaPicker = new GachaPicker(nessPool, testCost, testRefund);
+      testPlayer.wardrobe.currency = testCost * 3;
+
+      const startingBalance = testPlayer.wardrobe.currency;
+      const result = gachapon.pull(testPlayer);
+
+      expect(testPlayer.wardrobe.currency).toEqual(startingBalance - testCost);
+    });
     it('Refunds players for duplicate pulls', () => {
       const testCost = 10;
       const testRefund = 0.1;
       const gachapon: GachaPicker = new GachaPicker(nessPool, testCost, testRefund);
       testPlayer.wardrobe.currency = testCost * 3;
       const startingBalance = testPlayer.wardrobe.currency;
-      gachapon.pull(testPlayer);
+      const firstPull = gachapon.pull(testPlayer);
+
       const balanceAfterFirstPull = testPlayer.wardrobe.currency;
-      gachapon.pull(testPlayer);
-      const balanceAfterSecondPull = balanceAfterFirstPull - testCost;
-      const balanceAfterRefund = testPlayer.wardrobe.currency;
+      const secondPull = gachapon.pull(testPlayer);
 
       expect(balanceAfterFirstPull).toEqual(startingBalance - testCost);
-      expect(balanceAfterRefund).toEqual(balanceAfterSecondPull + testCost * testRefund);
+
+      expect(testPlayer.wardrobe.currency).toEqual(
+        balanceAfterFirstPull - testCost + testCost * testRefund,
+      );
     });
     // it('Emits a message on a successful pull');
   });

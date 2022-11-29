@@ -1,4 +1,4 @@
-import { Rarity, WardrobeItem } from '../types/CoveyTownSocket';
+import { WardrobeItem } from '../types/CoveyTownSocket';
 
 // Represents the default items every player has in their wardrobe upon initialization.
 export const DEFAULT_ITEMS: WardrobeItem[] = [

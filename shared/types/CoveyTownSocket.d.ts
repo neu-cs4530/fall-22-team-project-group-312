@@ -29,13 +29,8 @@ export interface Player {
   id: string;
   userName: string;
   location: PlayerLocation;
-<<<<<<< HEAD
-  wardrobe: Wardrobe;
-}
-=======
   wardrobe: WardrobeModel;
-};
->>>>>>> main
+}
 
 /**
  * Represents the location of a WardrobeItem on the player's body.
@@ -44,20 +39,20 @@ export type ItemCategory = "skin" | "outfit";
 
 export type Rarity = "common" | "rare" | "ultraRare";
 
- /**
-  * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
-  */
- export type WardrobeItem = {
-   id: string;
-   name: string;
-   category: ItemCategory;
-   rarity: Rarity;
- };
+/**
+ * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
+ */
+export type WardrobeItem = {
+  id: string;
+  name: string;
+  category: ItemCategory;
+  rarity: Rarity;
+};
 
 /**
  * Representation of a wardrobe that the TownGameScene can interact with.
  */
- export interface WardrobeModel {
+export interface WardrobeModel {
   /** The amount of currency a wardrobe currently has to be spent on WardrobeItems. */
   currency: number;
   /** The current skin color set in the wardrobe. */
@@ -68,7 +63,6 @@ export type Rarity = "common" | "rare" | "ultraRare";
   inventory: WardrobeItem[];
 }
 
-<<<<<<< HEAD
 export interface GachaPicker {
   id: string;
   pool: WardrobeItem[];
@@ -77,16 +71,13 @@ export interface GachaPicker {
   // pull: (pullingPlayer: Player) => void;
 }
 
-export type XY = { x: number; y: number };
-=======
 // Represents all skin color options the player could possibly have
-export const SKIN_COLORS: string[] = ['skin0', 'skin1', 'skin2', 'skin3'];
+export const SKIN_COLORS: string[] = ["skin0", "skin1", "skin2", "skin3"];
 
 // Represents all outfit options the player could possiby have
-export const OUTFITS: string[] = ['misa', 'bday', 'keqing', 'ness', 'xiaohei'];
+export const OUTFITS: string[] = ["misa", "bday", "keqing", "ness", "xiaohei"];
 
-export type XY = { x: number, y: number };
->>>>>>> main
+export type XY = { x: number; y: number };
 
 export interface PlayerLocation {
   /* The CENTER x coordinate of this player's location */
@@ -142,11 +133,6 @@ export interface ClientToServerEvents {
   chatMessage: (message: ChatMessage) => void;
   playerMovement: (movementData: PlayerLocation) => void;
   interactableUpdate: (update: Interactable) => void;
-<<<<<<< HEAD
-  playerPull: (pullingPlayer: PlayerModel) => void;
-}
-=======
   // New ClientToServer event for a changed wardrobe.
   playerWardobeChange: (newWardrobe: WardrobeModel) => void;
 }
->>>>>>> main

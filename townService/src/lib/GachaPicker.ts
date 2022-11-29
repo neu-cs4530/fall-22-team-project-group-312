@@ -54,18 +54,13 @@ export default class GachaPicker {
     this._refundPercent = refundPercent;
   }
 
-  // might refactor this to go into the Player interface instead
-  private static _playerHasGivenItem(player: Player, item: WardrobeItem): boolean {
-    const inventory: WardrobeItem[] | undefined = player.wardrobe.inventory.get('outfit');
-
-    return inventory !== undefined ? inventory.includes(item) : false;
-  }
-
   // returns a random item from the selection pool, accounting for item rarity
+  // assumes there's at least one item in the pool
   private _getOneItem(): WardrobeItem {
     const rarityList: number[] = [];
     for (let i = 0; i < this._itemPool.length; i++) {
-      rarityList.push(this._rarityMapping[this._itemPool[i].rarity] + rarityList[i - 1] || 0);
+      const rarityIndex = i > 0 ? i - 1 : 0;
+      rarityList.push(this._rarityMapping[this._itemPool[i].rarity] + rarityList[rarityIndex]);
     }
 
     let indexOfPulledItem = 0;
@@ -76,7 +71,10 @@ export default class GachaPicker {
         break;
       }
     }
-    return this._itemPool[indexOfPulledItem];
+    if (indexOfPulledItem >= 0 && indexOfPulledItem < this._itemPool.length) {
+      return this._itemPool[indexOfPulledItem];
+    }
+    return this._itemPool[0];
   }
 
   /**
@@ -94,19 +92,21 @@ export default class GachaPicker {
    *
    * Emits the pulled item to the frontend.
    * @param player the player pulling from the gacha pool
+   * @throws an error if the pull pool is empty
    */
   public pull(player: Player): WardrobeItem {
-    player.wardrobe.currency -= this._pullCost;
-    const pulledItem: WardrobeItem = this._getOneItem();
-    if (GachaPicker._playerHasGivenItem(player, pulledItem)) {
-      // refund
-      player.wardrobe.currency += this._pullCost * this._refundPercent;
+    if (this._itemPool.length > 0) {
+      player.wardrobe.currency -= this._pullCost;
+      const pulledItem: WardrobeItem = this._getOneItem();
+      const playerHasGivenItem = player.wardrobe.addWardrobeItem(pulledItem);
+      if (!playerHasGivenItem) {
+        // refund
+        player.wardrobe.currency += this._pullCost * this._refundPercent;
+      }
       // emit
-    } else {
-      // adds it to the player's inventory
-      player.wardrobe.addWardrobeItem(pulledItem);
-    }
 
-    return pulledItem;
+      return pulledItem;
+    }
+    throw new Error('No items in the pool.');
   }
 }
