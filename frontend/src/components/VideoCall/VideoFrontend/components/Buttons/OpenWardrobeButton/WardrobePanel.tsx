@@ -104,7 +104,7 @@ function WardrobePanel({
       setSpritePreview(newSpritePreview);
     }
   }
-  
+
   /**
    * Returns the player's wardrobe as a JSON formatted string.
    * @returns The player's wardrobe as a JSON string.
@@ -164,7 +164,6 @@ function WardrobePanel({
     console.log(spritePreview);
     return true;
   }
-
 
   /**
    * Checks if the outfit is locked, meaning checking if the item is inside the current player's
