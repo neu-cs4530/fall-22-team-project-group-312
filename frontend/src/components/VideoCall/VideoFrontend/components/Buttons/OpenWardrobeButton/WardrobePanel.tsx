@@ -1,5 +1,6 @@
 import {
   Button,
+  Heading,
   Image,
   Modal,
   ModalBody,
@@ -11,9 +12,8 @@ import {
   Tab,
   TabList,
   Tabs,
-  VStack,
-  Heading,
   useToast,
+  VStack,
 } from '@chakra-ui/react';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -67,26 +67,24 @@ function WardrobePanel({
    * @param itemID the id of the item (outfit or skin color) the player selected
    */
   async function switchSpriteItems(itemID: string): Promise<void> {
-    if (spritePreview[0].id !== itemID && spritePreview[1].id !== itemID) {
-      if (itemID.startsWith('skin')) {
-        const currentOutfit = spritePreview[0];
-        const newSpritePreview: WardrobeItem[] = [
-          currentOutfit,
-          coveyTownController.ourPlayer.wardrobe.inventory.find(
-            (item: WardrobeItem) => item.id === itemID,
-          ) as WardrobeItem,
-        ];
-        await setSpritePreview(newSpritePreview);
-      } else {
-        const currentSkin = spritePreview[1];
-        const newSpritePreview: WardrobeItem[] = [
-          coveyTownController.ourPlayer.wardrobe.inventory.find(
-            (item: WardrobeItem) => item.id === itemID,
-          ) as WardrobeItem,
-          currentSkin,
-        ];
-        await setSpritePreview(newSpritePreview);
-      }
+    if (itemID.startsWith('skin')) {
+      const currentOutfit = spritePreview[0];
+      const newSpritePreview: WardrobeItem[] = [
+        currentOutfit,
+        coveyTownController.ourPlayer.wardrobe.inventory.find(
+          (item: WardrobeItem) => item.id === itemID,
+        ) as WardrobeItem,
+      ];
+      await setSpritePreview(newSpritePreview);
+    } else {
+      const currentSkin = spritePreview[1];
+      const newSpritePreview: WardrobeItem[] = [
+        coveyTownController.ourPlayer.wardrobe.inventory.find(
+          (item: WardrobeItem) => item.id === itemID,
+        ) as WardrobeItem,
+        currentSkin,
+      ];
+      await setSpritePreview(newSpritePreview);
     }
   }
   /**
@@ -250,7 +248,7 @@ function WardrobePanel({
                     coveyTownController.emitWardobeChange(newWardrobe);
                     closeWardrobe();
                     toast({
-                      title: 'Wardrobe changed! Please move the character to see the changes.',
+                      title: 'Wardrobe changed! Please move the avatar to see the changes.',
                       variant: 'solid',
                       status: 'success',
                       isClosable: true,
