@@ -158,10 +158,12 @@ export default class Wardrobe {
    * @param model A WardrobeModel object that this Wardrobe will update to match.
    */
   public updateFromModel(model: WardrobeModel) {
-    this.currency = model.currency;
-    this.currentOutfit = model.currentOutfit;
-    this.currentSkin = model.currentSkin;
-    this.inventory = model.inventory;
+    if (model !== undefined) {
+      this.currency = model.currency;
+      this.currentOutfit = model.currentOutfit;
+      this.currentSkin = model.currentSkin;
+      this.inventory = model.inventory;
+    }
   }
 
   /**

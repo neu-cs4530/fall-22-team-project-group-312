@@ -1,6 +1,6 @@
 import Wardrobe from './Wardrobe';
 import { DEFAULT_ITEMS, UNLOCKABLE_ITEMS } from './WardrobeItem';
-import { WardrobeItem } from '../types/CoveyTownSocket';
+import { WardrobeItem, WardrobeModel } from '../types/CoveyTownSocket';
 
 describe('Wardrobe', () => {
   // A valid Wardrobe and WardrobeItem(s) to be reused within the tests
@@ -156,6 +156,7 @@ describe('Wardrobe', () => {
   });
 
   describe('toModel properly generates model based on Wardrobe properties', () => {
+    testWardrobe = new Wardrobe();
     const model = testWardrobe.toModel();
     expect(model).toEqual({
       currency: testWardrobe.currency,
@@ -166,6 +167,11 @@ describe('Wardrobe', () => {
   });
 
   describe('updateFromModel', () => {
+    fullWardrobe = new Wardrobe();
+    // add all unlockable items
+    UNLOCKABLE_ITEMS.forEach(item => fullWardrobe.addWardrobeItem(item));
+    fullWardrobe.currency = 1000;
+    fullWardrobe.currentSkin = DEFAULT_ITEMS.find(item => item.id === 'skin3') as WardrobeItem;
     const newModel = fullWardrobe.toModel();
     testWardrobe.updateFromModel(newModel);
     expect(testWardrobe.currency).toEqual(fullWardrobe.currency);
