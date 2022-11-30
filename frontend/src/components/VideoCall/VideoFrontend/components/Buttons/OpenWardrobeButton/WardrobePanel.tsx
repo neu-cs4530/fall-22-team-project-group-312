@@ -99,7 +99,7 @@ function WardrobePanel({
     );
   }
 
-  // add list of outfits so you can write default indexes
+  // list of available outfits and skinColors
   const outfits: string[] = ['misa', 'bday', 'ness', 'xiaohei', 'keqing'];
   const skinColors: string[] = ['skin0', 'skin1', 'skin2', 'skin3', 'skin4'];
   const prefix = 'assets/atlas/';
