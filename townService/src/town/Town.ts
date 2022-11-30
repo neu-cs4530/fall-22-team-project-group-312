@@ -98,6 +98,7 @@ export default class Town {
 
   private _connectedSockets: Set<CoveyTownSocket> = new Set();
 
+  // Represents the GachaPicker object that players will interact with to get new outfits.
   private _gachaRoller: GachaPicker;
 
   constructor(

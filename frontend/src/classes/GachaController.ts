@@ -8,16 +8,23 @@ import {
 } from '../types/CoveyTownSocket';
 import PlayerController from './PlayerController';
 
+/**
+ * Events that the GachaController will handle.
+ */
 export type GachaEvents = {
+  // If the Gacha object has been changed, emit update.
   gachaUpdate: (gachapon: GachaModel) => void;
 };
 export default class GachaController extends (EventEmitter as new () => TypedEmitter<GachaEvents>) {
+  // Potential items a player can receive from this GachaController
   private _itemPool: WardrobeItem[];
 
   private readonly _id: string;
 
+  // Cost in currency to activate the Gacha and receive a random outfit.
   private _pullCost: number;
 
+  // The percent of _pullCost refunded to the user if they receive a duplicate item.
   private _refundPercent: number;
 
   constructor(pool: WardrobeItem[], pullCost: number, refundPercent: number, id: string) {
@@ -93,7 +100,7 @@ export default class GachaController extends (EventEmitter as new () => TypedEmi
       const pulledItemIsDupe = newInventory.find(item => item.id === pulledItem.id);
 
       if (pulledItemIsDupe) {
-        // refund
+        // refund duplicate.
         newCurrency += Math.round(this._pullCost * this._refundPercent);
       } else {
         newInventory.push(pulledItem);
@@ -109,6 +116,7 @@ export default class GachaController extends (EventEmitter as new () => TypedEmi
       const result: PullResult = { item: pulledItem, wardrobe: newWardrobeModel };
       return result;
     }
+    // A GachaContorller must have items for the user to pull.
     throw new Error('No items in the pool.');
   }
 
@@ -125,6 +133,11 @@ export default class GachaController extends (EventEmitter as new () => TypedEmi
     };
   }
 
+  /**
+   * Create a GachaController based on the properties of a given GachaModel.
+   * @param modelGacha The model to generate a GachaController from.
+   * @returns A new GachaController based on the given model.
+   */
   static fromGachaModel(modelGacha: GachaModel): GachaController {
     return new GachaController(
       modelGacha.itemPool,

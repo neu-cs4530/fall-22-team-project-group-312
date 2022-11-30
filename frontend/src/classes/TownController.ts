@@ -216,6 +216,9 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
 
   private _viewingAreas: ViewingAreaController[] = [];
 
+  /**
+   * A GachaController that the player will interact with to receive new outfits.
+   */
   private _gachaRoller: GachaController = new GachaController(
     UNLOCKABLE_ITEMS,
     PULL_COST,
@@ -342,10 +345,12 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     this.emit('viewingAreasChanged', newViewingAreas);
   }
 
+  // Get the GachaController object.
   public get gachaRoller() {
     return this._gachaRoller;
   }
 
+  // Set the GachaController object to a new Controller and emit a gachaponChanged event.
   public set gachaRoller(newGachaRoller: GachaController) {
     this._gachaRoller = newGachaRoller;
     this.emit('gachaponChanged', newGachaRoller);

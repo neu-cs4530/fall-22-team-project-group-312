@@ -10,10 +10,13 @@ import Player from './Player';
  * A class to represent the randomized gacha pull system for getting new outfits.
  */
 export default class GachaPicker {
+  // Represents the pool of items a GachaPicker has to offer the use.
   private _itemPool: WardrobeItem[];
 
+  // The cost in currency to gain an item from this GachaPicker.
   private _pullCost: number;
 
+  // The percentage of the _pullCost refunded to the user if they roll a duplicate.
   private _refundPercent: number;
 
   private _townEmitter: TownEmitter;
@@ -71,7 +74,7 @@ export default class GachaPicker {
     this._id = id;
   }
 
-  // returns a random item from the selection pool without accounting for item rarity
+  // Returns a random item from the selection pool without accounting for item rarity
   // assumes there's at least one item in the pool
   private _getOneItem(): WardrobeItem {
     const max = this._itemPool.length;
@@ -116,6 +119,7 @@ export default class GachaPicker {
     throw new Error('No items in the pool.');
   }
 
+  // Convert this GachaPicker to a GachaModel for transmission.
   toGachaModel(): GachaModel {
     return {
       itemPool: this._itemPool,
