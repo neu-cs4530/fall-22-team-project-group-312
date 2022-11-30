@@ -51,15 +51,17 @@ export type RarityMapping = {
   ultraRare: number;
 };
 
-/**
- * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
- */
-export type WardrobeItem = {
-  id: string;
-  name: string;
-  category: ItemCategory;
-  rarity: Rarity;
-};
+ export type ItemID = string;
+
+ /**
+  * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
+  */
+ export type WardrobeItem = {
+   id: ItemID;
+   name: string;
+   category: ItemCategory;
+   rarity: Rarity;
+ };
 
 /**
  * Representation of a wardrobe that the TownGameScene can interact with.
@@ -159,6 +161,8 @@ export interface ServerToClientEvents {
   interactableUpdate: (interactable: Interactable) => void;
   gachaUpdate: (gachapon: GachaPicker) => void;
   playerPulled: (pullingPlayer: Player) => void;
+  wardrobeImported: (newWardrobeModel: WardrobeModel | undefined) => void;
+  wardrobeExported: (wardrobeJson: string) => void;
 }
 
 export interface ClientToServerEvents {
@@ -169,4 +173,6 @@ export interface ClientToServerEvents {
   playerWardobeChange: (newWardrobe: WardrobeModel) => void;
   // // New ClientToServer event for a gacha pull.
   // playerGachaPull: (pulledItem: WardrobeItem) => void;
+  exportWardrobe: () => void;
+  importWardrobe: (wardrobeJSON: string) => void;
 }
