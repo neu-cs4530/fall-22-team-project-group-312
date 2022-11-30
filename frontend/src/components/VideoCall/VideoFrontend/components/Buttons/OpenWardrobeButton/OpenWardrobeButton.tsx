@@ -1,4 +1,5 @@
 import { useDisclosure } from '@chakra-ui/react';
+import { Typography } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import React, { useCallback } from 'react';
 import useTownController from '../../../../../../hooks/useTownController';
@@ -15,7 +16,9 @@ export default function WardrobeButton() {
 
   return (
     <>
-      <MenuItem data-testid='openMenuButton' onClick={openWardrobe}></MenuItem>
+      <MenuItem data-testid='openMenuButton' onClick={openWardrobe}>
+        <Typography variant='body1'>Changing Room</Typography>
+      </MenuItem>
       <WardrobePanel
         isOpen={isOpen}
         onOpen={onOpen}
