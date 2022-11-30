@@ -1,6 +1,6 @@
 import Wardrobe from './Wardrobe';
 import { DEFAULT_ITEMS, UNLOCKABLE_ITEMS } from './WardrobeItem';
-import { WardrobeItem, WardrobeModel } from '../types/CoveyTownSocket';
+import { WardrobeItem } from '../types/CoveyTownSocket';
 
 describe('Wardrobe', () => {
   // A valid Wardrobe and WardrobeItem(s) to be reused within the tests
