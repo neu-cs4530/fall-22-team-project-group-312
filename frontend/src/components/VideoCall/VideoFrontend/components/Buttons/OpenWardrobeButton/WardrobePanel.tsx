@@ -26,17 +26,9 @@ import {
   useToast,
   VStack,
 } from '@chakra-ui/react';
-import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useState } from 'react';
 import TownController from '../../../../../../classes/TownController';
 import { ItemID, WardrobeItem, WardrobeModel } from '../../../../../../types/CoveyTownSocket';
-
-const useStyles = makeStyles({
-  preview: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 /**
  * The wardrobe panel inside the pop up modal. This shows all the available outfits and
@@ -62,7 +54,6 @@ function WardrobePanel({
   const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
   const initialCurrency = coveyTownController.ourPlayer.wardrobe.currency;
   const initialInventory = coveyTownController.ourPlayer.wardrobe.inventory;
-  const classes = useStyles(makeStyles);
   const toast = useToast();
 
   const [spritePreview, setSpritePreview] = useState<WardrobeModel>({
@@ -204,7 +195,6 @@ function WardrobePanel({
                 <Image
                   src={`${prefix}${spritePreview.currentOutfit.id}-${spritePreview.currentSkin.id}/${spritePreview.currentOutfit.id}-${spritePreview.currentSkin.id}-front.png`}
                   alt='sprite'
-                  className={classes.preview}
                 />
               </div>
               <div className='selectClothingPane'>

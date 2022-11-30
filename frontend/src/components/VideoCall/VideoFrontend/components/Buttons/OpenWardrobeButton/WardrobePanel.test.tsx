@@ -28,17 +28,15 @@ jest.mock('@chakra-ui/react', () => {
     },
   };
 });
-
+/**
+ * Tests wardrobe panel for emitted messages in accordance with manual testing.
+ */
 describe('Wardrobe Panel', () => {
   let mockedTownController: MockProxy<TownController>;
   let renderData: RenderResult;
   let confirmButton: HTMLElement;
-  let misaOption: HTMLElement;
   let skin0Option: HTMLElement;
-  let skin1Option: HTMLElement;
-  let skin2Option: HTMLElement;
   let skin3Option: HTMLElement;
-  let skin4Option: HTMLElement;
   let bdayOption: HTMLElement;
 
   const inventory: WardrobeItem[] = [
@@ -56,7 +54,6 @@ describe('Wardrobe Panel', () => {
     y: 0,
     rotation: 'front',
   };
-  // const playerWardrobe = new Wardrobe();
   const testWardrobe: WardrobeModel = {
     currentOutfit: {
       id: 'misa',
@@ -98,16 +95,10 @@ describe('Wardrobe Panel', () => {
       </ChakraProvider>,
     );
 
-    // await waitFor(() => renderData.getByText('Changing Room'));
     confirmButton = renderData.getByTestId('confirmButton');
-    misaOption = renderData.getByTestId('misa');
     skin0Option = renderData.getByTestId('skin0');
-    skin1Option = renderData.getByTestId('skin1');
-    skin2Option = renderData.getByTestId('skin2');
     skin3Option = renderData.getByTestId('skin3');
-    skin4Option = renderData.getByTestId('skin4');
     bdayOption = renderData.getByTestId('bday');
-    // upArrow = renderData.getByTestId('upArrow');
   };
 
   beforeEach(async () => {
@@ -116,29 +107,18 @@ describe('Wardrobe Panel', () => {
   });
   it('Sprite preview changes after a different skin (skin0) is chosen', async () => {
     await openWardrobePane();
-    console.log(mockedTownController.ourPlayer.wardrobe.currentSkin.id);
     await fireEvent.click(skin0Option);
     await fireEvent.click(confirmButton);
-    console.log(mockedTownController.ourPlayer.wardrobe.currentSkin.id);
-    // fireEvent.keyPress();
-    // fireEvent.keyDown({ code: 'ArrowUp', key: 'ArrowUp' });
 
     await waitFor(() => expect(mockedTownController.emitWardobeChange).toBeCalledTimes(1));
     await waitFor(() =>
       expect(mockedTownController.emitWardobeChange).toBeCalledWith(testWardrobe2),
     );
-    // await userEvent.keyboard('{leftarrow}');
-    // await waitFor(() => expect(mockedTownController.ourPlayer.wardrobe).toBe(testWardrobe2));
   });
-  // await waitFor(() => expect(params.ourPlayer.wardrobe.currentOutfit.id).toBe('misa'));
   it('Sprite preview changes after skin3 option is chosen', async () => {
     await openWardrobePane();
-    console.log(mockedTownController.ourPlayer.wardrobe.currentSkin.id);
     await fireEvent.click(skin3Option);
     await fireEvent.click(confirmButton);
-    console.log(mockedTownController.ourPlayer.wardrobe.currentSkin.id);
-    // fireEvent.keyPress();
-    // fireEvent.keyDown({ code: 'ArrowUp', key: 'ArrowUp' });
     testWardrobe2.currentSkin.id = 'skin3';
     testWardrobe2.currentSkin.name = 'skin3';
 
@@ -147,7 +127,18 @@ describe('Wardrobe Panel', () => {
       expect(mockedTownController.emitWardobeChange).toBeCalledWith(testWardrobe2),
     );
   });
-  it('Sprite changes in game after player moves and confirm button is clicked', () => {});
+  it('Sprite preview changes after bday outfit option is chosen', async () => {
+    await openWardrobePane();
+    await fireEvent.click(bdayOption);
+    await fireEvent.click(confirmButton);
+    testWardrobe.currentOutfit.id = 'bday';
+    testWardrobe.currentOutfit.name = 'Birthday Suit';
+
+    await waitFor(() => expect(mockedTownController.emitWardobeChange).toBeCalledTimes(1));
+    await waitFor(() =>
+      expect(mockedTownController.emitWardobeChange).toBeCalledWith(testWardrobe),
+    );
+  });
   it('Displays toast message when confirm button is clicked', async () => {
     await openWardrobePane();
     fireEvent.click(confirmButton);
