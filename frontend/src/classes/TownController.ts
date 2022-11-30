@@ -114,12 +114,6 @@ export type TownEvents = {
    * changed and replaced with the given gacha controller
    */
   gachaponChanged: (newGacha: GachaController) => void;
-
-  // /**
-  //  * An event that indicates that a player is pulling an item from this
-  //  * town's gacha picker.
-  //  */
-  // playerPulled: (pullingPlayer: PlayerController) => void;
 };
 
 /**
@@ -539,7 +533,6 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
    * @param message
    */
   public emitChatMessage(message: ChatMessage) {
-    console.log(this.ourPlayer.wardrobe);
     this._socket.emit('chatMessage', message);
   }
 
