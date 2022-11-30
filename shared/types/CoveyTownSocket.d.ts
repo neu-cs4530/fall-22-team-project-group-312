@@ -86,12 +86,6 @@ export interface GachaPicker {
   // pull: (pullingPlayer: Player) => void;
 }
 
-// Represents all skin color options the player could possibly have
-export const SKIN_COLORS: string[] = ["skin0", "skin1", "skin2", "skin3"];
-
-// Represents all outfit options the player could possiby have
-export const OUTFITS: string[] = ["misa", "bday", "keqing", "ness", "xiaohei"];
-
 export type XY = { x: number; y: number };
 
 export interface PlayerLocation {
