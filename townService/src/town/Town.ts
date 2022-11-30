@@ -151,7 +151,6 @@ export default class Town {
     socket.on('importWardrobe', (wardrobeJSON: string) => {
       try {
         newPlayer.wardrobe.updateWardrobeFromJSON(wardrobeJSON);
-        console.log('importWardrobe: ', newPlayer.wardrobe.toModel());
         this._broadcastEmitter.emit('wardrobeImported', newPlayer.wardrobe.toModel());
       } catch (e) {
         this._broadcastEmitter.emit('wardrobeImported', undefined);

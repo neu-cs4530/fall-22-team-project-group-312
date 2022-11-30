@@ -53,7 +53,8 @@ function WardrobePanel({
   onClose: any;
   coveyTownController: TownController;
 }) {
-  const [textInput, setTextInput] = useState<string>('');
+  const [inputWardrobeKey, setinputWardrobeKey] = useState<string>('');
+  const [downloadLink, setDownloadLink] = useState('');
   const initalOutfit = coveyTownController.ourPlayer.wardrobe.currentOutfit;
   const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
   const initialCurrency = coveyTownController.ourPlayer.wardrobe.currency;
@@ -85,11 +86,21 @@ function WardrobePanel({
         });
       }
     };
+    const exportFile = (wardrobeString: string) => {
+      const element = document.createElement('a');
+      const file = new Blob([wardrobeString], { type: 'text/plain' });
+      element.href = URL.createObjectURL(file);
+      element.download = 'WardrobeKey.txt';
+      document.body.appendChild(element);
+      element.click();
+    };
     coveyTownController.addListener('wardrobeImported', isSuccessfulyImportedMessage);
+    coveyTownController.addListener('wardrobeExported', exportFile);
     return () => {
       coveyTownController.removeListener('wardrobeImported', isSuccessfulyImportedMessage);
+      coveyTownController.removeListener('wardrobeExported', exportFile);
     };
-  }, [coveyTownController]);
+  }, [coveyTownController, toast, downloadLink, setDownloadLink]);
 
   const closeWardrobe = useCallback(() => {
     onClose();
@@ -266,27 +277,29 @@ function WardrobePanel({
               </div>
               <div>
                 <Button
-                  title='Export'
+                  title='Download Key'
                   onClick={() => {
                     coveyTownController.emitWardrobeExport();
                   }}>
-                  Export
+                  Download Key
                 </Button>
                 <Popover>
                   <PopoverTrigger>
-                    <Button>Import</Button>
+                    <Button>Import Key</Button>
                   </PopoverTrigger>
                   <PopoverContent>
                     <PopoverArrow />
                     <PopoverCloseButton />
                     <PopoverHeader>Wardrobe Key!</PopoverHeader>
                     <FormControl>
-                      <Input value={textInput} onChange={e => setTextInput(e.target.value)}></Input>
+                      <Input
+                        value={inputWardrobeKey}
+                        onChange={e => setinputWardrobeKey(e.target.value)}></Input>
                       <FormHelperText>Paste your key here!</FormHelperText>
                       <Button
                         title='Import'
                         onClick={() => {
-                          coveyTownController.emitWardrobeImport(textInput);
+                          coveyTownController.emitWardrobeImport(inputWardrobeKey);
                         }}>
                         Import
                       </Button>

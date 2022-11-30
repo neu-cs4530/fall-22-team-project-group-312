@@ -68,6 +68,10 @@ export type TownEvents = {
    */
   wardrobeImported: (isSuccessfulyImported: boolean) => void;
   /**
+   * ASDS:LKFJ:LFJS:LKGFLKSDKFJ
+   */
+  wardrobeExported: (wardrobeString: string) => void;
+  /**
    * An event that indicates that the set of conversation areas has changed. This event is dispatched
    * when a conversation area is created, or when the set of active conversations has changed. This event is dispatched
    * after updating the town controller's record of conversation areas.
@@ -426,14 +430,13 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     });
     this._socket.on('wardrobeExported', (wardrobeJSON: string) => {
       console.log(wardrobeJSON);
+      this.emit('wardrobeExported', wardrobeJSON);
     });
     this._socket.on('wardrobeImported', (newWardrobeModel: WardrobeModel | undefined) => {
       if (newWardrobeModel !== undefined && newWardrobeModel !== null) {
-        console.log('successful import! ', newWardrobeModel);
         this.emitWardobeChange(newWardrobeModel);
         this.emit('wardrobeImported', true);
       } else {
-        console.log('failedToImport');
         this.emit('wardrobeImported', false);
       }
     });
