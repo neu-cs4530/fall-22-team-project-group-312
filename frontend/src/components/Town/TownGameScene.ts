@@ -2,15 +2,12 @@ import Phaser from 'phaser';
 import PlayerController from '../../classes/PlayerController';
 import TownController from '../../classes/TownController';
 import { PlayerLocation } from '../../types/CoveyTownSocket';
-// import does not work fixing later
-// import { SKIN_COLORS, OUTFITS } from '../../../../../../types/CoveyTownSocket';
 import { Callback } from '../VideoCall/VideoFrontend/types';
 import Interactable from './Interactable';
 import ConversationArea from './interactables/ConversationArea';
 import Transporter from './interactables/Transporter';
 import ViewingArea from './interactables/ViewingArea';
 
-// Still not sure what the right type is here... "Interactable" doesn't do it
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function interactableTypeForObjectType(type: string): any {
   if (type === 'ConversationArea') {
@@ -23,9 +20,6 @@ function interactableTypeForObjectType(type: string): any {
     throw new Error(`Unknown object type: ${type}`);
   }
 }
-
-// Original inspiration and code from:
-// https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6
 
 export default class TownGameScene extends Phaser.Scene {
   private _pendingOverlapExits = new Map<Interactable, () => void>();
@@ -125,11 +119,12 @@ export default class TownGameScene extends Phaser.Scene {
     const skinColors: string[] = ['skin0', 'skin1', 'skin2', 'skin3', 'skin4'];
 
     // Represents all outfit options the player could possiby have
-    const outfits: string[] = ['misa', 'bday', 'keqing', 'ness', 'xiaohei'];
+    const outfits: string[] = ['misa', 'bday', 'ness', 'xiaohei', 'keqing'];
     this.load.tilemapTiledJSON('map', this._resourcePathPrefix + '/assets/tilemaps/indoors.json');
     for (const outfit in outfits) {
       for (const skin in skinColors) {
         const spriteAtlas = outfits[outfit] + '-' + skinColors[skin];
+        // Load each possible combination of skin and outfit as a sprite atlas.
         this.load.atlas(
           spriteAtlas,
           this._resourcePathPrefix + `/assets/atlas/${spriteAtlas}.png`,
@@ -137,11 +132,6 @@ export default class TownGameScene extends Phaser.Scene {
         );
       }
     }
-    this.load.atlas(
-      'keqing-skin4',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin4.png',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin4.json',
-    );
   }
 
   updatePlayers(players: PlayerController[]) {
@@ -299,6 +289,8 @@ export default class TownGameScene extends Phaser.Scene {
         });
         this.coveyTownController.emitMovement(this._lastLocation);
       }
+      // Emit a wardrobe change event on player update.
+      this.coveyTownController.emitWardobeChange(this.coveyTownController.ourPlayer.wardrobe);
     }
   }
 
@@ -458,10 +450,8 @@ export default class TownGameScene extends Phaser.Scene {
     }
     listOfAnimations.forEach(texture => {
       anims.create({
-        // key: 'misa-left-walk',
         key: `${texture}-left-walk`,
         frames: anims.generateFrameNames(texture, {
-          // prefix: 'misa-left-walk.',
           prefix: `${texture}-left-walk.`,
           start: 0,
           end: 3,
@@ -471,10 +461,8 @@ export default class TownGameScene extends Phaser.Scene {
         repeat: -1,
       });
       anims.create({
-        // key: 'misa-right-walk',
         key: `${texture}-right-walk`,
         frames: anims.generateFrameNames(texture, {
-          // prefix: 'misa-right-walk.',
           prefix: `${texture}-right-walk.`,
           start: 0,
           end: 3,
@@ -484,10 +472,8 @@ export default class TownGameScene extends Phaser.Scene {
         repeat: -1,
       });
       anims.create({
-        // key: 'misa-front-walk',
         key: `${texture}-front-walk`,
         frames: anims.generateFrameNames(texture, {
-          // prefix: 'misa-front-walk.',
           prefix: `${texture}-front-walk.`,
           start: 0,
           end: 3,
@@ -497,10 +483,8 @@ export default class TownGameScene extends Phaser.Scene {
         repeat: -1,
       });
       anims.create({
-        // key: 'misa-back-walk',
         key: `${texture}-back-walk`,
         frames: anims.generateFrameNames(texture, {
-          // prefix: 'misa-back-walk.',
           prefix: `${texture}-back-walk.`,
           start: 0,
           end: 3,
@@ -528,8 +512,6 @@ export default class TownGameScene extends Phaser.Scene {
       })
       .setScrollFactor(0)
       .setDepth(30);
-
-    // TODO: add covey coins display
 
     this._ready = true;
     this.updatePlayers(this.coveyTownController.players);

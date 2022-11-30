@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
-import Typography from '@material-ui/core/Typography';
-import MenuItem from '@material-ui/core/MenuItem';
 import { useDisclosure } from '@chakra-ui/react';
+import { Typography } from '@material-ui/core';
+import MenuItem from '@material-ui/core/MenuItem';
+import React, { useCallback } from 'react';
 import useTownController from '../../../../../../hooks/useTownController';
 import WardrobePanel from './WardrobePanel';
 
