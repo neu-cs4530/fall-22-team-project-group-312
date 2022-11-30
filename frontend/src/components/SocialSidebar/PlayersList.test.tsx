@@ -9,7 +9,7 @@ import TownController, * as TownControllerHooks from '../../classes/TownControll
 import PlayerController from '../../classes/PlayerController';
 import * as useTownController from '../../hooks/useTownController';
 import { mockTownController } from '../../TestUtils';
-import { PlayerLocation, WardrobeModel } from '../../types/CoveyTownSocket';
+import { PlayerLocation } from '../../types/CoveyTownSocket';
 import * as PlayerName from './PlayerName';
 import PlayersList from './PlayersList';
 import Wardrobe from '../../../../townService/src/lib/Wardrobe';

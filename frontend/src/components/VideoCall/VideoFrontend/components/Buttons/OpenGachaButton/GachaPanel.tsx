@@ -7,13 +7,15 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Stack,
   StackDivider,
   VStack,
+  Text,
 } from '@chakra-ui/react';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useState } from 'react';
 import TownController from '../../../../../../classes/TownController';
-import { PullResult, WardrobeItem, WardrobeModel } from '../../../../../../types/CoveyTownSocket';
+import { PullResult, WardrobeItem } from '../../../../../../types/CoveyTownSocket';
 
 const useStyles = makeStyles({
   preview: {
@@ -41,9 +43,7 @@ function GachaPanel({
 }) {
   const classes = useStyles(makeStyles);
 
-  const [singlePullCost, setSinglePullCost] = useState<number>(
-    coveyTownController.gachaRoller.pullCost,
-  );
+  const singlePullCost = coveyTownController.gachaRoller.pullCost;
 
   const animPrefix = 'assets/gacha_anims/';
   const animSuffix = '.gif';
@@ -53,28 +53,13 @@ function GachaPanel({
 
   const floatingBoxGif = animPrefix + 'gift_bounce' + animSuffix;
   const burstBoxGif = animPrefix + 'gift_burst' + animSuffix;
+  const coinImg = outfitPrefix + 'coin' + outfitSuffix;
 
   const [animImage, setAnimImage] = useState<string>(floatingBoxGif);
   const [resultImage, setResultImage] = useState<string>('');
 
-  const [bounceVisible, setBounceVisible] = useState<boolean>(true);
+  const bounceVisible = true;
   const [resultVisible, setResultVisible] = useState<boolean>(false);
-
-  const initalOutfit = coveyTownController.ourPlayer.wardrobe.currentOutfit;
-  const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
-  const initialCurrency = coveyTownController.ourPlayer.wardrobe.currency;
-  const initialInventory = coveyTownController.ourPlayer.wardrobe.inventory;
-  const [currentWardrobe, setCurrentWardrobe] = useState<WardrobeModel>({
-    currency: initialCurrency,
-    currentSkin: initialSkin,
-    currentOutfit: initalOutfit,
-    inventory: initialInventory,
-  });
-
-  // const [playerHasEnoughCoins, setPlayerHasEnoughCoins] = useState<boolean>(
-  //   coveyTownController.ourPlayer.wardrobe.currency >= singlePullCost,
-  // );
-  const [currencyDisplay, setCurrencyDisplay] = useState<number>(currentWardrobe.currency);
 
   const [pulledItem, setPulledItem] = useState<WardrobeItem | undefined>(undefined);
 
@@ -100,8 +85,6 @@ function GachaPanel({
     const { item, wardrobe }: PullResult = coveyTownController.gachaRoller.pull(
       coveyTownController.ourPlayer,
     );
-    setCurrencyDisplay(wardrobe.currency);
-    setCurrentWardrobe(wardrobe);
     setResultImage(outfitPrefix + item.id + outfitSuffix);
     setPulledItem(item);
     setResultVisible(true);
@@ -123,7 +106,13 @@ function GachaPanel({
           <ModalCloseButton />
           <ModalBody pb={6}>
             <VStack divider={<StackDivider borderColor='gray.200' />} spacing={15} align='center'>
-              <div className='coinDisplay'>{`You have ${coveyTownController.ourPlayer.wardrobe.currency} CoveyCoins.`}</div>
+              <Stack className='coinDisplay' direction='row' align={'center'}>
+                <Image alt='CoveyCoins' src={coinImg} />
+                <Text>
+                  {`You have ${coveyTownController.ourPlayer.wardrobe.currency} CoveyCoins!`}
+                </Text>
+                <Image alt='CoveyCoins' src={coinImg} />
+              </Stack>
               <div className='previewPane'>
                 <Image
                   src={`${animImage}`}
@@ -149,7 +138,10 @@ function GachaPanel({
                     setAnimImage(floatingBoxGif);
                     await delay(animationDelay);
                   }}>
-                  {`Roll! (-${singlePullCost} CoveyCoins)`}
+                  <Stack className='coinDisplay' direction='row' align={'center'}>
+                    <Text>{`Roll! x${singlePullCost}`}</Text>
+                    <Image alt='CoveyCoins' src={coinImg} />
+                  </Stack>
                 </Button>
               </div>
             </VStack>

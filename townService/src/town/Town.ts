@@ -18,7 +18,6 @@ import {
   SocketData,
   ViewingArea as ViewingAreaModel,
   WardrobeModel,
-  Player as PlayerModel,
 } from '../types/CoveyTownSocket';
 import ConversationArea from './ConversationArea';
 import InteractableArea from './InteractableArea';

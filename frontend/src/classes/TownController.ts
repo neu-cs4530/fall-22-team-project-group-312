@@ -35,7 +35,7 @@ const UNLOCKABLE_ITEMS: WardrobeItem[] = [
 ];
 
 // Represents the default pull cost for GachaPickers
-const PULL_COST = 10;
+const PULL_COST = 200;
 
 // Represents the default refund percentage for GachaPickers
 const REFUND_PERCENT = 0.1;
