@@ -127,6 +127,10 @@ describe('Wardrobe', () => {
       const testCurrentInventory = testWardrobe.inventory;
       expect(testWardrobe.inventory).toEqual(testCurrentInventory);
     });
+    it('sets the inventory', () => {
+      testWardrobe.inventory = fullWardrobe.inventory;
+      expect(testWardrobe.inventory).toEqual(fullWardrobe.inventory);
+    });
   });
 
   describe('addWardrobeItem', () => {

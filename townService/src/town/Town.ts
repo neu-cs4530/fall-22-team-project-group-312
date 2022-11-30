@@ -1,10 +1,12 @@
 import { ITiledMap, ITiledMapObjectLayer } from '@jonbell/tiled-map-type-guard';
 import { nanoid } from 'nanoid';
 import { BroadcastOperator } from 'socket.io';
+import GachaPicker from '../lib/GachaPicker';
 import IVideoClient from '../lib/IVideoClient';
 import Player from '../lib/Player';
 import TwilioVideo from '../lib/TwilioVideo';
 import { CURRENCY_GAIN_FROM_CHAT } from '../lib/Wardrobe';
+import { UNLOCKABLE_ITEMS } from '../lib/WardrobeItem';
 import { isViewingArea } from '../TestUtils';
 import {
   ChatMessage,
@@ -16,11 +18,16 @@ import {
   SocketData,
   ViewingArea as ViewingAreaModel,
   WardrobeModel,
-  Player as PlayerModel,
 } from '../types/CoveyTownSocket';
 import ConversationArea from './ConversationArea';
 import InteractableArea from './InteractableArea';
 import ViewingArea from './ViewingArea';
+
+// Represents the default pull cost for GachaPickers
+export const PULL_COST = 10;
+
+// Represents the default refund percentage for GachaPickers
+export const REFUND_PERCENT = 0.1;
 
 /**
  * The Town class implements the logic for each town: managing the various events that
@@ -91,6 +98,8 @@ export default class Town {
 
   private _connectedSockets: Set<CoveyTownSocket> = new Set();
 
+  private _gachaRoller: GachaPicker;
+
   constructor(
     friendlyName: string,
     isPubliclyListed: boolean,
@@ -103,6 +112,13 @@ export default class Town {
     this._isPubliclyListed = isPubliclyListed;
     this._friendlyName = friendlyName;
     this._broadcastEmitter = broadcastEmitter;
+    this._gachaRoller = new GachaPicker(
+      UNLOCKABLE_ITEMS,
+      PULL_COST,
+      REFUND_PERCENT,
+      broadcastEmitter,
+      nanoid(),
+    );
   }
 
   /**
@@ -134,6 +150,7 @@ export default class Town {
     // Set up a listener to forward all chat messages to all clients in the town
     socket.on('chatMessage', (message: ChatMessage) => {
       newPlayer.wardrobe.currency += CURRENCY_GAIN_FROM_CHAT;
+      socket.emit('playerWardrobeChanged', newPlayer.toPlayerModel());
       this._broadcastEmitter.emit('chatMessage', message);
     });
 

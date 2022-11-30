@@ -15,45 +15,42 @@ export type TownJoinResponse = {
   isPubliclyListed: boolean;
   /** Current state of interactables in this town */
   interactables: Interactable[];
-}
+};
 
 export type Interactable = ViewingArea | ConversationArea;
 
 export type TownSettingsUpdate = {
   friendlyName?: string;
   isPubliclyListed?: boolean;
-}
+};
 
-export type Direction = 'front' | 'back' | 'left' | 'right';
+export type Direction = "front" | "back" | "left" | "right";
 export interface Player {
   id: string;
   userName: string;
   location: PlayerLocation;
   wardrobe: WardrobeModel;
-};
+}
 
 /**
  * Represents the type of item a WardrobeItem is.
  */
- export type ItemCategory = 'skin' | 'outfit';
- /**
-  * Represents the ID of an item separate to the item name.
-  */
- export type ItemID = string;
+export type ItemCategory = "skin" | "outfit";
+export type ItemID = string;
 
- /**
-  * Represents a single item in a Wardrobe, either a skin or outfit.
-  */
- export type WardrobeItem = {
-   id: ItemID;
-   name: string;
-   category: ItemCategory;
- };
+/**
+ * Represents a single item in a Wardrobe, either a skin or outfit.
+ */
+export type WardrobeItem = {
+  id: ItemID;
+  name: string;
+  category: ItemCategory;
+};
 
 /**
  * Representation of a wardrobe that the PlayerController uses, and the TownGameScene can interact with.
  */
- export interface WardrobeModel {
+export interface WardrobeModel {
   /** The amount of currency a wardrobe currently has to be spent on WardrobeItems. */
   currency: number;
   /** The current skin color set in the wardrobe. */
@@ -64,13 +61,38 @@ export interface Player {
   inventory: WardrobeItem[];
 }
 
+/**
+ * Representation of the result of pulling from a gacha picker
+ */
+export type PullResult = {
+  /** The item that was just retrieved */
+  item: WardrobeItem;
+  /** The updated Wardrobe containing the item and currency */
+  wardrobe: WardrobeModel;
+};
+
+/**
+ * Represents a way to select a random item from a set pool of items
+ */
+export interface GachaPicker {
+  /** The pool of items that can be selected */
+  itemPool: WardrobeItem[];
+  /** How many CoveyCoins are needed to get an item */
+  pullCost: number;
+  /** The percent of coins returned to the player after pulling a duplicate item */
+  refundPercent: number;
+  /** The id of this GachaPicker */
+  id: string;
+  // pull: (pullingPlayer: Player) => void;
+}
+
 // Represents all skin color options the player could possibly have
-export const SKIN_COLORS: string[] = ['skin0', 'skin1', 'skin2', 'skin3'];
+export const SKIN_COLORS: string[] = ["skin0", "skin1", "skin2", "skin3"];
 
 // Represents all outfit options the player could possiby have
-export const OUTFITS: string[] = ['misa', 'bday', 'ness', 'xiaohei', 'keqing'];
+export const OUTFITS: string[] = ["misa", "bday", "keqing", "ness", "xiaohei"];
 
-export type XY = { x: number, y: number };
+export type XY = { x: number; y: number };
 
 export interface PlayerLocation {
   /* The CENTER x coordinate of this player's location */
@@ -81,7 +103,7 @@ export interface PlayerLocation {
   rotation: Direction;
   moving: boolean;
   interactableID?: string;
-};
+}
 export type ChatMessage = {
   author: string;
   sid: string;
@@ -93,13 +115,13 @@ export interface ConversationArea {
   id: string;
   topic?: string;
   occupantsByID: string[];
-};
+}
 export interface BoundingBox {
   x: number;
   y: number;
   width: number;
   height: number;
-};
+}
 
 export interface ViewingArea {
   id: string;
@@ -119,6 +141,7 @@ export interface ServerToClientEvents {
   interactableUpdate: (interactable: Interactable) => void;
   // New ServerToClient events for a changed, imported, or exported wardrobe.
   playerWardrobeChanged: (wardrobePlayer: Player) => void;
+  gachaUpdate: (model: GachaModel) => void;
 }
 
 export interface ClientToServerEvents {

@@ -84,7 +84,7 @@ function WardrobePanel({
     if (itemID.startsWith('skin')) {
       // switches the outfit in the sprite preview
       const newSpritePreview: WardrobeModel = {
-        currency: spritePreview.currency,
+        currency: coveyTownController.ourPlayer.wardrobe.currency,
         currentOutfit: spritePreview.currentOutfit,
         currentSkin: coveyTownController.ourPlayer.wardrobe.inventory.find(
           (item: WardrobeItem) => item.id === itemID,
@@ -95,7 +95,7 @@ function WardrobePanel({
     } else {
       // switches the skin in the sprite preview
       const newSpritePreview: WardrobeModel = {
-        currency: spritePreview.currency,
+        currency: coveyTownController.ourPlayer.wardrobe.currency,
         currentOutfit: coveyTownController.ourPlayer.wardrobe.inventory.find(
           (item: WardrobeItem) => item.id === itemID,
         ) as WardrobeItem,
@@ -182,6 +182,15 @@ function WardrobePanel({
   const outfits: string[] = ['misa', 'bday', 'ness', 'xiaohei', 'keqing'];
   const skinColors: string[] = ['skin0', 'skin1', 'skin2', 'skin3', 'skin4'];
   const prefix = 'assets/atlas/';
+  /**
+   * modal
+   * left side of the preview png
+   * selection screen on the right
+   * navigation menu (own component)
+   * actual items
+   * confirm button
+   * exit button
+   */
   return (
     <>
       <Modal isOpen={isOpen} onClose={closeWardrobe}>

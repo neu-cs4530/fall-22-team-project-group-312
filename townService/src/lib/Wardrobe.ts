@@ -119,10 +119,12 @@ export default class Wardrobe {
    * @param model A WardrobeModel object that this Wardrobe will update to match.
    */
   public updateFromModel(model: WardrobeModel) {
-    this.currency = model.currency;
-    this.currentOutfit = model.currentOutfit;
-    this.currentSkin = model.currentSkin;
-    this.inventory = model.inventory;
+    if (model !== undefined) {
+      this.currency = model.currency;
+      this.currentOutfit = model.currentOutfit;
+      this.currentSkin = model.currentSkin;
+      this.inventory = model.inventory;
+    }
   }
 
   /**
@@ -143,9 +145,7 @@ export default class Wardrobe {
   /** Checks if the given item is currently in the wardrobe inventory */
   private _itemIsInInventory(item: WardrobeItem): boolean {
     // Check if the newItem is already in the inventory
-    if (this.inventory.find(i => i.id === item.id) === undefined) {
-      return false;
-    }
-    return true;
+    const itemFromInventory = this.inventory.find(i => i.id === item.id);
+    return !(itemFromInventory === undefined);
   }
 }

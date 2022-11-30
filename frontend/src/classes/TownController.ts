@@ -1,6 +1,7 @@
 import assert from 'assert';
 import EventEmitter from 'events';
 import _ from 'lodash';
+import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import TypedEmitter from 'typed-emitter';
@@ -15,14 +16,29 @@ import {
   PlayerLocation,
   TownSettingsUpdate,
   ViewingArea as ViewingAreaModel,
+  WardrobeItem,
   WardrobeModel,
 } from '../types/CoveyTownSocket';
 import { isConversationArea, isViewingArea } from '../types/TypeUtils';
 import ConversationAreaController from './ConversationAreaController';
+import GachaController from './GachaController';
 import PlayerController from './PlayerController';
 import ViewingAreaController from './ViewingAreaController';
 
 const CALCULATE_NEARBY_PLAYERS_DELAY = 300;
+// Represents all other items players can unlock.
+const UNLOCKABLE_ITEMS: WardrobeItem[] = [
+  { id: 'bday', name: 'Birthday Suit', category: 'outfit' },
+  { id: 'keqing', name: 'Keqing', category: 'outfit' },
+  { id: 'ness', name: 'Ness', category: 'outfit' },
+  { id: 'xiaohei', name: 'Catboy', category: 'outfit' },
+];
+
+// Represents the default pull cost for GachaPickers
+const PULL_COST = 200;
+
+// Represents the default refund percentage for GachaPickers
+const REFUND_PERCENT = 0.1;
 
 export type ConnectionProperties = {
   userName: string;
@@ -93,6 +109,17 @@ export type TownEvents = {
    * @param obj the interactable that is being interacted with
    */
   interact: <T extends Interactable>(typeName: T['name'], obj: T) => void;
+  /**
+   * An event that indicates that this town's gacha controller has been
+   * changed and replaced with the given gacha controller
+   */
+  gachaponChanged: (newGacha: GachaController) => void;
+
+  // /**
+  //  * An event that indicates that a player is pulling an item from this
+  //  * town's gacha picker.
+  //  */
+  // playerPulled: (pullingPlayer: PlayerController) => void;
 };
 
 /**
@@ -194,6 +221,13 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
   private _interactableEmitter = new EventEmitter();
 
   private _viewingAreas: ViewingAreaController[] = [];
+
+  private _gachaRoller: GachaController = new GachaController(
+    UNLOCKABLE_ITEMS,
+    PULL_COST,
+    REFUND_PERCENT,
+    nanoid(),
+  );
 
   public constructor({ userName, townID, loginController }: ConnectionProperties) {
     super();
@@ -314,6 +348,15 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     this.emit('viewingAreasChanged', newViewingAreas);
   }
 
+  public get gachaRoller() {
+    return this._gachaRoller;
+  }
+
+  public set gachaRoller(newGachaRoller: GachaController) {
+    this._gachaRoller = newGachaRoller;
+    this.emit('gachaponChanged', newGachaRoller);
+  }
+
   /**
    * Begin interacting with an interactable object. Emits an event to all listeners.
    * @param interactedObj
@@ -395,6 +438,8 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         } else {
           playerToUpdate.location = movedPlayer.location;
         }
+        // Update player's currency on movement.
+        playerToUpdate.wardrobe.currency = movedPlayer.wardrobe.currency;
         this.emit('playerMoved', playerToUpdate);
       } else {
         //TODO: It should not be possible to receive a playerMoved event for a player that is not already in the players array, right?
@@ -479,6 +524,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     const ourPlayer = this._ourPlayer;
     assert(ourPlayer);
     ourPlayer.wardrobe = newWardrobe;
+    console.log(ourPlayer);
     this.emit('playerWardrobeChanged', ourPlayer);
   }
 
@@ -488,6 +534,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
    * @param message
    */
   public emitChatMessage(message: ChatMessage) {
+    console.log(this.ourPlayer.wardrobe);
     this._socket.emit('chatMessage', message);
   }
 
