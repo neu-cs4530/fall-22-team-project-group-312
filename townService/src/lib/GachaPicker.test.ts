@@ -329,7 +329,7 @@ describe('Gacha System tests', () => {
 
       const result = gachapon.pull(testPlayer);
 
-      expect(testPlayer.wardrobe.inventory.includes(result)).toBe(true);
+      expect(testPlayer.wardrobe.inventory.includes(result.item)).toBe(true);
       expect(testPlayer.wardrobe.inventory.length).toEqual(originalInventoryLength + 1);
 
       const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'playerWardrobeChanged');
@@ -353,11 +353,11 @@ describe('Gacha System tests', () => {
       const originalInventoryLength = testPlayer.wardrobe.inventory.length;
 
       const firstPull = gachapon.pull(testPlayer);
-      expect(testPlayer.wardrobe.inventory.includes(firstPull)).toBe(true);
+      expect(testPlayer.wardrobe.inventory.includes(firstPull.item)).toBe(true);
       expect(testPlayer.wardrobe.inventory.length).toEqual(originalInventoryLength + 1);
 
       const secondPull = gachapon.pull(testPlayer);
-      expect(testPlayer.wardrobe.inventory.includes(firstPull)).toBe(true);
+      expect(testPlayer.wardrobe.inventory.includes(firstPull.item)).toBe(true);
       expect(testPlayer.wardrobe.inventory.length).toEqual(originalInventoryLength + 1);
     });
     it('Does not refund players on non-duplicate pulls', () => {
@@ -377,6 +377,7 @@ describe('Gacha System tests', () => {
       const result = gachapon.pull(testPlayer);
 
       expect(testPlayer.wardrobe.currency).toEqual(startingBalance - testCost);
+      expect(result.wardrobe.currency).toEqual(testPlayer.wardrobe.currency);
     });
     it('Refunds players for duplicate pulls and emits an update', () => {
       const testCost = 10;

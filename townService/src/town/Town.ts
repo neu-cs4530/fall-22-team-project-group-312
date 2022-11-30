@@ -158,6 +158,7 @@ export default class Town {
     // Set up a listener to forward all chat messages to all clients in the town
     socket.on('chatMessage', (message: ChatMessage) => {
       newPlayer.wardrobe.currency += CURRENCY_GAIN_FROM_CHAT;
+      socket.emit('playerWardrobeChanged', newPlayer.toPlayerModel());
       this._broadcastEmitter.emit('chatMessage', message);
     });
 

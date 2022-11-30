@@ -3,7 +3,6 @@ import {
   TownEmitter,
   WardrobeItem,
   GachaPicker as GachaModel,
-  WardrobeModel,
   PullResult,
 } from '../types/CoveyTownSocket';
 import Player from './Player';
@@ -107,7 +106,6 @@ export default class GachaPicker {
    * @throws an error if the pull pool is empty
    */
   public pull(player: Player): PullResult {
-    console.log(player.wardrobe.toModel());
     let newCurrency = player.wardrobe.currency;
     if (this._itemPool.length > 0) {
       newCurrency -= this._pullCost;
@@ -117,17 +115,7 @@ export default class GachaPicker {
         // player already has the item so refund, rounded to the nearest integer
         newCurrency += Math.round(this._pullCost * this._refundPercent);
       }
-      console.log('AWOOGA IN THE SERVICE BABY');
-      // emit
-      // const newWardrobe: WardrobeModel = {
-      //   currency: newCurrency,
-      //   currentOutfit: player.wardrobe.currentOutfit,
-      //   currentSkin: player.wardrobe.currentSkin,
-      //   inventory: player.wardrobe.inventory,
-      // };
-      // player.wardrobe.updateFromModel(newWardrobe);
       player.wardrobe.currency = newCurrency;
-      console.log(player.wardrobe.toModel());
       this._townEmitter.emit('playerWardrobeChanged', player.toPlayerModel());
 
       const result: PullResult = { item: pulledItem, wardrobe: player.wardrobe.toModel() };
