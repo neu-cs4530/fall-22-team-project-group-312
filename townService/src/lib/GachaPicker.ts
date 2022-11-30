@@ -1,5 +1,4 @@
 import {
-  RarityMapping,
   TownEmitter,
   WardrobeItem,
   GachaPicker as GachaModel,
@@ -18,9 +17,6 @@ export default class GachaPicker {
   private _refundPercent: number;
 
   private _townEmitter: TownEmitter;
-
-  // The higher the number, the more likely you are to pull an item of this rarity from the pool
-  private _rarityMapping: RarityMapping;
 
   private _id: string;
 
@@ -49,10 +45,6 @@ export default class GachaPicker {
     this._townEmitter.emit('gachaUpdate', this.toGachaModel());
   }
 
-  public get rarityMapping(): RarityMapping {
-    return this._rarityMapping;
-  }
-
   public get id(): string {
     return this._id;
   }
@@ -70,14 +62,12 @@ export default class GachaPicker {
     pullCost: number,
     refundPercent: number,
     townEmitter: TownEmitter,
-    rarityMapping: RarityMapping,
     id: string,
   ) {
     this._itemPool = itemPool;
     this._pullCost = pullCost;
     this._refundPercent = refundPercent;
     this._townEmitter = townEmitter;
-    this._rarityMapping = rarityMapping;
     this._id = id;
   }
 

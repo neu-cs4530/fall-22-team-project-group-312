@@ -1,6 +1,6 @@
 import { mock, mockClear } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
-import { RarityMapping, TownEmitter, WardrobeItem } from '../types/CoveyTownSocket';
+import { TownEmitter, WardrobeItem } from '../types/CoveyTownSocket';
 import { getLastEmittedEvent } from '../TestUtils';
 import GachaPicker from './GachaPicker';
 import Player from './Player';
@@ -16,11 +16,6 @@ describe('Gacha System tests', () => {
   const free = 0;
   const fiveCoins = 5;
   const townEmitter = mock<TownEmitter>();
-  const testMapping: RarityMapping = {
-    common: 10,
-    rare: 5,
-    ultraRare: 1,
-  };
 
   let emptyPool: WardrobeItem[];
   let nessPool: WardrobeItem[];
@@ -33,31 +28,26 @@ describe('Gacha System tests', () => {
       id: 'misa',
       name: 'Default Outfit',
       category: 'outfit',
-      rarity: 'common',
     };
     ness = {
       id: 'ness',
       name: 'Ness',
       category: 'outfit',
-      rarity: 'common',
     };
     keqing = {
       name: 'Keqing',
       category: 'outfit',
       id: 'keqing',
-      rarity: 'rare',
     };
     bday = {
       name: 'Birthday Suit',
       category: 'outfit',
       id: 'bday',
-      rarity: 'ultraRare',
     };
     xiaohei = {
       name: 'Cat Boy',
       category: 'outfit',
       id: 'xiaohei',
-      rarity: 'rare',
     };
 
     testPlayer = new Player(nanoid(), mock<TownEmitter>());
@@ -69,14 +59,7 @@ describe('Gacha System tests', () => {
 
   describe('Test getters', () => {
     it('Gets the pull cost when free', () => {
-      const gachapon: GachaPicker = new GachaPicker(
-        emptyPool,
-        free,
-        0,
-        townEmitter,
-        testMapping,
-        nanoid(),
-      );
+      const gachapon: GachaPicker = new GachaPicker(emptyPool, free, 0, townEmitter, nanoid());
       expect(gachapon.pullCost).toBe(0);
     });
     it('Gets the pull cost when not free', () => {
@@ -85,7 +68,7 @@ describe('Gacha System tests', () => {
         10,
         0,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
       expect(gachapon.pullCost).toBe(10);
@@ -96,7 +79,7 @@ describe('Gacha System tests', () => {
         free,
         0,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
       expect(gachapon.itemPool.length).toBe(0);
@@ -107,7 +90,7 @@ describe('Gacha System tests', () => {
         free,
         0,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
       expect(gachapon.itemPool.length).toBe(5);
@@ -123,7 +106,7 @@ describe('Gacha System tests', () => {
         free,
         0,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
       expect(gachapon.refundPercent).toBe(0);
@@ -134,7 +117,7 @@ describe('Gacha System tests', () => {
         10,
         0.1,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
       expect(gachapon.refundPercent).toEqual(0.1);
@@ -148,7 +131,7 @@ describe('Gacha System tests', () => {
         free,
         0,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
       expect(gachapon.itemPool.length).toBe(0);
@@ -162,18 +145,10 @@ describe('Gacha System tests', () => {
         itemPool: gachapon.itemPool,
         pullCost: gachapon.pullCost,
         refundPercent: gachapon.refundPercent,
-        rarityMapping: gachapon.rarityMapping,
       });
     });
     it('Adds a new item to a non-empty pool', () => {
-      const gachapon: GachaPicker = new GachaPicker(
-        nonEmptyPool,
-        free,
-        0,
-        townEmitter,
-        testMapping,
-        nanoid(),
-      );
+      const gachapon: GachaPicker = new GachaPicker(nonEmptyPool, free, 0, townEmitter, nanoid());
       const originalPoolSize = gachapon.itemPool.length;
       gachapon.addItemToPool(ness);
       expect(gachapon.itemPool.length).toBe(originalPoolSize + 1);
@@ -185,7 +160,7 @@ describe('Gacha System tests', () => {
         free,
         0,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
       const oldInventorySize = testPlayer.wardrobe.inventory.length;
@@ -204,7 +179,7 @@ describe('Gacha System tests', () => {
         free,
         0,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
 
@@ -223,7 +198,7 @@ describe('Gacha System tests', () => {
         free,
         0,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
 
@@ -239,7 +214,7 @@ describe('Gacha System tests', () => {
         free,
         0,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
 
@@ -261,7 +236,7 @@ describe('Gacha System tests', () => {
         free,
         0,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
       expect(() => gachapon.pull(testPlayer)).toThrowError();
@@ -275,7 +250,7 @@ describe('Gacha System tests', () => {
         free,
         0,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
       testPlayer.wardrobe.currency = 1;
@@ -290,7 +265,7 @@ describe('Gacha System tests', () => {
         fiveCoins,
         0,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
       testPlayer.wardrobe.currency = fiveCoins + 20;
@@ -305,7 +280,7 @@ describe('Gacha System tests', () => {
         free,
         0,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
       const oldInventoryLength = testPlayer.wardrobe.inventory.length;
@@ -320,7 +295,7 @@ describe('Gacha System tests', () => {
         free,
         0,
         townEmitter,
-        testMapping,
+
         nanoid(),
       );
       testPlayer.wardrobe.currency = 10;
@@ -341,14 +316,7 @@ describe('Gacha System tests', () => {
       });
     });
     it('Does not change clothing in the inventory on duplicate pulls', () => {
-      const gachapon: GachaPicker = new GachaPicker(
-        nessPool,
-        free,
-        0,
-        townEmitter,
-        testMapping,
-        nanoid(),
-      );
+      const gachapon: GachaPicker = new GachaPicker(nessPool, free, 0, townEmitter, nanoid());
       testPlayer.wardrobe.currency = 10;
       const originalInventoryLength = testPlayer.wardrobe.inventory.length;
 
@@ -368,7 +336,6 @@ describe('Gacha System tests', () => {
         testCost,
         testRefund,
         townEmitter,
-        testMapping,
         nanoid(),
       );
       testPlayer.wardrobe.currency = testCost * 3;
@@ -387,7 +354,6 @@ describe('Gacha System tests', () => {
         testCost,
         testRefund,
         townEmitter,
-        testMapping,
         nanoid(),
       );
       testPlayer.wardrobe.currency = testCost * 3;

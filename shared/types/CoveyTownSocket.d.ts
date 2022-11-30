@@ -37,20 +37,6 @@ export interface Player {
  */
 export type ItemCategory = "skin" | "outfit";
 
-/**
- * Represents how rare a particular WardrobeItem is
- */
-export type Rarity = "common" | "rare" | "ultraRare";
-
-/**
- * Represents a mapping of item rarities to numeric values
- */
-export type RarityMapping = {
-  common: number;
-  rare: number;
-  ultraRare: number;
-};
-
 export type ItemID = string;
 
 /**
@@ -100,19 +86,6 @@ export interface GachaPicker {
   id: string;
   // pull: (pullingPlayer: Player) => void;
 }
-
-// Represents the default pull cost for GachaPickers
-// export const PULL_COST = 1000;
-
-// // Represents the default refund percentage for GachaPickers
-// export const REFUND_PERCENT = 0.1;
-
-// /** Represents the default rarity mapping for GachaPickers */
-// export const DEFAULT_RARITY_MAPPING: RarityMapping = {
-//   common: 10,
-//   rare: 5,
-//   ultraRare: 1,
-// };
 
 // Represents all skin color options the player could possibly have
 export const SKIN_COLORS: string[] = ["skin0", "skin1", "skin2", "skin3"];

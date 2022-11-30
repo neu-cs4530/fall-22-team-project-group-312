@@ -5,7 +5,6 @@ import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import TypedEmitter from 'typed-emitter';
-import { CURRENCY_GAIN_FROM_CHAT } from '../../../townService/src/lib/Wardrobe';
 import Interactable from '../components/Town/Interactable';
 import ViewingArea from '../components/Town/interactables/ViewingArea';
 import { LoginController } from '../contexts/LoginControllerContext';
@@ -15,7 +14,6 @@ import {
   ChatMessage,
   CoveyTownSocket,
   PlayerLocation,
-  RarityMapping,
   TownSettingsUpdate,
   ViewingArea as ViewingAreaModel,
   WardrobeItem,
@@ -30,17 +28,11 @@ import ViewingAreaController from './ViewingAreaController';
 const CALCULATE_NEARBY_PLAYERS_DELAY = 300;
 // Represents all other items players can unlock.
 const UNLOCKABLE_ITEMS: WardrobeItem[] = [
-  { id: 'bday', name: 'Birthday Suit', category: 'outfit', rarity: 'ultraRare' },
-  { id: 'keqing', name: 'Keqing', category: 'outfit', rarity: 'rare' },
-  { id: 'ness', name: 'Ness', category: 'outfit', rarity: 'common' },
-  { id: 'xiaohei', name: 'Catboy', category: 'outfit', rarity: 'common' },
+  { id: 'bday', name: 'Birthday Suit', category: 'outfit' },
+  { id: 'keqing', name: 'Keqing', category: 'outfit' },
+  { id: 'ness', name: 'Ness', category: 'outfit' },
+  { id: 'xiaohei', name: 'Catboy', category: 'outfit' },
 ];
-
-const defaultRarityMapping: RarityMapping = {
-  common: 10,
-  rare: 5,
-  ultraRare: 1,
-};
 
 // Represents the default pull cost for GachaPickers
 const PULL_COST = 10;
@@ -238,7 +230,6 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     UNLOCKABLE_ITEMS,
     PULL_COST,
     REFUND_PERCENT,
-    defaultRarityMapping,
     nanoid(),
   );
 

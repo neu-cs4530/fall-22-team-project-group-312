@@ -14,7 +14,6 @@ import {
   CoveyTownSocket,
   Interactable,
   PlayerLocation,
-  RarityMapping,
   ServerToClientEvents,
   SocketData,
   ViewingArea as ViewingAreaModel,
@@ -30,12 +29,6 @@ export const PULL_COST = 1000;
 // Represents the default refund percentage for GachaPickers
 export const REFUND_PERCENT = 0.1;
 
-/** Represents the default rarity mapping for GachaPickers */
-export const defaultRarityMapping: RarityMapping = {
-  common: 10,
-  rare: 5,
-  ultraRare: 1,
-};
 /**
  * The Town class implements the logic for each town: managing the various events that
  * can occur (e.g. joining a town, moving, leaving a town)
@@ -124,7 +117,6 @@ export default class Town {
       PULL_COST,
       REFUND_PERCENT,
       broadcastEmitter,
-      defaultRarityMapping,
       nanoid(),
     );
   }
