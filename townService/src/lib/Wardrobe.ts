@@ -1,11 +1,16 @@
 import { DEFAULT_ITEMS } from './WardrobeItem';
 import { WardrobeItem, WardrobeModel, ItemID } from '../types/CoveyTownSocket';
 
+// Different rates for gaining currency by completing various objectives.
 export const CURRENCY_GAIN_FROM_CHAT = 1;
 export const CURRENCY_GAIN_RATE_FROM_INTERACTABLE_AREA = 2;
 export const CURRENCY_GAIN_RATE_FROM_VIEWING_AREA = 2;
 export const CURRENCY_GAIN_RATE_FROM_PROXIMITY = 1;
 
+/**
+ * Represents a parsed JSON string that contains the information needed to update a
+ * Wardrobe object.
+ */
 export interface WardrobeJSON {
   currency: number;
   currentSkinID: ItemID;
@@ -58,12 +63,12 @@ export default class Wardrobe {
     }
   }
 
-  // Returns the current skin item of the player this wardrobe corresponds to.
+  // Returns the current skin of the player this wardrobe corresponds to.
   get currentSkin(): WardrobeItem {
     return this._currentSkin;
   }
 
-  // Sets the skin item of the player to the given WardrobeItem if it is in the inventory.
+  // Sets the skin of the player to the given WardrobeItem if it is in the inventory.
   set currentSkin(skin: WardrobeItem) {
     if (this._itemIsInInventory(skin) && skin.category === 'skin') {
       this._currentSkin = skin;
@@ -77,7 +82,7 @@ export default class Wardrobe {
     return this._currentOutfit;
   }
 
-  // Sets the outfit item of the player to the given WardrobeItem if it is in the inventory.
+  // Sets the outfit of the player to the given WardrobeItem if it is in the inventory.
   set currentOutfit(outfit: WardrobeItem) {
     if (this._itemIsInInventory(outfit) && outfit.category === 'outfit') {
       this._currentOutfit = outfit;

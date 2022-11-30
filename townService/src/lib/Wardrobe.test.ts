@@ -136,7 +136,7 @@ describe('Wardrobe', () => {
     it('returns true and adds new skin, and cannot be added twice', () => {
       expect(testWardrobe.addWardrobeItem(unaddedSkin)).toBe(true);
       expect(testWardrobe.inventory.includes(unaddedSkin)).toBe(true);
-      // Length of inventory changes
+      // Length of inventory changes.
       expect(testWardrobe.inventory.length).toEqual(9);
       // Trying to add again should return false.
       expect(testWardrobe.addWardrobeItem(unaddedSkin)).toBe(false);
