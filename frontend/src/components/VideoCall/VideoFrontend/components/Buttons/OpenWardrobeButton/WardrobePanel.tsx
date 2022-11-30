@@ -3,6 +3,7 @@ import {
   FormControl,
   FormHelperText,
   Heading,
+  HStack,
   Image,
   Input,
   Modal,
@@ -26,7 +27,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import TownController from '../../../../../../classes/TownController';
 import { ItemID, WardrobeItem, WardrobeModel } from '../../../../../../types/CoveyTownSocket';
 
@@ -104,7 +105,7 @@ function WardrobePanel({
       setSpritePreview(newSpritePreview);
     }
   }
-  
+
   /**
    * Returns the player's wardrobe as a JSON formatted string.
    * @returns The player's wardrobe as a JSON string.
@@ -164,7 +165,6 @@ function WardrobePanel({
     console.log(spritePreview);
     return true;
   }
-
 
   /**
    * Checks if the outfit is locked, meaning checking if the item is inside the current player's
@@ -322,54 +322,6 @@ function WardrobePanel({
               </div>
               <div>
                 <Button
-                  title='Download Key'
-                  onClick={() => {
-                    exportToFile();
-                  }}>
-                  Download Key
-                </Button>
-                <Popover>
-                  <PopoverTrigger>
-                    <Button>Import Key</Button>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <PopoverArrow />
-                    <PopoverCloseButton />
-                    <PopoverHeader>Wardrobe Key!</PopoverHeader>
-                    <FormControl>
-                      <Input
-                        value={inputWardrobeKey}
-                        onChange={e => setinputWardrobeKey(e.target.value)}></Input>
-                      <FormHelperText>Paste your key here!</FormHelperText>
-                    </FormControl>
-                    <PopoverFooter>
-                      <Button
-                        title='Import'
-                        onClick={() => {
-                          if (importWardrobeString(inputWardrobeKey)) {
-                            toast({
-                              title:
-                                'Successfully Imported! Click on one of the skins to show the update!',
-                              variant: 'solid',
-                              status: 'success',
-                              isClosable: true,
-                            });
-                          } else {
-                            toast({
-                              title:
-                                'Failed to import. Please check that your input string was pasted correctly.',
-                              variant: 'solid',
-                              status: 'error',
-                              isClosable: true,
-                            });
-                          }
-                        }}>
-                        Import
-                      </Button>
-                    </PopoverFooter>
-                  </PopoverContent>
-                </Popover>
-                <Button
                   title='Confirm'
                   data-testid='confirmButton'
                   onClick={() => {
@@ -389,6 +341,59 @@ function WardrobePanel({
                   }}>
                   Confirm
                 </Button>
+              </div>
+              <div className='importExportWardrobe'>
+                <HStack spacing={15} justify='center'>
+                  <Button
+                    title='Download Key'
+                    size='sm'
+                    onClick={() => {
+                      exportToFile();
+                    }}>
+                    Download Key
+                  </Button>
+                  <Popover>
+                    <PopoverTrigger>
+                      <Button size='sm'>Import Key</Button>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <PopoverArrow />
+                      <PopoverCloseButton />
+                      <PopoverHeader>Wardrobe Key</PopoverHeader>
+                      <FormControl>
+                        <Input
+                          value={inputWardrobeKey}
+                          onChange={e => setinputWardrobeKey(e.target.value)}></Input>
+                        <FormHelperText>Paste your key here</FormHelperText>
+                      </FormControl>
+                      <PopoverFooter>
+                        <Button
+                          title='Import'
+                          onClick={() => {
+                            if (importWardrobeString(inputWardrobeKey)) {
+                              toast({
+                                title:
+                                  'Successfully Imported! Click on one of the skins to show the update!',
+                                variant: 'solid',
+                                status: 'success',
+                                isClosable: true,
+                              });
+                            } else {
+                              toast({
+                                title:
+                                  'Failed to import. Please check that your input string was pasted correctly.',
+                                variant: 'solid',
+                                status: 'error',
+                                isClosable: true,
+                              });
+                            }
+                          }}>
+                          Import
+                        </Button>
+                      </PopoverFooter>
+                    </PopoverContent>
+                  </Popover>
+                </HStack>
               </div>
             </VStack>
           </ModalBody>
