@@ -215,7 +215,6 @@ export default class TownGameScene extends Phaser.Scene {
     const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
     const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
     const playerTexture = outfitId + '-' + skinId;
-    console.log(playerTexture);
     if (gameObjects && this._cursors) {
       const speed = 175;
 

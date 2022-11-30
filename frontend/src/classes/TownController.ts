@@ -64,6 +64,10 @@ export type TownEvents = {
    */
   playerWardrobeChanged: (wardrobePlayer: PlayerController) => void;
   /**
+   * ASDS:LKFJ:LFJS:LKGFLKSDKFJ
+   */
+  wardrobeImported: (isSuccessfulyImported: boolean) => void;
+  /**
    * An event that indicates that the set of conversation areas has changed. This event is dispatched
    * when a conversation area is created, or when the set of active conversations has changed. This event is dispatched
    * after updating the town controller's record of conversation areas.
@@ -420,6 +424,19 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         this.emit('playerWardrobeChanged', newPlayer);
       }
     });
+    this._socket.on('wardrobeExported', (wardrobeJSON: string) => {
+      console.log(wardrobeJSON);
+    });
+    this._socket.on('wardrobeImported', (newWardrobeModel: WardrobeModel | undefined) => {
+      if (newWardrobeModel !== undefined && newWardrobeModel !== null) {
+        console.log('successful import! ', newWardrobeModel);
+        this.emitWardobeChange(newWardrobeModel);
+        this.emit('wardrobeImported', true);
+      } else {
+        console.log('failedToImport');
+        this.emit('wardrobeImported', false);
+      }
+    });
 
     /**
      * When an interactable's state changes, push that update into the relevant controller, which is assumed
@@ -481,6 +498,24 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     assert(ourPlayer);
     ourPlayer.wardrobe = newWardrobe;
     this.emit('playerWardrobeChanged', ourPlayer);
+  }
+
+  /**
+   * Emit a wardrobe change event for the current player, and updating the current wardrobe state
+   * by notifying the townService that the player's current wardrobe has changed.
+   * @param newWardrobe the new Wardrobe set of outfit/skin that the player has chosen
+   */
+  public emitWardrobeImport(wardrobeJSON: string): void {
+    this._socket.emit('importWardrobe', wardrobeJSON);
+  }
+
+  /**
+   * Emit a wardrobe change event for the current player, and updating the current wardrobe state
+   * by notifying the townService that the player's current wardrobe has changed.
+   * @param newWardrobe the new Wardrobe set of outfit/skin that the player has chosen
+   */
+  public emitWardrobeExport() {
+    this._socket.emit('exportWardrobe');
   }
 
   /**

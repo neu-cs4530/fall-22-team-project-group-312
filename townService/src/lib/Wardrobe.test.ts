@@ -1,9 +1,13 @@
 import Wardrobe from './Wardrobe';
-import { DEFAULT_ITEMS } from './WardrobeItem';
+import { DEFAULT_ITEMS, UNLOCKABLE_ITEMS } from './WardrobeItem';
 import { WardrobeItem } from '../types/CoveyTownSocket';
 
 describe('Wardrobe', () => {
   // A valid Wardrobe and WardrobeItem(s) to be reused within the tests
+  // wardobe with no items unlocked
+  let emptyWardrobe: Wardrobe;
+  // wardrobe with all items unlocked
+  let fullWardrobe: Wardrobe;
   let testWardrobe: Wardrobe;
   let testSkin: WardrobeItem;
   let testOutfit: WardrobeItem;
@@ -37,6 +41,14 @@ describe('Wardrobe', () => {
     // Add test items to wardrobe.
     testWardrobe.addWardrobeItem(testSkin);
     testWardrobe.addWardrobeItem(testOutfit);
+
+    emptyWardrobe = new Wardrobe();
+    fullWardrobe = new Wardrobe();
+    // add all unlockable items
+    UNLOCKABLE_ITEMS.forEach(item => fullWardrobe.addWardrobeItem(item));
+    fullWardrobe.currency = 1000;
+    fullWardrobe.currentOutfit = UNLOCKABLE_ITEMS.find(item => item.id === 'bday') as WardrobeItem;
+    fullWardrobe.currentSkin = DEFAULT_ITEMS.find(item => item.id === 'skin3') as WardrobeItem;
   });
 
   describe('constructor', () => {
@@ -136,6 +148,54 @@ describe('Wardrobe', () => {
       expect(testWardrobe.inventory.length).toEqual(9);
       // Trying to add again should return false.
       expect(testWardrobe.addWardrobeItem(unaddedOutfit)).toBe(false);
+    });
+  });
+
+  describe('exportWardrobeToJSON', () => {
+    it('returns the correct string with no unlocked items', () => {
+      expect(emptyWardrobe.exportWardrobeToJSON()).toEqual(
+        '{"currency":0,"currentSkinID":"skin1","currentOutfitID":"misa","inventory":[]}',
+      );
+    });
+    it('returns the correct string with all unlocked items', () => {
+      expect(fullWardrobe.exportWardrobeToJSON()).toEqual(
+        '{"currency":1000,"currentSkinID":"skin3","currentOutfitID":"bday","inventory":["bday","keqing","ness","xiaohei"]}',
+      );
+    });
+  });
+
+  describe('importWardrobeFromJSON', () => {
+    it('returns the correct wardrobe with no unlocked items', () => {
+      fullWardrobe.updateWardrobeFromJSON(
+        '{"currency":0,"currentSkinID":"skin1","currentOutfitID":"misa","inventory":[]}',
+      );
+      expect(fullWardrobe.currency).toEqual(emptyWardrobe.currency);
+      expect(fullWardrobe.currentSkin).toEqual(emptyWardrobe.currentSkin);
+      expect(fullWardrobe.currentOutfit).toEqual(emptyWardrobe.currentOutfit);
+      expect(fullWardrobe.inventory).toEqual(emptyWardrobe.inventory);
+    });
+    it('returns the correct string with all unlocked items', () => {
+      emptyWardrobe.updateWardrobeFromJSON(
+        '{"currency":1000,"currentSkinID":"skin3","currentOutfitID":"bday","inventory":["bday","keqing","ness","xiaohei"]}',
+      );
+      expect(emptyWardrobe.currency).toEqual(fullWardrobe.currency);
+      expect(emptyWardrobe.currentSkin).toEqual(fullWardrobe.currentSkin);
+      expect(emptyWardrobe.currentOutfit).toEqual(fullWardrobe.currentOutfit);
+      expect(emptyWardrobe.inventory).toEqual(fullWardrobe.inventory);
+    });
+    it.each<string>([
+      // invalid json string
+      'invalid json input',
+      // negative currency
+      '{"currency":-1,"currentSkinID":"skin1","currentOutfitID":"misa","inventory":[]}',
+      // skin not in inventory
+      '{"currency":0,"currentSkinID":"invalidskin","currentOutfitID":"misa","inventory":[]"]}',
+      // outfit not in inventory
+      '{"currency":0,"currentSkinID":"skin1","currentOutfitID":"bday","inventory":[]}',
+      // inventory has invalid items in inventory
+      '{"currency":0,"currentSkinID":"skin1","currentOutfitID":"misa","inventory":["invalid item id"]}',
+    ])('throws an error when given invalid inputs', (input: string) => {
+      expect(() => emptyWardrobe.updateWardrobeFromJSON(input)).toThrowError();
     });
   });
 });
