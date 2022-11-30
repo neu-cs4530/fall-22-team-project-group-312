@@ -2,8 +2,7 @@ import Phaser from 'phaser';
 import PlayerController from '../../classes/PlayerController';
 import TownController from '../../classes/TownController';
 import { PlayerLocation } from '../../types/CoveyTownSocket';
-// import does not work fixing later
-// import { SKIN_COLORS, OUTFITS } from '../../../../../../types/CoveyTownSocket';
+
 import { Callback } from '../VideoCall/VideoFrontend/types';
 import Interactable from './Interactable';
 import ConversationArea from './interactables/ConversationArea';
@@ -125,7 +124,7 @@ export default class TownGameScene extends Phaser.Scene {
     const skinColors: string[] = ['skin0', 'skin1', 'skin2', 'skin3', 'skin4'];
 
     // Represents all outfit options the player could possiby have
-    const outfits: string[] = ['misa', 'bday', 'keqing', 'ness', 'xiaohei'];
+    const outfits: string[] = ['misa', 'bday', 'ness', 'xiaohei', 'keqing'];
     this.load.tilemapTiledJSON('map', this._resourcePathPrefix + '/assets/tilemaps/indoors.json');
     for (const outfit in outfits) {
       for (const skin in skinColors) {
@@ -137,11 +136,11 @@ export default class TownGameScene extends Phaser.Scene {
         );
       }
     }
-    this.load.atlas(
-      'keqing-skin4',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin4.png',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin4.json',
-    );
+    // this.load.atlas(
+    //   'keqing-skin4',
+    //   this._resourcePathPrefix + '/assets/atlas/keqing-skin4.png',
+    //   this._resourcePathPrefix + '/assets/atlas/keqing-skin4.json',
+    // );
   }
 
   updatePlayers(players: PlayerController[]) {
@@ -215,7 +214,6 @@ export default class TownGameScene extends Phaser.Scene {
     const outfitId: string = this.coveyTownController.ourPlayer.wardrobe.currentOutfit.id;
     const skinId: string = this.coveyTownController.ourPlayer.wardrobe.currentSkin.id;
     const playerTexture = outfitId + '-' + skinId;
-    console.log(playerTexture);
     if (gameObjects && this._cursors) {
       const speed = 175;
 

@@ -99,6 +99,9 @@ function WardrobePanel({
     );
   }
 
+  // add list of outfits so you can write default indexes
+  const outfits: string[] = ['misa', 'bday', 'ness', 'xiaohei', 'keqing'];
+  const skinColors: string[] = ['skin0', 'skin1', 'skin2', 'skin3', 'skin4'];
   const prefix = 'assets/atlas/';
   return (
     <>
@@ -120,7 +123,9 @@ function WardrobePanel({
                 <Heading as='h5' size='sm'>
                   Select Outfit
                 </Heading>
-                <Tabs aria-label='selectClothingMenu'>
+                <Tabs
+                  aria-label='selectClothingMenu'
+                  defaultIndex={outfits.indexOf(spritePreview[0].id)}>
                   <TabList>
                     <Tab>
                       <Image
@@ -175,11 +180,13 @@ function WardrobePanel({
                   </TabList>
                 </Tabs>
               </div>
-              <div className='selectSkinColorMenu'>
+              <div className='selectSkinColorPane'>
                 <Heading as='h5' size='sm'>
                   Select Skin Color
                 </Heading>
-                <Tabs>
+                <Tabs
+                  aria-label='selectSkinColorMenu'
+                  defaultIndex={skinColors.indexOf(spritePreview[1].id)}>
                   <TabList>
                     <Tab>
                       <Image
