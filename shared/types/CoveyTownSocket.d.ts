@@ -141,6 +141,7 @@ export interface ServerToClientEvents {
   interactableUpdate: (interactable: Interactable) => void;
   // New ServerToClient events for a changed, imported, or exported wardrobe.
   playerWardrobeChanged: (wardrobePlayer: Player) => void;
+  gachaUpdate: (model: GachaModel) => void;
 }
 
 export interface ClientToServerEvents {

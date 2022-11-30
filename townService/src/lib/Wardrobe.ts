@@ -145,9 +145,7 @@ export default class Wardrobe {
   /** Checks if the given item is currently in the wardrobe inventory */
   private _itemIsInInventory(item: WardrobeItem): boolean {
     // Check if the newItem is already in the inventory
-    if (this.inventory.find(i => i.id === item.id) === undefined) {
-      return false;
-    }
-    return true;
+    const itemFromInventory = this.inventory.find(i => i.id === item.id);
+    return !(itemFromInventory === undefined);
   }
 }

@@ -75,7 +75,9 @@ export default class GachaPicker {
   // assumes there's at least one item in the pool
   private _getOneItem(): WardrobeItem {
     const max = this._itemPool.length;
-    return this._itemPool[Math.random() * max];
+    const randomValue = Math.floor(Math.random() * max);
+
+    return this._itemPool[randomValue];
   }
 
   /**
