@@ -60,7 +60,6 @@ export type RarityMapping = {
    id: ItemID;
    name: string;
    category: ItemCategory;
-   rarity: Rarity;
  };
 
 /**

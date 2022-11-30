@@ -127,6 +127,10 @@ describe('Wardrobe', () => {
       const testCurrentInventory = testWardrobe.inventory;
       expect(testWardrobe.inventory).toEqual(testCurrentInventory);
     });
+    it('sets the inventory', () => {
+      testWardrobe.inventory = fullWardrobe.inventory;
+      expect(testWardrobe.inventory).toEqual(fullWardrobe.inventory);
+    });
   });
 
   describe('addWardrobeItem', () => {
@@ -149,6 +153,25 @@ describe('Wardrobe', () => {
       // Trying to add again should return false.
       expect(testWardrobe.addWardrobeItem(unaddedOutfit)).toBe(false);
     });
+  });
+
+  describe('toModel properly generates model based on Wardrobe properties', () => {
+    const model = testWardrobe.toModel();
+    expect(model).toEqual({
+      currency: testWardrobe.currency,
+      currentSkin: testWardrobe.currentSkin,
+      currentOutfit: testWardrobe.currentOutfit,
+      inventory: testWardrobe.inventory,
+    });
+  });
+
+  describe('updateFromModel', () => {
+    const newModel = fullWardrobe.toModel();
+    testWardrobe.updateFromModel(newModel);
+    expect(testWardrobe.currency).toEqual(fullWardrobe.currency);
+    expect(testWardrobe.currentOutfit).toEqual(fullWardrobe.currentOutfit);
+    expect(testWardrobe.currentSkin).toEqual(fullWardrobe.currentSkin);
+    expect(testWardrobe.inventory).toEqual(fullWardrobe.inventory);
   });
 
   describe('exportWardrobeToJSON', () => {

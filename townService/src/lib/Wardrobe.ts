@@ -162,8 +162,6 @@ export default class Wardrobe {
     this.currentOutfit = model.currentOutfit;
     this.currentSkin = model.currentSkin;
     this.inventory = model.inventory;
-
-    console.log(this.toModel());
   }
 
   /**
