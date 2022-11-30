@@ -103,7 +103,7 @@ function WardrobePanel({
    * other currently selected item.
    * @param itemID the id of the item (outfit or skin color) the player selected
    */
-  async function switchSpriteItems(itemID: ItemID): Promise<void> {
+  function switchSpriteItems(itemID: ItemID): void {
     if (itemID.startsWith('skin')) {
       const newSpritePreview: WardrobeModel = {
         currency: spritePreview.currency,
@@ -114,8 +114,6 @@ function WardrobePanel({
         inventory: spritePreview.inventory,
       };
       setSpritePreview(newSpritePreview);
-      ];
-      await setSpritePreview(newSpritePreview);
     } else {
       const newSpritePreview: WardrobeModel = {
         currency: spritePreview.currency,
@@ -126,9 +124,6 @@ function WardrobePanel({
         inventory: spritePreview.inventory,
       };
       setSpritePreview(newSpritePreview);
-        currentSkin,
-      ];
-      await setSpritePreview(newSpritePreview);
     }
   }
   /**
@@ -169,7 +164,7 @@ function WardrobePanel({
                 </Heading>
                 <Tabs
                   aria-label='selectClothingMenu'
-                  defaultIndex={outfits.indexOf(spritePreview[0].id)}>
+                  defaultIndex={outfits.indexOf(spritePreview.currentOutfit.id)}>
                   <TabList>
                     <Tab>
                       <Image
@@ -230,7 +225,7 @@ function WardrobePanel({
                 </Heading>
                 <Tabs
                   aria-label='selectSkinColorMenu'
-                  defaultIndex={skinColors.indexOf(spritePreview[1].id)}>
+                  defaultIndex={skinColors.indexOf(spritePreview.currentSkin.id)}>
                   <TabList>
                     <Tab>
                       <Image
@@ -323,8 +318,7 @@ function WardrobePanel({
                       currentSkin: spritePreview.currentSkin,
                       inventory: coveyTownController.ourPlayer.wardrobe.inventory,
                       currency: coveyTownController.ourPlayer.wardrobe.currency,
-                    };
-                    coveyTownController.emitWardobeChange(newWardrobe);
+                    });
                     closeWardrobe();
                     toast({
                       title: 'Wardrobe changed! Please move the avatar to see the changes.',
