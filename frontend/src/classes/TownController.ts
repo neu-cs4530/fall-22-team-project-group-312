@@ -451,6 +451,8 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         } else {
           playerToUpdate.location = movedPlayer.location;
         }
+        // Update player's currency on movement.
+        playerToUpdate.wardrobe.currency = movedPlayer.wardrobe.currency;
         this.emit('playerMoved', playerToUpdate);
       } else {
         //TODO: It should not be possible to receive a playerMoved event for a player that is not already in the players array, right?
