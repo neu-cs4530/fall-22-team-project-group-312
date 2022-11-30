@@ -84,7 +84,7 @@ export default class Wardrobe {
       throw new Error('Invalid outfit equipped');
     }
     newWardrobe.currentOutfit = currentOutfit;
-    // sets this wardrobes data to match the new one
+    // Sets this wardrobes data to match the new one
     this.currency = newWardrobe.currency;
     this.inventory = newWardrobe.inventory;
     this.currentOutfit = newWardrobe.currentOutfit;

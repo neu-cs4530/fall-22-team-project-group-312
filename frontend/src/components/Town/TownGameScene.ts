@@ -449,10 +449,8 @@ export default class TownGameScene extends Phaser.Scene {
     }
     listOfAnimations.forEach(texture => {
       anims.create({
-        // key: 'misa-left-walk',
         key: `${texture}-left-walk`,
         frames: anims.generateFrameNames(texture, {
-          // prefix: 'misa-left-walk.',
           prefix: `${texture}-left-walk.`,
           start: 0,
           end: 3,
@@ -462,10 +460,8 @@ export default class TownGameScene extends Phaser.Scene {
         repeat: -1,
       });
       anims.create({
-        // key: 'misa-right-walk',
         key: `${texture}-right-walk`,
         frames: anims.generateFrameNames(texture, {
-          // prefix: 'misa-right-walk.',
           prefix: `${texture}-right-walk.`,
           start: 0,
           end: 3,
@@ -475,10 +471,8 @@ export default class TownGameScene extends Phaser.Scene {
         repeat: -1,
       });
       anims.create({
-        // key: 'misa-front-walk',
         key: `${texture}-front-walk`,
         frames: anims.generateFrameNames(texture, {
-          // prefix: 'misa-front-walk.',
           prefix: `${texture}-front-walk.`,
           start: 0,
           end: 3,
@@ -488,10 +482,8 @@ export default class TownGameScene extends Phaser.Scene {
         repeat: -1,
       });
       anims.create({
-        // key: 'misa-back-walk',
         key: `${texture}-back-walk`,
         frames: anims.generateFrameNames(texture, {
-          // prefix: 'misa-back-walk.',
           prefix: `${texture}-back-walk.`,
           start: 0,
           end: 3,
@@ -519,8 +511,6 @@ export default class TownGameScene extends Phaser.Scene {
       })
       .setScrollFactor(0)
       .setDepth(30);
-
-    // TODO: add covey coins display
 
     this._ready = true;
     this.updatePlayers(this.coveyTownController.players);
