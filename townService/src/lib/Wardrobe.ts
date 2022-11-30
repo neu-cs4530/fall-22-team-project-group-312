@@ -53,7 +53,7 @@ export default class Wardrobe {
    * Updates a wardrobe based on a json string of wardrobe info. Used in
    * the import wardrobe feature to automatically fill a wardrobe based on a player's previous
    * items.
-   * @param jsonString The json string containing the information to update a wardobe. 
+   * @param jsonString The json string containing the information to update a wardobe.
    */
   public updateWardrobeFromJSON(jsonString: string): void {
     let json: WardrobeJSON;
