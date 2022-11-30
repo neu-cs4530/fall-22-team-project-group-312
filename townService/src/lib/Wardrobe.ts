@@ -75,14 +75,12 @@ export default class Wardrobe {
     this.inventory = newWardrobe.inventory;
     this.currentOutfit = newWardrobe.currentOutfit;
     this.currentSkin = newWardrobe.currentSkin;
-
-    console.log(json.currency, newWardrobe.currency, this.currency);
   }
 
   public exportWardrobeToJSON(): string {
     return JSON.stringify({
-      currency: this._currency,
-      currentSkinID: this._currentSkin.id,
+      currency: this.currency,
+      currentSkinID: this.currentSkin.id,
       currentOutfitID: this.currentOutfit.id,
       inventory: this._inventory
         .filter(item => DEFAULT_ITEMS.find(i => i.id === item.id) === undefined)

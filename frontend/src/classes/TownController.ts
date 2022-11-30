@@ -420,6 +420,17 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         this.emit('playerWardrobeChanged', newPlayer);
       }
     });
+    this._socket.on('wardrobeExported', (wardrobeJSON: string) => {
+      console.log(wardrobeJSON);
+    });
+    this._socket.on('wardrobeImported', (newWardrobeModel: WardrobeModel | undefined) => {
+      if (newWardrobeModel !== undefined && newWardrobeModel !== null) {
+        console.log('successful import! ', newWardrobeModel);
+        this.emitWardobeChange(newWardrobeModel);
+      } else {
+        console.log('failedToImport');
+      }
+    });
 
     /**
      * When an interactable's state changes, push that update into the relevant controller, which is assumed
@@ -488,17 +499,8 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
    * by notifying the townService that the player's current wardrobe has changed.
    * @param newWardrobe the new Wardrobe set of outfit/skin that the player has chosen
    */
-  public emitWardrobeImport(wardrobeJSON: string): boolean {
+  public emitWardrobeImport(wardrobeJSON: string): void {
     this._socket.emit('importWardrobe', wardrobeJSON);
-    this._socket.on('wardrobeImported', (newWardrobeModel: WardrobeModel | undefined) => {
-      if (newWardrobeModel === undefined) {
-        return false;
-      } else {
-        this.emitWardobeChange(newWardrobeModel);
-        return true;
-      }
-    });
-    return false;
   }
 
   /**
@@ -508,9 +510,6 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
    */
   public emitWardrobeExport() {
     this._socket.emit('exportWardrobe');
-    this._socket.on('wardrobeExported', (wardrobeJSON: string) => {
-      return wardrobeJSON;
-    });
   }
 
   /**

@@ -242,10 +242,7 @@ function WardrobePanel({
                 <Button
                   title='Export'
                   onClick={() => {
-                    console.log('hi', spritePreview);
-                    const wardrobeJSON = coveyTownController.emitWardrobeExport();
-                    console.log(wardrobeJSON);
-                    // figure out how to save to file
+                    coveyTownController.emitWardrobeExport();
                   }}>
                   Export
                 </Button>
@@ -263,11 +260,7 @@ function WardrobePanel({
                       <Button
                         title='Import'
                         onClick={() => {
-                          if (coveyTownController.emitWardrobeImport(textInput)) {
-                            console.log('successful import!');
-                          } else {
-                            console.log('failed to import :((');
-                          }
+                          coveyTownController.emitWardrobeImport(textInput);
                         }}>
                         Import
                       </Button>
