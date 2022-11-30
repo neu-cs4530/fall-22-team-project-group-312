@@ -71,9 +71,9 @@ function GachaPanel({
     inventory: initialInventory,
   });
 
-  const [playerHasEnoughCoins, setPlayerHasEnoughCoins] = useState<boolean>(
-    currentWardrobe.currency >= singlePullCost,
-  );
+  // const [playerHasEnoughCoins, setPlayerHasEnoughCoins] = useState<boolean>(
+  //   coveyTownController.ourPlayer.wardrobe.currency >= singlePullCost,
+  // );
   const [currencyDisplay, setCurrencyDisplay] = useState<number>(currentWardrobe.currency);
 
   const [pulledItem, setPulledItem] = useState<WardrobeItem | undefined>(undefined);
@@ -84,6 +84,10 @@ function GachaPanel({
   }, [onClose, coveyTownController]);
 
   const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+  const playerHasEnoughCoins = (): boolean => {
+    return coveyTownController.ourPlayer.wardrobe.currency >= singlePullCost;
+  };
 
   const animationDelay = 5000;
 
@@ -97,7 +101,6 @@ function GachaPanel({
       coveyTownController.ourPlayer,
     );
     setCurrencyDisplay(wardrobe.currency);
-    setPlayerHasEnoughCoins(currencyDisplay >= singlePullCost);
     setCurrentWardrobe(wardrobe);
     setResultImage(outfitPrefix + item.id + outfitSuffix);
     setPulledItem(item);
@@ -120,7 +123,7 @@ function GachaPanel({
           <ModalCloseButton />
           <ModalBody pb={6}>
             <VStack divider={<StackDivider borderColor='gray.200' />} spacing={15} align='center'>
-              <div className='coinDisplay'>{`You have ${currencyDisplay} CoveyCoins.`}</div>
+              <div className='coinDisplay'>{`You have ${coveyTownController.ourPlayer.wardrobe.currency} CoveyCoins.`}</div>
               <div className='previewPane'>
                 <Image
                   src={`${animImage}`}
@@ -137,16 +140,12 @@ function GachaPanel({
               <div>
                 <Button
                   title={`Click to roll for new items.`}
-                  disabled={!playerHasEnoughCoins}
+                  disabled={!playerHasEnoughCoins()}
                   onClick={async () => {
                     setAnimImage(burstBoxGif);
                     setResultVisible(false);
-                    setPlayerHasEnoughCoins(false);
                     await delay(animationDelay);
                     await doPull();
-                    setPlayerHasEnoughCoins(
-                      coveyTownController.ourPlayer.wardrobe.currency >= singlePullCost,
-                    );
                     setAnimImage(floatingBoxGif);
                     await delay(animationDelay);
                   }}>
