@@ -130,30 +130,33 @@ function WardrobePanel({
     let parsedJSON: WardrobeModel;
     try {
       parsedJSON = JSON.parse(inputJSON) as WardrobeModel;
-      console.log(parsedJSON);
     } catch (e) {
-      console.log('failed to parse');
       return false;
     }
-    if (parsedJSON.currency < 0) {
-      console.log('failed to currency');
+    // check if the currency given is non-negative
+    if (parsedJSON.currency === undefined || parsedJSON.currency< 0) {
       return false;
     }
-    if (parsedJSON.inventory.find(item => item.id === parsedJSON.currentOutfit.id) === undefined) {
-      console.log('failed to currentoutifit');
+    // check if the outfit equiped is in the inventory
+    if (
+      parsedJSON.currentOutfit === undefined ||
+      parsedJSON.inventory.find(item => item.id === parsedJSON.currentOutfit.id) === undefined
+    ) {
       return false;
     }
-    if (parsedJSON.inventory.find(item => item.id === parsedJSON.currentSkin.id) === undefined) {
-      console.log('failed to current skin');
+    // check if the skin equiped is in the inventory
+    if (
+      parsedJSON.currentSkin === undefined ||
+      parsedJSON.inventory.find(item => item.id === parsedJSON.currentSkin.id) === undefined
+    ) {
       return false;
     }
     if (parsedJSON.inventory === undefined) {
-      console.log('failed to inventory');
       return false;
     }
+    // update wardrobe and sprite preview
     coveyTownController.emitWardobeChange(parsedJSON);
     setSpritePreview(parsedJSON);
-    console.log(spritePreview);
     return true;
   }
 

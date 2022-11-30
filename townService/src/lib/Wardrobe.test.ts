@@ -4,8 +4,6 @@ import { WardrobeItem } from '../types/CoveyTownSocket';
 
 describe('Wardrobe', () => {
   // A valid Wardrobe and WardrobeItem(s) to be reused within the tests
-  // wardobe with no items unlocked
-  let emptyWardrobe: Wardrobe;
   // wardrobe with all items unlocked
   let fullWardrobe: Wardrobe;
   let testWardrobe: Wardrobe;
@@ -41,8 +39,6 @@ describe('Wardrobe', () => {
     // Add test items to wardrobe.
     testWardrobe.addWardrobeItem(testSkin);
     testWardrobe.addWardrobeItem(testOutfit);
-
-    emptyWardrobe = new Wardrobe();
     fullWardrobe = new Wardrobe();
     // add all unlockable items
     UNLOCKABLE_ITEMS.forEach(item => fullWardrobe.addWardrobeItem(item));
@@ -106,11 +102,11 @@ describe('Wardrobe', () => {
       const testCurrentOutfit = testWardrobe.currentOutfit;
       expect(testWardrobe.currentOutfit).toEqual(testCurrentOutfit);
     });
-    it('sets the current eye color to a different eye color', () => {
+    it('sets the current outfit to a different outfit', () => {
       testWardrobe.currentOutfit = testOutfit;
       expect(testWardrobe.currentOutfit).toEqual(testOutfit);
     });
-    it('Throws an error if the eye color to add is not in the wardrobe.', () => {
+    it('Throws an error if the outfit to set is not in the inventory.', () => {
       expect(() => {
         testWardrobe.currentOutfit = unaddedOutfit;
       }).toThrowError();
@@ -145,7 +141,7 @@ describe('Wardrobe', () => {
       // Trying to add again should return false.
       expect(testWardrobe.addWardrobeItem(unaddedSkin)).toBe(false);
     });
-    it('returns true and adds new hair, and cannot be added twice', () => {
+    it('returns true and adds new outfit, and cannot be added twice', () => {
       expect(testWardrobe.addWardrobeItem(unaddedOutfit)).toBe(true);
       expect(testWardrobe.inventory.includes(unaddedOutfit)).toBe(true);
       // Length of inventory changes
