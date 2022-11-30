@@ -22,10 +22,11 @@ import {
   Tab,
   TabList,
   Tabs,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import TownController from '../../../../../../classes/TownController';
 import { ItemID, WardrobeItem, WardrobeModel } from '../../../../../../types/CoveyTownSocket';
 
@@ -58,6 +59,7 @@ function WardrobePanel({
   const initialCurrency = coveyTownController.ourPlayer.wardrobe.currency;
   const initialInventory = coveyTownController.ourPlayer.wardrobe.inventory;
   const classes = useStyles(makeStyles);
+  const toast = useToast();
 
   const [spritePreview, setSpritePreview] = useState<WardrobeModel>({
     currency: initialCurrency,
@@ -65,6 +67,30 @@ function WardrobePanel({
     currentOutfit: initalOutfit,
     inventory: initialInventory,
   });
+  useEffect(() => {
+    const isSuccessfulyImportedMessage = (isSuccessfulyImported: boolean) => {
+      if (isSuccessfulyImported) {
+        toast({
+          title: 'Successfully Imported! Click on one of the skins to show the update!',
+          variant: 'solid',
+          status: 'success',
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: 'Failed to import. Please check that your input string was pasted correctly.',
+          variant: 'solid',
+          status: 'error',
+          isClosable: true,
+        });
+      }
+    };
+    coveyTownController.addListener('wardrobeImported', isSuccessfulyImportedMessage);
+    return () => {
+      coveyTownController.removeListener('wardrobeImported', isSuccessfulyImportedMessage);
+    };
+  }, [coveyTownController]);
+
   const closeWardrobe = useCallback(() => {
     onClose();
     coveyTownController.unPause();
