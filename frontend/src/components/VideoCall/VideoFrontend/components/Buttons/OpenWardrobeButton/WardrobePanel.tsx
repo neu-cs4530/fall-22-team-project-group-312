@@ -57,7 +57,6 @@ function WardrobePanel({
   const initalOutfit = coveyTownController.ourPlayer.wardrobe.currentOutfit;
   const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
   const initialCurrency = coveyTownController.ourPlayer.wardrobe.currency;
-  console.log(initialCurrency);
   const initialInventory = coveyTownController.ourPlayer.wardrobe.inventory;
   const classes = useStyles(makeStyles);
   const toast = useToast();
@@ -132,15 +131,7 @@ function WardrobePanel({
   }
 
   const prefix = 'assets/atlas/';
-  /**
-   * modal
-   * left side of the preview png
-   * selection screen on the right
-   * navigation menu (own component)
-   * actual items
-   * confirm button
-   * exit button
-   */
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={closeWardrobe}>

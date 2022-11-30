@@ -560,18 +560,6 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     this.emit('playerWardrobeChanged', ourPlayer);
   }
 
-  /**
-   * Emit a gacha pull event for the current player, and updating the current wardrobe state
-   * by notifying the townService that the player's current wardrobe has changed.
-   * @param pulledItem the WardrobeItem that the player has pulled from the GachaPicker
-   */
-  // public emitGachaPull(wardrobeAfterPull: WardrobeModel) {
-  //   this._socket.emit('playerWardobeChange', wardrobeAfterPull);
-  //   const ourPlayer = this._ourPlayer;
-  //   assert(ourPlayer);
-  //   this.emit('playerPulled', ourPlayer);
-  // }
-
   /*
    * Emit a wardrobe change event for the current player, and updating the current wardrobe state
    * by notifying the townService that the player's current wardrobe has changed.
@@ -597,7 +585,6 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
    */
   public emitChatMessage(message: ChatMessage) {
     console.log(this.ourPlayer.wardrobe);
-    // this.ourPlayer.wardrobe.currency += CURRENCY_GAIN_FROM_CHAT;
     this._socket.emit('chatMessage', message);
   }
 

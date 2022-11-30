@@ -84,6 +84,10 @@ function GachaPanel({
     coveyTownController.unPause();
   }, [onClose, coveyTownController]);
 
+  const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+  const animationDelay = 5000;
+
   /**
    * Switches the sprite preview to one with the newly selected item and the
    * other currently selected item.
@@ -99,7 +103,6 @@ function GachaPanel({
     setResultImage(outfitPrefix + item.id + outfitSuffix);
     setPulledItem(item);
     setResultVisible(true);
-    console.log('Pulled: ' + item.id);
 
     coveyTownController.emitWardobeChange({
       currentOutfit: wardrobe.currentOutfit,
@@ -109,7 +112,6 @@ function GachaPanel({
     });
   }
 
-  const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
   return (
     <>
       <Modal isOpen={isOpen} onClose={closeGacha}>
@@ -140,10 +142,10 @@ function GachaPanel({
                   onClick={async () => {
                     setAnimImage(burstBoxGif);
                     setResultVisible(false);
-                    await delay(5000);
+                    await delay(animationDelay);
                     await doPull();
                     setAnimImage(floatingBoxGif);
-                    await delay(5000);
+                    await delay(animationDelay);
                   }}>
                   {`Roll! (-${singlePullCost} CoveyCoins)`}
                 </Button>

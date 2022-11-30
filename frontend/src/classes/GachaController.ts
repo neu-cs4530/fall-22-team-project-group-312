@@ -85,16 +85,13 @@ export default class GachaController extends (EventEmitter as new () => TypedEmi
    */
   public pull(player: PlayerController): PullResult {
     let newCurrency = player.wardrobe.currency;
-    console.log('Pull cost: ' + this._pullCost);
-    console.log('Refund percent: ' + this._refundPercent);
-    console.log('Refund amount: ' + Math.round(this._pullCost * this._refundPercent));
-    console.log('Starting currency' + newCurrency);
+
     const newInventory = player.wardrobe.inventory;
     if (this._itemPool.length > 0) {
       newCurrency -= this._pullCost;
       const pulledItem: WardrobeItem = this._getOneItem();
       const pulledItemIsDupe = newInventory.find(item => item.id === pulledItem.id);
-      console.log('Currency after pull' + newCurrency);
+
       if (pulledItemIsDupe) {
         // refund
         newCurrency += Math.round(this._pullCost * this._refundPercent);
@@ -108,8 +105,6 @@ export default class GachaController extends (EventEmitter as new () => TypedEmi
         inventory: newInventory,
       };
       player.wardrobe = newWardrobeModel;
-      console.log('New wardrobe in controller: ' + JSON.stringify(newWardrobeModel));
-      // player.emit('wardrobeChange', newWardrobeModel); emitting to other players and not to backend
 
       const result: PullResult = { item: pulledItem, wardrobe: newWardrobeModel };
       return result;
