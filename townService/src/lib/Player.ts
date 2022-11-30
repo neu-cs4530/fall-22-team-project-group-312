@@ -68,6 +68,7 @@ export default class Player {
       id: this._id,
       location: this.location,
       userName: this._userName,
+      // Updated to include WardrobeModel.
       wardrobe: this.wardrobe.toModel(),
     };
   }
