@@ -2,16 +2,12 @@ import Phaser from 'phaser';
 import PlayerController from '../../classes/PlayerController';
 import TownController from '../../classes/TownController';
 import { PlayerLocation } from '../../types/CoveyTownSocket';
-// import does not work fixing later
-// import { SKIN_COLORS, OUTFITS } from '../../../../../../types/CoveyTownSocket';
 import { Callback } from '../VideoCall/VideoFrontend/types';
 import Interactable from './Interactable';
 import ConversationArea from './interactables/ConversationArea';
 import Transporter from './interactables/Transporter';
 import ViewingArea from './interactables/ViewingArea';
 
-// Still not sure what the right type is here... "Interactable" doesn't do it
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function interactableTypeForObjectType(type: string): any {
   if (type === 'ConversationArea') {
     return ConversationArea;
@@ -23,9 +19,6 @@ function interactableTypeForObjectType(type: string): any {
     throw new Error(`Unknown object type: ${type}`);
   }
 }
-
-// Original inspiration and code from:
-// https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6
 
 export default class TownGameScene extends Phaser.Scene {
   private _pendingOverlapExits = new Map<Interactable, () => void>();
@@ -130,6 +123,7 @@ export default class TownGameScene extends Phaser.Scene {
     for (const outfit in outfits) {
       for (const skin in skinColors) {
         const spriteAtlas = outfits[outfit] + '-' + skinColors[skin];
+        // Load each possible combination of skin and outfit as a sprite atlas.
         this.load.atlas(
           spriteAtlas,
           this._resourcePathPrefix + `/assets/atlas/${spriteAtlas}.png`,
@@ -137,11 +131,6 @@ export default class TownGameScene extends Phaser.Scene {
         );
       }
     }
-    this.load.atlas(
-      'keqing-skin4',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin4.png',
-      this._resourcePathPrefix + '/assets/atlas/keqing-skin4.json',
-    );
   }
 
   updatePlayers(players: PlayerController[]) {
@@ -299,6 +288,8 @@ export default class TownGameScene extends Phaser.Scene {
         });
         this.coveyTownController.emitMovement(this._lastLocation);
       }
+      // Emit a wardrobe change event on player update.
+      this.coveyTownController.emitWardobeChange(this.coveyTownController.ourPlayer.wardrobe);
     }
   }
 

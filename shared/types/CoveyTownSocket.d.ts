@@ -33,13 +33,16 @@ export interface Player {
 };
 
 /**
- * Represents the location of a WardrobeItem on the player's body.
+ * Represents the type of item a WardrobeItem is.
  */
  export type ItemCategory = 'skin' | 'outfit';
+ /**
+  * Represents the ID of an item separate to the item name.
+  */
  export type ItemID = string;
 
  /**
-  * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
+  * Represents a single item in a Wardrobe, either a skin or outfit.
   */
  export type WardrobeItem = {
    id: ItemID;
