@@ -155,7 +155,6 @@ export interface ClientToServerEvents {
   // New ClientToServer event for a changed wardrobe.
   playerWardobeChange: (newWardrobe: WardrobeModel) => void;
   // // New ClientToServer event for a gacha pull.
-  // playerGachaPull: (pulledItem: WardrobeItem) => void;
   exportWardrobe: () => void;
   importWardrobe: (wardrobeJSON: string) => void;
 }

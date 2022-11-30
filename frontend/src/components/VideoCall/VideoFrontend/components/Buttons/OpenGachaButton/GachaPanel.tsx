@@ -11,8 +11,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useCallback, useEffect, useState } from 'react';
-import PlayerController from '../../../../../../classes/PlayerController';
+import React, { useCallback, useState } from 'react';
 import TownController from '../../../../../../classes/TownController';
 import { PullResult, WardrobeItem, WardrobeModel } from '../../../../../../types/CoveyTownSocket';
 
@@ -142,8 +141,12 @@ function GachaPanel({
                   onClick={async () => {
                     setAnimImage(burstBoxGif);
                     setResultVisible(false);
+                    setPlayerHasEnoughCoins(false);
                     await delay(animationDelay);
                     await doPull();
+                    setPlayerHasEnoughCoins(
+                      coveyTownController.ourPlayer.wardrobe.currency >= singlePullCost,
+                    );
                     setAnimImage(floatingBoxGif);
                     await delay(animationDelay);
                   }}>

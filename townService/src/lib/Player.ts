@@ -40,6 +40,7 @@ export default class Player {
     this._sessionToken = nanoid();
     this.townEmitter = townEmitter;
     this.wardrobe = new Wardrobe();
+    this.wardrobe.currency = 10;
   }
 
   get userName(): string {

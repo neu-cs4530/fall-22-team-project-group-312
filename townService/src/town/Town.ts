@@ -24,7 +24,7 @@ import InteractableArea from './InteractableArea';
 import ViewingArea from './ViewingArea';
 
 // Represents the default pull cost for GachaPickers
-export const PULL_COST = 1000;
+export const PULL_COST = 10;
 
 // Represents the default refund percentage for GachaPickers
 export const REFUND_PERCENT = 0.1;

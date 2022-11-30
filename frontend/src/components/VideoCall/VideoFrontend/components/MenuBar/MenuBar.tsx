@@ -96,10 +96,10 @@ export default function MenuBar() {
                 <ToggleScreenShareButton disabled={isReconnecting} />
               )}
               <OpenGachaButton />
+              <WardrobeButton />
               <Hidden smDown>
                 <Menu />
                 <TownSettings />
-                <WardrobeButton />
               </Hidden>
             </Grid>
           </Grid>
