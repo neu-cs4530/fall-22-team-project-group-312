@@ -13,9 +13,9 @@ import {
   ModalOverlay,
   Popover,
   PopoverArrow,
-  PopoverBody,
   PopoverCloseButton,
   PopoverContent,
+  PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
   StackDivider,
@@ -54,7 +54,6 @@ function WardrobePanel({
   coveyTownController: TownController;
 }) {
   const [inputWardrobeKey, setinputWardrobeKey] = useState<string>('');
-  const [downloadLink, setDownloadLink] = useState('');
   const initalOutfit = coveyTownController.ourPlayer.wardrobe.currentOutfit;
   const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
   const initialCurrency = coveyTownController.ourPlayer.wardrobe.currency;
@@ -68,40 +67,6 @@ function WardrobePanel({
     currentOutfit: initalOutfit,
     inventory: initialInventory,
   });
-  useEffect(() => {
-    const isSuccessfulyImportedMessage = (isSuccessfulyImported: boolean) => {
-      if (isSuccessfulyImported) {
-        toast({
-          title: 'Successfully Imported! Click on one of the skins to show the update!',
-          variant: 'solid',
-          status: 'success',
-          isClosable: true,
-        });
-      } else {
-        toast({
-          title: 'Failed to import. Please check that your input string was pasted correctly.',
-          variant: 'solid',
-          status: 'error',
-          isClosable: true,
-        });
-      }
-    };
-    const exportFile = (wardrobeString: string) => {
-      const element = document.createElement('a');
-      const file = new Blob([wardrobeString], { type: 'text/plain' });
-      element.href = URL.createObjectURL(file);
-      element.download = 'WardrobeKey.txt';
-      document.body.appendChild(element);
-      element.click();
-    };
-    coveyTownController.addListener('wardrobeImported', isSuccessfulyImportedMessage);
-    coveyTownController.addListener('wardrobeExported', exportFile);
-    return () => {
-      coveyTownController.removeListener('wardrobeImported', isSuccessfulyImportedMessage);
-      coveyTownController.removeListener('wardrobeExported', exportFile);
-    };
-  }, [coveyTownController, toast, downloadLink, setDownloadLink]);
-
   const closeWardrobe = useCallback(() => {
     onClose();
     coveyTownController.unPause();
@@ -133,6 +98,50 @@ function WardrobePanel({
       };
       setSpritePreview(newSpritePreview);
     }
+  }
+
+  function getWardrobeString(): string {
+    return JSON.stringify(coveyTownController.ourPlayer.wardrobe);
+  }
+
+  function exportToFile(): void {
+    const element = document.createElement('a');
+    const file = new Blob([getWardrobeString()], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = 'WardrobeKey.txt';
+    document.body.appendChild(element);
+    element.click();
+  }
+
+  function importWardrobeString(inputJSON: string): boolean {
+    let parsedJSON: WardrobeModel;
+    try {
+      parsedJSON = JSON.parse(inputJSON) as WardrobeModel;
+      console.log(parsedJSON);
+    } catch (e) {
+      console.log('failed to parse');
+      return false;
+    }
+    if (parsedJSON.currency < 0) {
+      console.log('failed to currency');
+      return false;
+    }
+    if (parsedJSON.inventory.find(item => item.id === parsedJSON.currentOutfit.id) === undefined) {
+      console.log('failed to currentoutifit');
+      return false;
+    }
+    if (parsedJSON.inventory.find(item => item.id === parsedJSON.currentSkin.id) === undefined) {
+      console.log('failed to current skin');
+      return false;
+    }
+    if (parsedJSON.inventory === undefined) {
+      console.log('failed to inventory');
+      return false;
+    }
+    coveyTownController.emitWardobeChange(parsedJSON);
+    setSpritePreview(parsedJSON);
+    console.log(spritePreview);
+    return true;
   }
 
   function isOutfitLocked(itemID: string): boolean {
@@ -279,7 +288,7 @@ function WardrobePanel({
                 <Button
                   title='Download Key'
                   onClick={() => {
-                    coveyTownController.emitWardrobeExport();
+                    exportToFile();
                   }}>
                   Download Key
                 </Button>
@@ -296,14 +305,32 @@ function WardrobePanel({
                         value={inputWardrobeKey}
                         onChange={e => setinputWardrobeKey(e.target.value)}></Input>
                       <FormHelperText>Paste your key here!</FormHelperText>
+                    </FormControl>
+                    <PopoverFooter>
                       <Button
                         title='Import'
                         onClick={() => {
-                          coveyTownController.emitWardrobeImport(inputWardrobeKey);
+                          if (importWardrobeString(inputWardrobeKey)) {
+                            toast({
+                              title:
+                                'Successfully Imported! Click on one of the skins to show the update!',
+                              variant: 'solid',
+                              status: 'success',
+                              isClosable: true,
+                            });
+                          } else {
+                            toast({
+                              title:
+                                'Failed to import. Please check that your input string was pasted correctly.',
+                              variant: 'solid',
+                              status: 'error',
+                              isClosable: true,
+                            });
+                          }
                         }}>
                         Import
                       </Button>
-                    </FormControl>
+                    </PopoverFooter>
                   </PopoverContent>
                 </Popover>
                 <Button
