@@ -51,7 +51,7 @@ export interface Player {
  };
 
 /**
- * Representation of a wardrobe that the TownGameScene can interact with.
+ * Representation of a wardrobe that the PlayerController uses, and the TownGameScene can interact with.
  */
  export interface WardrobeModel {
   /** The amount of currency a wardrobe currently has to be spent on WardrobeItems. */
@@ -110,8 +110,6 @@ export interface ViewingArea {
 
 export interface ServerToClientEvents {
   playerMoved: (movedPlayer: Player) => void;
-  // New ServerToClient event for a changed wardrobe.
-  playerWardrobeChanged: (wardrobePlayer: Player) => void;
   playerDisconnect: (disconnectedPlayer: Player) => void;
   playerJoined: (newPlayer: Player) => void;
   initialize: (initialData: TownJoinResponse) => void;
@@ -119,6 +117,8 @@ export interface ServerToClientEvents {
   townClosing: () => void;
   chatMessage: (message: ChatMessage) => void;
   interactableUpdate: (interactable: Interactable) => void;
+  // New ServerToClient events for a changed, imported, or exported wardrobe.
+  playerWardrobeChanged: (wardrobePlayer: Player) => void;
   wardrobeImported: (newWardrobeModel: WardrobeModel | undefined) => void;
   wardrobeExported: (wardrobeJson: string) => void;
 }
@@ -127,7 +127,7 @@ export interface ClientToServerEvents {
   chatMessage: (message: ChatMessage) => void;
   playerMovement: (movementData: PlayerLocation) => void;
   interactableUpdate: (update: Interactable) => void;
-  // New ClientToServer event for a changed wardrobe.
+  // New ClientToServer events for a changed, imported, or exported wardrobe.
   playerWardobeChange: (newWardrobe: WardrobeModel) => void;
   exportWardrobe: () => void;
   importWardrobe: (wardrobeJSON: string) => void;
