@@ -381,7 +381,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
       this._players = this.players.filter(eachPlayer => eachPlayer.id !== disconnectedPlayer.id);
     });
     /**
-     * When a player moves, update local state and emit an event to the controller's event listeners
+     * When a player moves, update local state and emit an event to the controller's event listeners.
      */
     this._socket.on('playerMoved', movedPlayer => {
       const playerToUpdate = this.players.find(eachPlayer => eachPlayer.id === movedPlayer.id);
@@ -403,18 +403,17 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         this.emit('playerMoved', newPlayer);
       }
     });
+    /**
+     * When a player changes their wardrobe, update local state and emit an event to controller's event listeners.
+     */
     this._socket.on('playerWardrobeChanged', wardrobePlayer => {
       const playerToUpdate = this.players.find(eachPlayer => eachPlayer.id === wardrobePlayer.id);
       if (playerToUpdate) {
-        if (playerToUpdate === this._ourPlayer) {
-          // Do something? Do nothing? In the location part it doesn't update their own x,y so I'm thinking we don't update
-          // our own wardrobe
-        } else {
-          playerToUpdate.wardrobe = wardrobePlayer.wardrobe;
-        }
+        // Update the player's wardrobe and emit event.
+        playerToUpdate.wardrobe = wardrobePlayer.wardrobe;
         this.emit('playerWardrobeChanged', playerToUpdate);
       } else {
-        //TODO: It should not be possible to receive a playerWardrobeChange event for a player that is not already in the players array, right?
+        // If player is not already in the array, add them.
         const newPlayer = PlayerController.fromPlayerModel(wardrobePlayer);
         this._players = this.players.concat(newPlayer);
         this.emit('playerWardrobeChanged', newPlayer);
