@@ -118,7 +118,7 @@ export default class TownGameScene extends Phaser.Scene {
     const skinColors: string[] = ['skin0', 'skin1', 'skin2', 'skin3', 'skin4'];
 
     // Represents all outfit options the player could possiby have
-    const outfits: string[] = ['misa', 'bday', 'keqing', 'ness', 'xiaohei'];
+    const outfits: string[] = ['misa', 'bday', 'ness', 'xiaohei', 'keqing'];
     this.load.tilemapTiledJSON('map', this._resourcePathPrefix + '/assets/tilemaps/indoors.json');
     for (const outfit in outfits) {
       for (const skin in skinColors) {
