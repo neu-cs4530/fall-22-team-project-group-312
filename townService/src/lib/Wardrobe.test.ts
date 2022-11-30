@@ -4,8 +4,6 @@ import { WardrobeItem } from '../types/CoveyTownSocket';
 
 describe('Wardrobe', () => {
   // A valid Wardrobe and WardrobeItem(s) to be reused within the tests
-  // wardobe with no items unlocked
-  let emptyWardrobe: Wardrobe;
   // wardrobe with all items unlocked
   let fullWardrobe: Wardrobe;
   let testWardrobe: Wardrobe;
@@ -41,8 +39,6 @@ describe('Wardrobe', () => {
     // Add test items to wardrobe.
     testWardrobe.addWardrobeItem(testSkin);
     testWardrobe.addWardrobeItem(testOutfit);
-
-    emptyWardrobe = new Wardrobe();
     fullWardrobe = new Wardrobe();
     // add all unlockable items
     UNLOCKABLE_ITEMS.forEach(item => fullWardrobe.addWardrobeItem(item));
