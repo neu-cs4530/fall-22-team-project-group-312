@@ -15,6 +15,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   PopoverContent,
+  PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
   StackDivider,
@@ -55,7 +56,7 @@ function WardrobePanel({
   onClose: any;
   coveyTownController: TownController;
 }) {
-  const [textInput, setTextInput] = useState<string>('');
+  const [inputWardrobeKey, setinputWardrobeKey] = useState<string>('');
   const initalOutfit = coveyTownController.ourPlayer.wardrobe.currentOutfit;
   const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
   const initialCurrency = coveyTownController.ourPlayer.wardrobe.currency;
@@ -69,30 +70,6 @@ function WardrobePanel({
     currentOutfit: initalOutfit,
     inventory: initialInventory,
   });
-  useEffect(() => {
-    const isSuccessfulyImportedMessage = (isSuccessfulyImported: boolean) => {
-      if (isSuccessfulyImported) {
-        toast({
-          title: 'Successfully Imported! Click on one of the skins to show the update!',
-          variant: 'solid',
-          status: 'success',
-          isClosable: true,
-        });
-      } else {
-        toast({
-          title: 'Failed to import. Please check that your input string was pasted correctly.',
-          variant: 'solid',
-          status: 'error',
-          isClosable: true,
-        });
-      }
-    };
-    coveyTownController.addListener('wardrobeImported', isSuccessfulyImportedMessage);
-    return () => {
-      coveyTownController.removeListener('wardrobeImported', isSuccessfulyImportedMessage);
-    };
-  }, [coveyTownController, toast]);
-
   const closeWardrobe = useCallback(() => {
     onClose();
     coveyTownController.unPause();
@@ -104,6 +81,7 @@ function WardrobePanel({
    */
   function switchSpriteItems(itemID: ItemID): void {
     if (itemID.startsWith('skin')) {
+      // switches the outfit in the sprite preview
       const newSpritePreview: WardrobeModel = {
         currency: spritePreview.currency,
         currentOutfit: spritePreview.currentOutfit,
@@ -114,6 +92,7 @@ function WardrobePanel({
       };
       setSpritePreview(newSpritePreview);
     } else {
+      // switches the skin in the sprite preview
       const newSpritePreview: WardrobeModel = {
         currency: spritePreview.currency,
         currentOutfit: coveyTownController.ourPlayer.wardrobe.inventory.find(
@@ -125,6 +104,68 @@ function WardrobePanel({
       setSpritePreview(newSpritePreview);
     }
   }
+  
+  /**
+   * Returns the player's wardrobe as a JSON formatted string.
+   * @returns The player's wardrobe as a JSON string.
+   */
+  function getWardrobeString(): string {
+    return JSON.stringify(coveyTownController.ourPlayer.wardrobe);
+  }
+
+  /**
+   * Download's the player's wardrobe as a text file.
+   */
+  function exportToFile(): void {
+    const element = document.createElement('a');
+    const file = new Blob([getWardrobeString()], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = 'WardrobeKey.txt';
+    document.body.appendChild(element);
+    element.click();
+  }
+
+  /**
+   * Parses the given input string and saves it to the player's wardrobe and
+   * spritePreview. It will return false if given string has invalid inputs like
+   * a negative currency or equipped outfit/skins that are not in the inventory.
+   * If all fields are valid, it will update the preview and player's wardrobe
+   * and return true.
+   * @param inputJSON input string being read.
+   * @returns true if it is successfully parsed, false otherwise.
+   */
+  function importWardrobeString(inputJSON: string): boolean {
+    let parsedJSON: WardrobeModel;
+    try {
+      parsedJSON = JSON.parse(inputJSON) as WardrobeModel;
+      console.log(parsedJSON);
+    } catch (e) {
+      console.log('failed to parse');
+      return false;
+    }
+    if (parsedJSON.currency < 0) {
+      console.log('failed to currency');
+      return false;
+    }
+    if (parsedJSON.inventory.find(item => item.id === parsedJSON.currentOutfit.id) === undefined) {
+      console.log('failed to currentoutifit');
+      return false;
+    }
+    if (parsedJSON.inventory.find(item => item.id === parsedJSON.currentSkin.id) === undefined) {
+      console.log('failed to current skin');
+      return false;
+    }
+    if (parsedJSON.inventory === undefined) {
+      console.log('failed to inventory');
+      return false;
+    }
+    coveyTownController.emitWardobeChange(parsedJSON);
+    setSpritePreview(parsedJSON);
+    console.log(spritePreview);
+    return true;
+  }
+
+
   /**
    * Checks if the outfit is locked, meaning checking if the item is inside the current player's
    * inventory.
@@ -281,31 +322,51 @@ function WardrobePanel({
               </div>
               <div>
                 <Button
-                  title='Export'
+                  title='Download Key'
                   onClick={() => {
-                    coveyTownController.emitWardrobeExport();
+                    exportToFile();
                   }}>
-                  Export
+                  Download Key
                 </Button>
                 <Popover>
                   <PopoverTrigger>
-                    <Button>Import</Button>
+                    <Button>Import Key</Button>
                   </PopoverTrigger>
                   <PopoverContent>
                     <PopoverArrow />
                     <PopoverCloseButton />
                     <PopoverHeader>Wardrobe Key!</PopoverHeader>
                     <FormControl>
-                      <Input value={textInput} onChange={e => setTextInput(e.target.value)}></Input>
+                      <Input
+                        value={inputWardrobeKey}
+                        onChange={e => setinputWardrobeKey(e.target.value)}></Input>
                       <FormHelperText>Paste your key here!</FormHelperText>
+                    </FormControl>
+                    <PopoverFooter>
                       <Button
                         title='Import'
                         onClick={() => {
-                          coveyTownController.emitWardrobeImport(textInput);
+                          if (importWardrobeString(inputWardrobeKey)) {
+                            toast({
+                              title:
+                                'Successfully Imported! Click on one of the skins to show the update!',
+                              variant: 'solid',
+                              status: 'success',
+                              isClosable: true,
+                            });
+                          } else {
+                            toast({
+                              title:
+                                'Failed to import. Please check that your input string was pasted correctly.',
+                              variant: 'solid',
+                              status: 'error',
+                              isClosable: true,
+                            });
+                          }
                         }}>
                         Import
                       </Button>
-                    </FormControl>
+                    </PopoverFooter>
                   </PopoverContent>
                 </Popover>
                 <Button

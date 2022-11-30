@@ -16,6 +16,7 @@ import {
   SocketData,
   ViewingArea as ViewingAreaModel,
   WardrobeModel,
+  Player as PlayerModel,
 } from '../types/CoveyTownSocket';
 import ConversationArea from './ConversationArea';
 import InteractableArea from './InteractableArea';
@@ -146,21 +147,6 @@ export default class Town {
     // their wardrobe, inform the CoveyTownController
     socket.on('playerWardobeChange', (wardrobeData: WardrobeModel) => {
       this._updatePlayerWardrobe(newPlayer, wardrobeData);
-    });
-
-    // Register an event listener for when a wardrobe is imported from a JSON string.
-    socket.on('importWardrobe', (wardrobeJSON: string) => {
-      try {
-        newPlayer.wardrobe.updateWardrobeFromJSON(wardrobeJSON);
-        this._broadcastEmitter.emit('wardrobeImported', newPlayer.wardrobe.toModel());
-      } catch (error) {
-        this._broadcastEmitter.emit('wardrobeImported', undefined);
-      }
-    });
-
-    // Register an event listener for when a user exports their wardrobe to a JSON string.
-    socket.on('exportWardrobe', () => {
-      this._broadcastEmitter.emit('wardrobeExported', newPlayer.wardrobe.exportWardrobeToJSON());
     });
 
     // Set up a listener to process updates to interactables.
