@@ -51,6 +51,7 @@ function WardrobePanel({
   coveyTownController,
 }: {
   isOpen: boolean;
+  onOpen: any;
   onClose: any;
   coveyTownController: TownController;
 }) {
