@@ -1,10 +1,22 @@
-import { DEFAULT_ITEMS } from './WardrobeItem';
-import { WardrobeItem, WardrobeModel } from '../types/CoveyTownSocket';
+import { DEFAULT_ITEMS, UNLOCKABLE_ITEMS } from './WardrobeItem';
+import { WardrobeItem, WardrobeModel, ItemID } from '../types/CoveyTownSocket';
 
+// Different rates for gaining currency by completing various objectives.
 export const CURRENCY_GAIN_FROM_CHAT = 1;
 export const CURRENCY_GAIN_RATE_FROM_INTERACTABLE_AREA = 2;
 export const CURRENCY_GAIN_RATE_FROM_VIEWING_AREA = 2;
 export const CURRENCY_GAIN_RATE_FROM_PROXIMITY = 1;
+
+/**
+ * Represents a parsed JSON string that contains the information needed to update a
+ * Wardrobe object.
+ */
+export interface WardrobeJSON {
+  currency: number;
+  currentSkinID: ItemID;
+  currentOutfitID: ItemID;
+  inventory: ItemID[];
+}
 
 /**
  * Serves as an inventory for a Player that contains their current currency, any WardrobeItems they
@@ -37,6 +49,64 @@ export default class Wardrobe {
     ) as WardrobeItem;
   }
 
+  /**
+   * Updates a wardrobe based on a json string of wardrobe info. Used in
+   * the import wardrobe feature to automatically fill a wardrobe based on a player's previous
+   * items.
+   * @param jsonString The json string containing the information to update a wardobe. 
+   */
+  public updateWardrobeFromJSON(jsonString: string): void {
+    let json: WardrobeJSON;
+    // Parse the string for Wardrobe information
+    try {
+      json = JSON.parse(jsonString) as WardrobeJSON;
+    } catch {
+      throw new Error('Invalid string format for json');
+    }
+    const newWardrobe = new Wardrobe();
+    newWardrobe.currency = json.currency;
+    // Add each unlocked item to the inventory.
+    json.inventory.forEach(newItemId => {
+      const newItem = UNLOCKABLE_ITEMS.find(item => item.id === newItemId);
+      if (newItem === undefined) {
+        throw new Error('Invalid item in inventory');
+      }
+      newWardrobe.addWardrobeItem(newItem);
+    });
+    // Set current equipped items.
+    const currentSkin = newWardrobe.inventory.find(item => item.id === json.currentSkinID);
+    if (currentSkin === undefined) {
+      throw new Error('Invalid skin equipped');
+    }
+    newWardrobe.currentSkin = currentSkin;
+    const currentOutfit = newWardrobe.inventory.find(item => item.id === json.currentOutfitID);
+    if (currentOutfit === undefined) {
+      throw new Error('Invalid outfit equipped');
+    }
+    newWardrobe.currentOutfit = currentOutfit;
+    // Sets this wardrobes data to match the new one
+    this.currency = newWardrobe.currency;
+    this.inventory = newWardrobe.inventory;
+    this.currentOutfit = newWardrobe.currentOutfit;
+    this.currentSkin = newWardrobe.currentSkin;
+  }
+
+  /**
+   * Converts the Wardrobe to a JSON string for the user to save and use for future imports.
+   * @returns A string in JSON format representing the information of this Wardrobe.
+   */
+  public exportWardrobeToJSON(): string {
+    // Convery the information of the Wardrobe to a string.
+    return JSON.stringify({
+      currency: this.currency,
+      currentSkinID: this.currentSkin.id,
+      currentOutfitID: this.currentOutfit.id,
+      inventory: this._inventory
+        .filter(item => DEFAULT_ITEMS.find(i => i.id === item.id) === undefined)
+        .map(item => item.id),
+    });
+  }
+
   // Returns the currency in the wardrobe.
   get currency(): number {
     return this._currency;
@@ -51,12 +121,12 @@ export default class Wardrobe {
     }
   }
 
-  // Returns the current skin item of the player this wardrobe corresponds to.
+  // Returns the current skin of the player this wardrobe corresponds to.
   get currentSkin(): WardrobeItem {
     return this._currentSkin;
   }
 
-  // Sets the skin item of the player to the given WardrobeItem if it is in the inventory.
+  // Sets the skin of the player to the given WardrobeItem if it is in the inventory.
   set currentSkin(skin: WardrobeItem) {
     if (this._itemIsInInventory(skin) && skin.category === 'skin') {
       this._currentSkin = skin;
@@ -70,7 +140,7 @@ export default class Wardrobe {
     return this._currentOutfit;
   }
 
-  // Sets the outfit item of the player to the given WardrobeItem if it is in the inventory.
+  // Sets the outfit of the player to the given WardrobeItem if it is in the inventory.
   set currentOutfit(outfit: WardrobeItem) {
     if (this._itemIsInInventory(outfit) && outfit.category === 'outfit') {
       this._currentOutfit = outfit;
@@ -82,6 +152,11 @@ export default class Wardrobe {
   // Returns the inventory of the player this wardrobe corresponds to.
   get inventory(): WardrobeItem[] {
     return this._inventory;
+  }
+
+  // Sets the inventory of the player this wardrobe corresponds to.
+  set inventory(newInventory: WardrobeItem[]) {
+    this._inventory = newInventory;
   }
 
   /**
@@ -105,7 +180,7 @@ export default class Wardrobe {
     this.currency = model.currency;
     this.currentOutfit = model.currentOutfit;
     this.currentSkin = model.currentSkin;
-    this._inventory = model.inventory;
+    this.inventory = model.inventory;
   }
 
   /**
@@ -126,7 +201,7 @@ export default class Wardrobe {
   /** Checks if the given item is currently in the wardrobe inventory */
   private _itemIsInInventory(item: WardrobeItem): boolean {
     // Check if the newItem is already in the inventory
-    if (this.inventory.find(i => i.name === item.name) === undefined) {
+    if (this.inventory.find(i => i.id === item.id) === undefined) {
       return false;
     }
     return true;

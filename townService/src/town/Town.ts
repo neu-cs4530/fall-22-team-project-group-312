@@ -148,6 +148,21 @@ export default class Town {
       this._updatePlayerWardrobe(newPlayer, wardrobeData);
     });
 
+    // Register an event listener for when a wardrobe is imported from a JSON string.
+    socket.on('importWardrobe', (wardrobeJSON: string) => {
+      try {
+        newPlayer.wardrobe.updateWardrobeFromJSON(wardrobeJSON);
+        this._broadcastEmitter.emit('wardrobeImported', newPlayer.wardrobe.toModel());
+      } catch (error) {
+        this._broadcastEmitter.emit('wardrobeImported', undefined);
+      }
+    });
+
+    // Register an event listener for when a user exports their wardrobe to a JSON string.
+    socket.on('exportWardrobe', () => {
+      this._broadcastEmitter.emit('wardrobeExported', newPlayer.wardrobe.exportWardrobeToJSON());
+    });
+
     // Set up a listener to process updates to interactables.
     // Currently only knows how to process updates for ViewingArea's, and
     // ignores any other updates for any other kind of interactable.

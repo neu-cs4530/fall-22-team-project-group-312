@@ -10,11 +10,13 @@ export type PlayerEvents = {
 export type PlayerGameObjects = {
   sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   label: Phaser.GameObjects.Text;
-  locationManagedByGameScene: boolean /* For the local player, the game scene will calculate the current location, and we should NOT apply updates when we receive events */;
+  locationManagedByGameScene: boolean /* For the local player, the game scene will calculate the current location, 
+  and we should NOT apply updates when we receive events */;
 };
 export default class PlayerController extends (EventEmitter as new () => TypedEmitter<PlayerEvents>) {
   private _location: PlayerLocation;
 
+  // Representation of the player's wardrobe.
   private _wardrobe: WardrobeModel;
 
   private readonly _id: string;
@@ -67,6 +69,7 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
       id: this.id,
       userName: this.userName,
       location: this.location,
+      // Added wardrobe to model.
       wardrobe: this._wardrobe,
     };
   }
@@ -79,6 +82,7 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
       sprite.setY(this.location.y);
       label.setX(sprite.body.position.x);
       label.setY(sprite.body.position.y - 20);
+      // Instead of using the hardcoded atlas/misa sprite, we now pass in the current outfit and skin id
       const currentSprite = this.wardrobe.currentOutfit.id + '-' + this.wardrobe.currentSkin.id;
       if (this.location.moving) {
         sprite.anims.play(`${currentSprite}-${this.location.rotation}-walk`, true);
@@ -94,6 +98,7 @@ export default class PlayerController extends (EventEmitter as new () => TypedEm
       modelPlayer.id,
       modelPlayer.userName,
       modelPlayer.location,
+      // Added wardrobe to model.
       modelPlayer.wardrobe,
     );
   }

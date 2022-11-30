@@ -1,13 +1,23 @@
 import {
   Button,
+  FormControl,
+  FormHelperText,
   Heading,
   Image,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
   StackDivider,
   Tab,
   TabList,
@@ -18,7 +28,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import TownController from '../../../../../../classes/TownController';
-import { WardrobeItem, WardrobeModel } from '../../../../../../types/CoveyTownSocket';
+import { ItemID, WardrobeItem, WardrobeModel } from '../../../../../../types/CoveyTownSocket';
 
 const useStyles = makeStyles({
   preview: {
@@ -46,17 +56,44 @@ function WardrobePanel({
   onClose: any;
   coveyTownController: TownController;
 }) {
+  const [textInput, setTextInput] = useState<string>('');
   const initalOutfit = coveyTownController.ourPlayer.wardrobe.currentOutfit;
   const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
+  const initialCurrency = coveyTownController.ourPlayer.wardrobe.currency;
+  const initialInventory = coveyTownController.ourPlayer.wardrobe.inventory;
   const classes = useStyles(makeStyles);
   const toast = useToast();
 
-  const [spritePreview, setSpritePreview] = useState<WardrobeItem[]>([initalOutfit, initialSkin]);
-  useEffect(() => {
-    console.log(
-      'Sprite preview has changed to ' + spritePreview[0].id + ' and ' + spritePreview[1].id,
-    );
+  const [spritePreview, setSpritePreview] = useState<WardrobeModel>({
+    currency: initialCurrency,
+    currentSkin: initialSkin,
+    currentOutfit: initalOutfit,
+    inventory: initialInventory,
   });
+  useEffect(() => {
+    const isSuccessfulyImportedMessage = (isSuccessfulyImported: boolean) => {
+      if (isSuccessfulyImported) {
+        toast({
+          title: 'Successfully Imported! Click on one of the skins to show the update!',
+          variant: 'solid',
+          status: 'success',
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: 'Failed to import. Please check that your input string was pasted correctly.',
+          variant: 'solid',
+          status: 'error',
+          isClosable: true,
+        });
+      }
+    };
+    coveyTownController.addListener('wardrobeImported', isSuccessfulyImportedMessage);
+    return () => {
+      coveyTownController.removeListener('wardrobeImported', isSuccessfulyImportedMessage);
+    };
+  }, [coveyTownController]);
+
   const closeWardrobe = useCallback(() => {
     onClose();
     coveyTownController.unPause();
@@ -66,22 +103,29 @@ function WardrobePanel({
    * other currently selected item.
    * @param itemID the id of the item (outfit or skin color) the player selected
    */
-  async function switchSpriteItems(itemID: string): Promise<void> {
+  async function switchSpriteItems(itemID: ItemID): Promise<void> {
     if (itemID.startsWith('skin')) {
-      const currentOutfit = spritePreview[0];
-      const newSpritePreview: WardrobeItem[] = [
-        currentOutfit,
-        coveyTownController.ourPlayer.wardrobe.inventory.find(
+      const newSpritePreview: WardrobeModel = {
+        currency: spritePreview.currency,
+        currentOutfit: spritePreview.currentOutfit,
+        currentSkin: coveyTownController.ourPlayer.wardrobe.inventory.find(
           (item: WardrobeItem) => item.id === itemID,
         ) as WardrobeItem,
+        inventory: spritePreview.inventory,
+      };
+      setSpritePreview(newSpritePreview);
       ];
       await setSpritePreview(newSpritePreview);
     } else {
-      const currentSkin = spritePreview[1];
-      const newSpritePreview: WardrobeItem[] = [
-        coveyTownController.ourPlayer.wardrobe.inventory.find(
+      const newSpritePreview: WardrobeModel = {
+        currency: spritePreview.currency,
+        currentOutfit: coveyTownController.ourPlayer.wardrobe.inventory.find(
           (item: WardrobeItem) => item.id === itemID,
         ) as WardrobeItem,
+        currentSkin: spritePreview.currentSkin,
+        inventory: spritePreview.inventory,
+      };
+      setSpritePreview(newSpritePreview);
         currentSkin,
       ];
       await setSpritePreview(newSpritePreview);
@@ -114,7 +158,7 @@ function WardrobePanel({
             <VStack divider={<StackDivider borderColor='gray.200' />} spacing={15} align='center'>
               <div className='previewPane'>
                 <Image
-                  src={`${prefix}${spritePreview[0].id}-${spritePreview[1].id}/${spritePreview[0].id}-${spritePreview[1].id}-front.png`}
+                  src={`${prefix}${spritePreview.currentOutfit.id}-${spritePreview.currentSkin.id}/${spritePreview.currentOutfit.id}-${spritePreview.currentSkin.id}-front.png`}
                   alt='sprite'
                   className={classes.preview}
                 />
@@ -243,12 +287,40 @@ function WardrobePanel({
               </div>
               <div>
                 <Button
+                  title='Export'
+                  onClick={() => {
+                    coveyTownController.emitWardrobeExport();
+                  }}>
+                  Export
+                </Button>
+                <Popover>
+                  <PopoverTrigger>
+                    <Button>Import</Button>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <PopoverArrow />
+                    <PopoverCloseButton />
+                    <PopoverHeader>Wardrobe Key!</PopoverHeader>
+                    <FormControl>
+                      <Input value={textInput} onChange={e => setTextInput(e.target.value)}></Input>
+                      <FormHelperText>Paste your key here!</FormHelperText>
+                      <Button
+                        title='Import'
+                        onClick={() => {
+                          coveyTownController.emitWardrobeImport(textInput);
+                        }}>
+                        Import
+                      </Button>
+                    </FormControl>
+                  </PopoverContent>
+                </Popover>
+                <Button
                   title='Confirm'
                   data-testid='confirmButton'
                   onClick={() => {
-                    const newWardrobe: WardrobeModel = {
-                      currentOutfit: spritePreview[0],
-                      currentSkin: spritePreview[1],
+                    coveyTownController.emitWardobeChange({
+                      currentOutfit: spritePreview.currentOutfit,
+                      currentSkin: spritePreview.currentSkin,
                       inventory: coveyTownController.ourPlayer.wardrobe.inventory,
                       currency: coveyTownController.ourPlayer.wardrobe.currency,
                     };

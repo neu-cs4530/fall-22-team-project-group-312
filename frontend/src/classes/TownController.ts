@@ -64,6 +64,10 @@ export type TownEvents = {
    */
   playerWardrobeChanged: (wardrobePlayer: PlayerController) => void;
   /**
+   * An event that indicates a player has updated their wardrobe by importing JSON string.
+   */
+  wardrobeImported: (isSuccessfulyImported: boolean) => void;
+  /**
    * An event that indicates that the set of conversation areas has changed. This event is dispatched
    * when a conversation area is created, or when the set of active conversations has changed. This event is dispatched
    * after updating the town controller's record of conversation areas.
@@ -381,7 +385,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
       this._players = this.players.filter(eachPlayer => eachPlayer.id !== disconnectedPlayer.id);
     });
     /**
-     * When a player moves, update local state and emit an event to the controller's event listeners
+     * When a player moves, update local state and emit an event to the controller's event listeners.
      */
     this._socket.on('playerMoved', movedPlayer => {
       const playerToUpdate = this.players.find(eachPlayer => eachPlayer.id === movedPlayer.id);
@@ -403,21 +407,37 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         this.emit('playerMoved', newPlayer);
       }
     });
+    /**
+     * When a player changes their wardrobe, update local state and emit an event to controller's event listeners.
+     */
     this._socket.on('playerWardrobeChanged', wardrobePlayer => {
       const playerToUpdate = this.players.find(eachPlayer => eachPlayer.id === wardrobePlayer.id);
       if (playerToUpdate) {
-        if (playerToUpdate === this._ourPlayer) {
-          // Do something? Do nothing? In the location part it doesn't update their own x,y so I'm thinking we don't update
-          // our own wardrobe
-        } else {
-          playerToUpdate.wardrobe = wardrobePlayer.wardrobe;
-        }
+        // Update the player's wardrobe and emit event.
+        playerToUpdate.wardrobe = wardrobePlayer.wardrobe;
         this.emit('playerWardrobeChanged', playerToUpdate);
       } else {
-        //TODO: It should not be possible to receive a playerWardrobeChange event for a player that is not already in the players array, right?
+        // If player is not already in the array, add them.
         const newPlayer = PlayerController.fromPlayerModel(wardrobePlayer);
         this._players = this.players.concat(newPlayer);
         this.emit('playerWardrobeChanged', newPlayer);
+      }
+    });
+    /**
+     * When a player exports their wardrobe, emit the event to the controller's event listeners.
+     */
+    this._socket.on('wardrobeExported', (wardrobeJSON: string) => {
+      console.log(wardrobeJSON);
+    });
+    /**
+     * When a player imports a wardrobe from a JSON string, emit an event signaling a wardrobe change.
+     */
+    this._socket.on('wardrobeImported', (newWardrobeModel: WardrobeModel | undefined) => {
+      if (newWardrobeModel !== undefined && newWardrobeModel !== null) {
+        this.emitWardobeChange(newWardrobeModel);
+        this.emit('wardrobeImported', true);
+      } else {
+        this.emit('wardrobeImported', false);
       }
     });
 
@@ -481,6 +501,21 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     assert(ourPlayer);
     ourPlayer.wardrobe = newWardrobe;
     this.emit('playerWardrobeChanged', ourPlayer);
+  }
+
+  /**
+   * Emit a import wardrobe event for the current player.
+   * @param wardrobeJSON the json string imported to change the wardrobe.
+   */
+  public emitWardrobeImport(wardrobeJSON: string): void {
+    this._socket.emit('importWardrobe', wardrobeJSON);
+  }
+
+  /**
+   * Emit a export wardrobe event for the current player.
+   */
+  public emitWardrobeExport() {
+    this._socket.emit('exportWardrobe');
   }
 
   /**
