@@ -13,7 +13,6 @@ import {
   ModalOverlay,
   Popover,
   PopoverArrow,
-  PopoverBody,
   PopoverCloseButton,
   PopoverContent,
   PopoverHeader,
@@ -52,7 +51,6 @@ function WardrobePanel({
   coveyTownController,
 }: {
   isOpen: boolean;
-  onOpen: any;
   onClose: any;
   coveyTownController: TownController;
 }) {
@@ -92,7 +90,7 @@ function WardrobePanel({
     return () => {
       coveyTownController.removeListener('wardrobeImported', isSuccessfulyImportedMessage);
     };
-  }, [coveyTownController]);
+  }, [coveyTownController, toast]);
 
   const closeWardrobe = useCallback(() => {
     onClose();
