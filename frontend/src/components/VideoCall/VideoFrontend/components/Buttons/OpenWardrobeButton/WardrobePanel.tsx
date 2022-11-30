@@ -78,6 +78,7 @@ function WardrobePanel({
    */
   async function switchSpriteItems(itemID: ItemID): Promise<void> {
     if (itemID.startsWith('skin')) {
+      // switches the outfit in the sprite preview
       const newSpritePreview: WardrobeModel = {
         currency: spritePreview.currency,
         currentOutfit: spritePreview.currentOutfit,
@@ -88,6 +89,7 @@ function WardrobePanel({
       };
       setSpritePreview(newSpritePreview);
     } else {
+      // switches the skin in the sprite preview
       const newSpritePreview: WardrobeModel = {
         currency: spritePreview.currency,
         currentOutfit: coveyTownController.ourPlayer.wardrobe.inventory.find(
@@ -100,10 +102,17 @@ function WardrobePanel({
     }
   }
 
+  /**
+   * Returns the player's wardrobe as a JSON formatted string.
+   * @returns The player's wardrobe as a JSON string.
+   */
   function getWardrobeString(): string {
     return JSON.stringify(coveyTownController.ourPlayer.wardrobe);
   }
 
+  /**
+   * Download's the player's wardrobe as a text file.
+   */
   function exportToFile(): void {
     const element = document.createElement('a');
     const file = new Blob([getWardrobeString()], { type: 'text/plain' });
@@ -113,6 +122,15 @@ function WardrobePanel({
     element.click();
   }
 
+  /**
+   * Parses the given input string and saves it to the player's wardrobe and
+   * spritePreview. It will return false if given string has invalid inputs like
+   * a negative currency or equipped outfit/skins that are not in the inventory.
+   * If all fields are valid, it will update the preview and player's wardrobe
+   * and return true.
+   * @param inputJSON input string being read.
+   * @returns true if it is successfully parsed, false otherwise.
+   */
   function importWardrobeString(inputJSON: string): boolean {
     let parsedJSON: WardrobeModel;
     try {
@@ -144,6 +162,11 @@ function WardrobePanel({
     return true;
   }
 
+  /**
+   * Checks if the given wardrobe item is in the player's inventory.
+   * @param itemID item to be checked
+   * @returns true if the item is in the player's wardrobe, false otherwise.
+   */
   function isOutfitLocked(itemID: string): boolean {
     return (
       coveyTownController.ourPlayer.wardrobe.inventory.find(o => o.id === itemID) === undefined
