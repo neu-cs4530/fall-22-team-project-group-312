@@ -463,13 +463,10 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     });
     this._socket.on('playerWardrobeChanged', wardrobePlayer => {
       const playerToUpdate = this.players.find(eachPlayer => eachPlayer.id === wardrobePlayer.id);
-      console.log('hi', wardrobePlayer);
       if (playerToUpdate) {
         playerToUpdate.wardrobe = wardrobePlayer.wardrobe;
-        console.log(playerToUpdate);
         this.emit('playerWardrobeChanged', playerToUpdate);
       } else {
-        //TODO: It should not be possible to receive a playerWardrobeChange event for a player that is not already in the players array, right?
         const newPlayer = PlayerController.fromPlayerModel(wardrobePlayer);
         this._players = this.players.concat(newPlayer);
         this.emit('playerWardrobeChanged', newPlayer);
@@ -480,11 +477,9 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     });
     this._socket.on('wardrobeImported', (newWardrobeModel: WardrobeModel | undefined) => {
       if (newWardrobeModel !== undefined && newWardrobeModel !== null) {
-        console.log('successful import! ', newWardrobeModel);
         this.emitWardobeChange(newWardrobeModel);
         this.emit('wardrobeImported', true);
       } else {
-        console.log('failedToImport');
         this.emit('wardrobeImported', false);
       }
     });

@@ -31,7 +31,7 @@ export default class Wardrobe {
   private _inventory: WardrobeItem[];
 
   constructor() {
-    this._currency = 100;
+    this._currency = 0;
     this._inventory = [];
     // Add all default items to wardrobe.
     DEFAULT_ITEMS.forEach((item: WardrobeItem) => this.addWardrobeItem(item));
@@ -158,12 +158,12 @@ export default class Wardrobe {
    * @param model A WardrobeModel object that this Wardrobe will update to match.
    */
   public updateFromModel(model: WardrobeModel) {
-    this.currency = model.currency;
-    this.currentOutfit = model.currentOutfit;
-    this.currentSkin = model.currentSkin;
-    this.inventory = model.inventory;
-
-    console.log(this.toModel());
+    if (model !== undefined) {
+      this.currency = model.currency;
+      this.currentOutfit = model.currentOutfit;
+      this.currentSkin = model.currentSkin;
+      this.inventory = model.inventory;
+    }
   }
 
   /**
