@@ -31,7 +31,7 @@ export default class Wardrobe {
   private _inventory: WardrobeItem[];
 
   constructor() {
-    this._currency = 100;
+    this._currency = 0;
     this._inventory = [];
     // Add all default items to wardrobe.
     DEFAULT_ITEMS.forEach((item: WardrobeItem) => this.addWardrobeItem(item));
