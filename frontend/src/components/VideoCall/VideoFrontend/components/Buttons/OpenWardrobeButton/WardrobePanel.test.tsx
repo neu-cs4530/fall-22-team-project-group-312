@@ -1,9 +1,7 @@
 import { ChakraProvider, UseDisclosureReturn } from '@chakra-ui/react';
-import { fireEvent, getByText, render, RenderResult, waitFor } from '@testing-library/react';
-import { keyboard } from '@testing-library/user-event/dist/types/keyboard';
+import { fireEvent, render, RenderResult, waitFor } from '@testing-library/react';
 import { mock, mockClear, MockProxy } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
-import { LEFT } from 'phaser';
 import React from 'react';
 import PlayerController from '../../../../../../classes/PlayerController';
 import TownController from '../../../../../../classes/TownController';
@@ -15,7 +13,6 @@ import {
   WardrobeModel,
 } from '../../../../../../types/CoveyTownSocket';
 import WardrobeButton from './OpenWardrobeButton';
-import userEvent from '@testing-library/user-event';
 
 const mockToast = jest.fn();
 const mockUseDisclosure = mock<UseDisclosureReturn>();
@@ -42,7 +39,7 @@ describe('Wardrobe Panel', () => {
   let skin2Option: HTMLElement;
   let skin3Option: HTMLElement;
   let skin4Option: HTMLElement;
-  let upArrow: HTMLElement;
+  let bdayOption: HTMLElement;
 
   const inventory: WardrobeItem[] = [
     { id: 'misa', name: 'default outfit', category: 'outfit' },
@@ -74,13 +71,24 @@ describe('Wardrobe Panel', () => {
     currency: 0,
     inventory: inventory,
   };
+  const testWardrobe2: WardrobeModel = {
+    currentOutfit: {
+      id: 'misa',
+      name: 'default outfit',
+      category: 'outfit',
+    },
+    currentSkin: {
+      id: 'skin0',
+      name: 'skin0',
+      category: 'skin',
+    },
+    currency: 0,
+    inventory: inventory,
+  };
   const currentPlayer = new PlayerController(nanoid(), nanoid(), playerLocation, testWardrobe);
-  mockedTownController = mockTownController({
-    ourPlayer: currentPlayer,
-  });
-  const openWardrobePane = async (params: { ourPlayer: PlayerController }) => {
+  const openWardrobePane = async () => {
     mockedTownController = mockTownController({
-      ourPlayer: params.ourPlayer,
+      ourPlayer: currentPlayer,
     });
     renderData = render(
       <ChakraProvider>
@@ -90,7 +98,7 @@ describe('Wardrobe Panel', () => {
       </ChakraProvider>,
     );
 
-    await waitFor(() => renderData.getByText('Changing Room'));
+    // await waitFor(() => renderData.getByText('Changing Room'));
     confirmButton = renderData.getByTestId('confirmButton');
     misaOption = renderData.getByTestId('misa');
     skin0Option = renderData.getByTestId('skin0');
@@ -98,6 +106,7 @@ describe('Wardrobe Panel', () => {
     skin2Option = renderData.getByTestId('skin2');
     skin3Option = renderData.getByTestId('skin3');
     skin4Option = renderData.getByTestId('skin4');
+    bdayOption = renderData.getByTestId('bday');
     // upArrow = renderData.getByTestId('upArrow');
   };
 
@@ -105,32 +114,47 @@ describe('Wardrobe Panel', () => {
     mockUseDisclosure.onClose.mockReset();
     mockClear(mockToast);
   });
-  it('Sprite preview changes after a different skin is chosen', async () => {
-    const params = {
-      ourPlayer: currentPlayer,
-    };
-    await openWardrobePane(params);
-    fireEvent.click(skin0Option);
-    fireEvent.click(confirmButton);
-    userEvent.keyboard('{ArrowUp/}');
+  it('Sprite preview changes after a different skin (skin0) is chosen', async () => {
+    await openWardrobePane();
+    console.log(mockedTownController.ourPlayer.wardrobe.currentSkin.id);
+    await fireEvent.click(skin0Option);
+    await fireEvent.click(confirmButton);
+    console.log(mockedTownController.ourPlayer.wardrobe.currentSkin.id);
     // fireEvent.keyPress();
-    fireEvent.keyDown(renderData, { code: 'ArrowUp', key: 'ArrowUp' });
+    // fireEvent.keyDown({ code: 'ArrowUp', key: 'ArrowUp' });
 
-    await waitFor(() => expect(params.ourPlayer.wardrobe.currentSkin.id).toBe('skin0'));
-    await waitFor(() => expect(params.ourPlayer.wardrobe.currentOutfit.id).toBe('misa'));
+    await waitFor(() => expect(mockedTownController.emitWardobeChange).toBeCalledTimes(1));
+    await waitFor(() =>
+      expect(mockedTownController.emitWardobeChange).toBeCalledWith(testWardrobe2),
+    );
+    // await userEvent.keyboard('{leftarrow}');
+    // await waitFor(() => expect(mockedTownController.ourPlayer.wardrobe).toBe(testWardrobe2));
   });
-  it('Sprite preview changes after a different available outfit is chosen', () => {});
+  // await waitFor(() => expect(params.ourPlayer.wardrobe.currentOutfit.id).toBe('misa'));
+  it('Sprite preview changes after skin3 option is chosen', async () => {
+    await openWardrobePane();
+    console.log(mockedTownController.ourPlayer.wardrobe.currentSkin.id);
+    await fireEvent.click(skin3Option);
+    await fireEvent.click(confirmButton);
+    console.log(mockedTownController.ourPlayer.wardrobe.currentSkin.id);
+    // fireEvent.keyPress();
+    // fireEvent.keyDown({ code: 'ArrowUp', key: 'ArrowUp' });
+    testWardrobe2.currentSkin.id = 'skin3';
+    testWardrobe2.currentSkin.name = 'skin3';
+
+    await waitFor(() => expect(mockedTownController.emitWardobeChange).toBeCalledTimes(1));
+    await waitFor(() =>
+      expect(mockedTownController.emitWardobeChange).toBeCalledWith(testWardrobe2),
+    );
+  });
   it('Sprite changes in game after player moves and confirm button is clicked', () => {});
   it('Displays toast message when confirm button is clicked', async () => {
-    const params = {
-      ourPlayer: currentPlayer,
-    };
-    await openWardrobePane(params);
+    await openWardrobePane();
     fireEvent.click(confirmButton);
 
     await waitFor(() =>
       expect(mockToast).toBeCalledWith({
-        title: 'Wardrobe changed! Please move the character to see the changes.',
+        title: 'Wardrobe changed! Please move the avatar to see the changes.',
         variant: 'solid',
         status: 'success',
         isClosable: true,
@@ -138,30 +162,5 @@ describe('Wardrobe Panel', () => {
     );
     expect(mockedTownController.emitWardobeChange).toBeCalled();
     await waitFor(() => expect(mockUseDisclosure.onClose).toBeCalled());
-  }, 1000);
+  });
 });
-// afterEach(cleanup);
-
-// it('Sprite preview changes after a skin/outfit is chosen', () => {
-//   const { getByDisplayValue } = render(<WardrobeButton/>);
-
-//   expect(getByDisplayValue().toBe('Initial State');
-
-//   fireEvent.click(getByText('Confirm'));
-
-//   expect(getByText(/Initial/i).textContent).toBe('Initial State Changed');
-// });
-
-// it('button click changes props', () => {
-//   const { getByText } = render(
-//     <App>
-//       <TestHook />
-//     </App>,
-//   );
-
-//   expect(getByText(/Moe/i).textContent).toBe('Moe');
-
-//   fireEvent.click(getByText('Change Name'));
-
-//   expect(getByText(/Steve/i).textContent).toBe('Steve');
-// });
