@@ -1,4 +1,4 @@
-import { DEFAULT_ITEMS, UNLOCKABLE_ITEMS } from './WardrobeItem';
+import { DEFAULT_ITEMS } from './WardrobeItem';
 import { WardrobeItem, WardrobeModel, ItemID } from '../types/CoveyTownSocket';
 
 // Different rates for gaining currency by completing various objectives.
@@ -47,64 +47,6 @@ export default class Wardrobe {
     this._currentOutfit = this.inventory.find(
       (item: WardrobeItem) => item.id === 'misa',
     ) as WardrobeItem;
-  }
-
-  /**
-   * Updates a wardrobe based on a json string of wardrobe info. Used in
-   * the import wardrobe feature to automatically fill a wardrobe based on a player's previous
-   * items.
-   * @param jsonString The json string containing the information to update a wardobe.
-   */
-  public updateWardrobeFromJSON(jsonString: string): void {
-    let json: WardrobeJSON;
-    // Parse the string for Wardrobe information
-    try {
-      json = JSON.parse(jsonString) as WardrobeJSON;
-    } catch {
-      throw new Error('Invalid string format for json');
-    }
-    const newWardrobe = new Wardrobe();
-    newWardrobe.currency = json.currency;
-    // Add each unlocked item to the inventory.
-    json.inventory.forEach(newItemId => {
-      const newItem = UNLOCKABLE_ITEMS.find(item => item.id === newItemId);
-      if (newItem === undefined) {
-        throw new Error('Invalid item in inventory');
-      }
-      newWardrobe.addWardrobeItem(newItem);
-    });
-    // Set current equipped items.
-    const currentSkin = newWardrobe.inventory.find(item => item.id === json.currentSkinID);
-    if (currentSkin === undefined) {
-      throw new Error('Invalid skin equipped');
-    }
-    newWardrobe.currentSkin = currentSkin;
-    const currentOutfit = newWardrobe.inventory.find(item => item.id === json.currentOutfitID);
-    if (currentOutfit === undefined) {
-      throw new Error('Invalid outfit equipped');
-    }
-    newWardrobe.currentOutfit = currentOutfit;
-    // Sets this wardrobes data to match the new one
-    this.currency = newWardrobe.currency;
-    this.inventory = newWardrobe.inventory;
-    this.currentOutfit = newWardrobe.currentOutfit;
-    this.currentSkin = newWardrobe.currentSkin;
-  }
-
-  /**
-   * Converts the Wardrobe to a JSON string for the user to save and use for future imports.
-   * @returns A string in JSON format representing the information of this Wardrobe.
-   */
-  public exportWardrobeToJSON(): string {
-    // Convery the information of the Wardrobe to a string.
-    return JSON.stringify({
-      currency: this.currency,
-      currentSkinID: this.currentSkin.id,
-      currentOutfitID: this.currentOutfit.id,
-      inventory: this._inventory
-        .filter(item => DEFAULT_ITEMS.find(i => i.id === item.id) === undefined)
-        .map(item => item.id),
-    });
   }
 
   // Returns the currency in the wardrobe.

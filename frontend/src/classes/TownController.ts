@@ -80,10 +80,6 @@ export type TownEvents = {
    */
   playerWardrobeChanged: (wardrobePlayer: PlayerController) => void;
   /**
-   * An event that indicates a player has updated their wardrobe by importing JSON string.
-   */
-  wardrobeImported: (isSuccessfulyImported: boolean) => void;
-  /**
    * An event that indicates that the set of conversation areas has changed. This event is dispatched
    * when a conversation area is created, or when the set of active conversations has changed. This event is dispatched
    * after updating the town controller's record of conversation areas.
@@ -468,23 +464,6 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         this.emit('playerWardrobeChanged', newPlayer);
       }
     });
-    /**
-     * When a player exports their wardrobe, emit the event to the controller's event listeners.
-     */
-    this._socket.on('wardrobeExported', (wardrobeJSON: string) => {
-      console.log(wardrobeJSON);
-    });
-    /**
-     * When a player imports a wardrobe from a JSON string, emit an event signaling a wardrobe change.
-     */
-    this._socket.on('wardrobeImported', (newWardrobeModel: WardrobeModel | undefined) => {
-      if (newWardrobeModel !== undefined && newWardrobeModel !== null) {
-        this.emitWardobeChange(newWardrobeModel);
-        this.emit('wardrobeImported', true);
-      } else {
-        this.emit('wardrobeImported', false);
-      }
-    });
 
     /**
      * When an interactable's state changes, push that update into the relevant controller, which is assumed
@@ -547,21 +526,6 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     ourPlayer.wardrobe = newWardrobe;
     console.log(ourPlayer);
     this.emit('playerWardrobeChanged', ourPlayer);
-  }
-
-  /**
-   * Emit a import wardrobe event for the current player.
-   * @param wardrobeJSON the json string imported to change the wardrobe.
-   */
-  public emitWardrobeImport(wardrobeJSON: string): void {
-    this._socket.emit('importWardrobe', wardrobeJSON);
-  }
-
-  /**
-   * Emit a export wardrobe event for the current player.
-   */
-  public emitWardrobeExport() {
-    this._socket.emit('exportWardrobe');
   }
 
   /**

@@ -141,8 +141,6 @@ export interface ServerToClientEvents {
   interactableUpdate: (interactable: Interactable) => void;
   // New ServerToClient events for a changed, imported, or exported wardrobe.
   playerWardrobeChanged: (wardrobePlayer: Player) => void;
-  wardrobeImported: (newWardrobeModel: WardrobeModel | undefined) => void;
-  wardrobeExported: (wardrobeJson: string) => void;
 }
 
 export interface ClientToServerEvents {
@@ -151,7 +149,4 @@ export interface ClientToServerEvents {
   interactableUpdate: (update: Interactable) => void;
   // New ClientToServer events for a changed, imported, or exported wardrobe.
   playerWardobeChange: (newWardrobe: WardrobeModel) => void;
-  // // New ClientToServer event for a gacha pull.
-  exportWardrobe: () => void;
-  importWardrobe: (wardrobeJSON: string) => void;
 }
