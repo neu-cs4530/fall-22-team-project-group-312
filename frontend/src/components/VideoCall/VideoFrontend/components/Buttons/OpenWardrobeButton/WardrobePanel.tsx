@@ -98,49 +98,6 @@ function WardrobePanel({
     }
   }
 
-  // returns false if it is an invalid string input
-  function parseString(input: string): WardrobeModel | undefined {
-    let inputWardrobe: WardrobeModel;
-    try {
-      inputWardrobe = JSON.parse(input) as WardrobeModel;
-    } catch {
-      return undefined;
-    }
-    // if currency in the input is invalid
-    if (inputWardrobe.currency < 0) {
-      return undefined;
-    }
-    // checks if the inventory is invalid
-    if (inputWardrobe.inventory === undefined) {
-      return undefined;
-    }
-    // checks if currentSKin is in the inventory
-    if (
-      inputWardrobe.inventory.find(item => item.id === inputWardrobe.currentSkin.id) === undefined
-    ) {
-      return undefined;
-    }
-    // checks if currentOutift is in the inventory
-    if (
-      inputWardrobe.inventory.find(item => item.id === inputWardrobe.currentOutfit.id) === undefined
-    ) {
-      return undefined;
-    }
-    return inputWardrobe;
-  }
-
-  function importString(input: string): void {
-    const newWardrobe = parseString(input);
-    if (newWardrobe !== undefined) {
-      setSpritePreview(newWardrobe);
-    }
-  }
-
-  // returns the preview as a string
-  function exportString(): string {
-    return JSON.stringify(spritePreview);
-  }
-
   function isOutfitLocked(itemID: string): boolean {
     return (
       coveyTownController.ourPlayer.wardrobe.inventory.find(o => o.id === itemID) === undefined
@@ -282,19 +239,16 @@ function WardrobePanel({
                 </Tabs>
               </div>
               <div>
-                <Popover>
-                  <PopoverTrigger>
-                    <Button>Export</Button>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <PopoverArrow />
-                    <PopoverCloseButton />
-                    <PopoverHeader>Wardrobe Key!</PopoverHeader>
-                    <PopoverBody>
-                      {`Here is your key for your inventory:\n ${exportString()}\nKeep it somewhere safe.`}
-                    </PopoverBody>
-                  </PopoverContent>
-                </Popover>
+                <Button
+                  title='Export'
+                  onClick={() => {
+                    console.log('hi', spritePreview);
+                    const wardrobeJSON = coveyTownController.emitWardrobeExport();
+                    console.log(wardrobeJSON);
+                    // figure out how to save to file
+                  }}>
+                  Export
+                </Button>
                 <Popover>
                   <PopoverTrigger>
                     <Button>Import</Button>
@@ -309,8 +263,11 @@ function WardrobePanel({
                       <Button
                         title='Import'
                         onClick={() => {
-                          importString(textInput);
-                          coveyTownController.emitWardobeChange(spritePreview);
+                          if (coveyTownController.emitWardrobeImport(textInput)) {
+                            console.log('successful import!');
+                          } else {
+                            console.log('failed to import :((');
+                          }
                         }}>
                         Import
                       </Button>
@@ -320,7 +277,12 @@ function WardrobePanel({
                 <Button
                   title='Confirm'
                   onClick={() => {
-                    coveyTownController.emitWardobeChange(spritePreview);
+                    coveyTownController.emitWardobeChange({
+                      currentOutfit: spritePreview.currentOutfit,
+                      currentSkin: spritePreview.currentSkin,
+                      inventory: coveyTownController.ourPlayer.wardrobe.inventory,
+                      currency: coveyTownController.ourPlayer.wardrobe.currency,
+                    });
                   }}>
                   Confirm
                 </Button>

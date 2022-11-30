@@ -116,6 +116,8 @@ export interface ServerToClientEvents {
   townClosing: () => void;
   chatMessage: (message: ChatMessage) => void;
   interactableUpdate: (interactable: Interactable) => void;
+  wardrobeImported: (newWardrobeModel: WardrobeModel | undefined) => void;
+  wardrobeExported: (wardrobeJson: string) => void;
 }
 
 export interface ClientToServerEvents {
@@ -124,4 +126,6 @@ export interface ClientToServerEvents {
   interactableUpdate: (update: Interactable) => void;
   // New ClientToServer event for a changed wardrobe.
   playerWardobeChange: (newWardrobe: WardrobeModel) => void;
+  exportWardrobe: () => void;
+  importWardrobe: (wardrobeJSON: string) => void;
 }

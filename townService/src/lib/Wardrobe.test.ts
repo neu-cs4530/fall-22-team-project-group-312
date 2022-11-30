@@ -166,22 +166,22 @@ describe('Wardrobe', () => {
 
   describe('importWardrobeFromJSON', () => {
     it('returns the correct wardrobe with no unlocked items', () => {
-      const tempWardrobe = Wardrobe.getWardrobeFromJSON(
+      fullWardrobe.updateWardrobeFromJSON(
         '{"currency":0,"currentSkinID":"skin1","currentOutfitID":"misa","inventory":[]}',
       );
-      expect(tempWardrobe.currency).toEqual(emptyWardrobe.currency);
-      expect(tempWardrobe.currentSkin).toEqual(emptyWardrobe.currentSkin);
-      expect(tempWardrobe.currentOutfit).toEqual(emptyWardrobe.currentOutfit);
-      expect(tempWardrobe.inventory).toEqual(emptyWardrobe.inventory);
+      expect(fullWardrobe.currency).toEqual(emptyWardrobe.currency);
+      expect(fullWardrobe.currentSkin).toEqual(emptyWardrobe.currentSkin);
+      expect(fullWardrobe.currentOutfit).toEqual(emptyWardrobe.currentOutfit);
+      expect(fullWardrobe.inventory).toEqual(emptyWardrobe.inventory);
     });
     it('returns the correct string with all unlocked items', () => {
-      const tempWardrobe = Wardrobe.getWardrobeFromJSON(
+      emptyWardrobe.updateWardrobeFromJSON(
         '{"currency":1000,"currentSkinID":"skin3","currentOutfitID":"bday","inventory":["bday","keqing","ness","xiaohei"]}',
       );
-      expect(tempWardrobe.currency).toEqual(fullWardrobe.currency);
-      expect(tempWardrobe.currentSkin).toEqual(fullWardrobe.currentSkin);
-      expect(tempWardrobe.currentOutfit).toEqual(fullWardrobe.currentOutfit);
-      expect(tempWardrobe.inventory).toEqual(fullWardrobe.inventory);
+      expect(emptyWardrobe.currency).toEqual(fullWardrobe.currency);
+      expect(emptyWardrobe.currentSkin).toEqual(fullWardrobe.currentSkin);
+      expect(emptyWardrobe.currentOutfit).toEqual(fullWardrobe.currentOutfit);
+      expect(emptyWardrobe.inventory).toEqual(fullWardrobe.inventory);
     });
     it.each<string>([
       // invalid json string
@@ -195,7 +195,7 @@ describe('Wardrobe', () => {
       // inventory has invalid items in inventory
       '{"currency":0,"currentSkinID":"skin1","currentOutfitID":"misa","inventory":["invalid item id"]}',
     ])('throws an error when given invalid inputs', (input: string) => {
-      expect(() => Wardrobe.getWardrobeFromJSON(input)).toThrowError();
+      expect(() => emptyWardrobe.updateWardrobeFromJSON(input)).toThrowError();
     });
   });
 });

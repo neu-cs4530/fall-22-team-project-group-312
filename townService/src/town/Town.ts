@@ -133,6 +133,8 @@ export default class Town {
     // Set up a listener to forward all chat messages to all clients in the town
     socket.on('chatMessage', (message: ChatMessage) => {
       newPlayer.wardrobe.currency += CURRENCY_GAIN_FROM_CHAT;
+      console.log(newPlayer.toPlayerModel().wardrobe.currency);
+      console.log(newPlayer.toPlayerModel().wardrobe.inventory);
       this._broadcastEmitter.emit('chatMessage', message);
     });
 
@@ -146,6 +148,19 @@ export default class Town {
     // their wardrobe, inform the CoveyTownController
     socket.on('playerWardobeChange', (wardrobeData: WardrobeModel) => {
       this._updatePlayerWardrobe(newPlayer, wardrobeData);
+    });
+
+    socket.on('importWardrobe', (wardrobeJSON: string) => {
+      try {
+        newPlayer.wardrobe.updateWardrobeFromJSON(wardrobeJSON);
+        this._broadcastEmitter.emit('wardrobeImported', newPlayer.wardrobe.toModel());
+      } catch (e) {
+        this._broadcastEmitter.emit('wardrobeImported', undefined);
+      }
+    });
+
+    socket.on('exportWardrobe', () => {
+      this._broadcastEmitter.emit('wardrobeExported', newPlayer.wardrobe.exportWardrobeToJSON());
     });
 
     // Set up a listener to process updates to interactables.
@@ -223,7 +238,9 @@ export default class Town {
    * @param wardrobe The new wardrobe object for the player
    */
   private _updatePlayerWardrobe(player: Player, wardrobe: WardrobeModel): void {
+    console.log('updatePlayerWardrobe: ', wardrobe);
     player.wardrobe.updateFromModel(wardrobe);
+    console.log('updatePlayerWardrobe after: ', player.wardrobe.toModel());
     this._broadcastEmitter.emit('playerWardrobeChanged', player.toPlayerModel());
   }
 

@@ -484,6 +484,36 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
   }
 
   /**
+   * Emit a wardrobe change event for the current player, and updating the current wardrobe state
+   * by notifying the townService that the player's current wardrobe has changed.
+   * @param newWardrobe the new Wardrobe set of outfit/skin that the player has chosen
+   */
+  public emitWardrobeImport(wardrobeJSON: string): boolean {
+    this._socket.emit('importWardrobe', wardrobeJSON);
+    this._socket.on('wardrobeImported', (newWardrobeModel: WardrobeModel | undefined) => {
+      if (newWardrobeModel === undefined) {
+        return false;
+      } else {
+        this.emitWardobeChange(newWardrobeModel);
+        return true;
+      }
+    });
+    return false;
+  }
+
+  /**
+   * Emit a wardrobe change event for the current player, and updating the current wardrobe state
+   * by notifying the townService that the player's current wardrobe has changed.
+   * @param newWardrobe the new Wardrobe set of outfit/skin that the player has chosen
+   */
+  public emitWardrobeExport() {
+    this._socket.emit('exportWardrobe');
+    this._socket.on('wardrobeExported', (wardrobeJSON: string) => {
+      return wardrobeJSON;
+    });
+  }
+
+  /**
    * Emit a chat message to the townService
    *
    * @param message
