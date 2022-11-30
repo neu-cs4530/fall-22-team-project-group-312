@@ -80,7 +80,7 @@ export type TownEvents = {
    */
   playerWardrobeChanged: (wardrobePlayer: PlayerController) => void;
   /**
-   * ASDS:LKFJ:LFJS:LKGFLKSDKFJ
+   * An event that indicates a player has updated their wardrobe by importing JSON string.
    */
   wardrobeImported: (isSuccessfulyImported: boolean) => void;
   /**
@@ -428,7 +428,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
       this._players = this.players.filter(eachPlayer => eachPlayer.id !== disconnectedPlayer.id);
     });
     /**
-     * When a player moves, update local state and emit an event to the controller's event listeners
+     * When a player moves, update local state and emit an event to the controller's event listeners.
      */
     this._socket.on('playerMoved', movedPlayer => {
       const playerToUpdate = this.players.find(eachPlayer => eachPlayer.id === movedPlayer.id);
@@ -452,20 +452,31 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         this.emit('playerMoved', newPlayer);
       }
     });
+    /**
+     * When a player changes their wardrobe, update local state and emit an event to controller's event listeners.
+     */
     this._socket.on('playerWardrobeChanged', wardrobePlayer => {
       const playerToUpdate = this.players.find(eachPlayer => eachPlayer.id === wardrobePlayer.id);
       if (playerToUpdate) {
+        // Update the player's wardrobe and emit event.
         playerToUpdate.wardrobe = wardrobePlayer.wardrobe;
         this.emit('playerWardrobeChanged', playerToUpdate);
       } else {
+        // If player is not already in the array, add them.
         const newPlayer = PlayerController.fromPlayerModel(wardrobePlayer);
         this._players = this.players.concat(newPlayer);
         this.emit('playerWardrobeChanged', newPlayer);
       }
     });
+    /**
+     * When a player exports their wardrobe, emit the event to the controller's event listeners.
+     */
     this._socket.on('wardrobeExported', (wardrobeJSON: string) => {
       console.log(wardrobeJSON);
     });
+    /**
+     * When a player imports a wardrobe from a JSON string, emit an event signaling a wardrobe change.
+     */
     this._socket.on('wardrobeImported', (newWardrobeModel: WardrobeModel | undefined) => {
       if (newWardrobeModel !== undefined && newWardrobeModel !== null) {
         this.emitWardobeChange(newWardrobeModel);
@@ -505,28 +516,6 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         updatedViewingArea?.updateFrom(interactable);
       }
     });
-
-    /**
-     * When a player pulls for an item, push the updated player into the relevant controller,
-     * which is assumed to be represented by a PlayerController that this TownController has.
-     *
-     */
-    // this._socket.on('playerPulled', pullingPlayer => {
-    //   const playerToUpdate = this.players.find(eachPlayer => eachPlayer.id === pullingPlayer.id);
-
-    //   if (playerToUpdate) {
-    //     const retrievedItem = this._gachaRoller.pull(playerToUpdate);
-
-    //     this.emit('playerPulled', playerToUpdate);
-    //   } else {
-    //     //TODO: It should not be possible to receive a playerWardrobeChange event for a player that is not already in the players array, right?
-    //     const newPlayer = PlayerController.fromPlayerModel(pullingPlayer);
-    //     const retrievedItem = this._gachaRoller.pull(newPlayer);
-
-    //     this._players = this.players.concat(newPlayer);
-    //     this.emit('playerPulled', newPlayer);
-    //   }
-    // });
   }
 
   /**
@@ -560,19 +549,16 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     this.emit('playerWardrobeChanged', ourPlayer);
   }
 
-  /*
-   * Emit a wardrobe change event for the current player, and updating the current wardrobe state
-   * by notifying the townService that the player's current wardrobe has changed.
-   * @param newWardrobe the new Wardrobe set of outfit/skin that the player has chosen
+  /**
+   * Emit a import wardrobe event for the current player.
+   * @param wardrobeJSON the json string imported to change the wardrobe.
    */
   public emitWardrobeImport(wardrobeJSON: string): void {
     this._socket.emit('importWardrobe', wardrobeJSON);
   }
 
   /**
-   * Emit a wardrobe change event for the current player, and updating the current wardrobe state
-   * by notifying the townService that the player's current wardrobe has changed.
-   * @param newWardrobe the new Wardrobe set of outfit/skin that the player has chosen
+   * Emit a export wardrobe event for the current player.
    */
   public emitWardrobeExport() {
     this._socket.emit('exportWardrobe');

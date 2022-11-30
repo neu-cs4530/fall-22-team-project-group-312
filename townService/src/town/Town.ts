@@ -166,16 +166,17 @@ export default class Town {
       this._updatePlayerWardrobe(newPlayer, wardrobeData);
     });
 
+    // Register an event listener for when a wardrobe is imported from a JSON string.
     socket.on('importWardrobe', (wardrobeJSON: string) => {
       try {
         newPlayer.wardrobe.updateWardrobeFromJSON(wardrobeJSON);
-        console.log('importWardrobe: ', newPlayer.wardrobe.toModel());
         this._broadcastEmitter.emit('wardrobeImported', newPlayer.wardrobe.toModel());
-      } catch (e) {
+      } catch (error) {
         this._broadcastEmitter.emit('wardrobeImported', undefined);
       }
     });
 
+    // Register an event listener for when a user exports their wardrobe to a JSON string.
     socket.on('exportWardrobe', () => {
       this._broadcastEmitter.emit('wardrobeExported', newPlayer.wardrobe.exportWardrobeToJSON());
     });
