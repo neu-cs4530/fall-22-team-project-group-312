@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import TypedEmitter from 'typed-emitter';
+import { CURRENCY_GAIN_FROM_CHAT } from '../../../townService/src/lib/Wardrobe';
 import Interactable from '../components/Town/Interactable';
 import ViewingArea from '../components/Town/interactables/ViewingArea';
 import { LoginController } from '../contexts/LoginControllerContext';
@@ -42,7 +43,7 @@ const defaultRarityMapping: RarityMapping = {
 };
 
 // Represents the default pull cost for GachaPickers
-const PULL_COST = 1000;
+const PULL_COST = 10;
 
 // Represents the default refund percentage for GachaPickers
 const REFUND_PERCENT = 0.1;
@@ -126,11 +127,11 @@ export type TownEvents = {
    */
   gachaponChanged: (newGacha: GachaController) => void;
 
-  /**
-   * An event that indicates that a player is pulling an item from this
-   * town's gacha picker.
-   */
-  playerPulled: (pullingPlayer: PlayerController) => void;
+  // /**
+  //  * An event that indicates that a player is pulling an item from this
+  //  * town's gacha picker.
+  //  */
+  // playerPulled: (pullingPlayer: PlayerController) => void;
 };
 
 /**
@@ -460,13 +461,10 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     });
     this._socket.on('playerWardrobeChanged', wardrobePlayer => {
       const playerToUpdate = this.players.find(eachPlayer => eachPlayer.id === wardrobePlayer.id);
+      console.log('hi', wardrobePlayer);
       if (playerToUpdate) {
-        if (playerToUpdate === this._ourPlayer) {
-          // Do something? Do nothing? In the location part it doesn't update their own x,y so I'm thinking we don't update
-          // our own wardrobe
-        } else {
-          playerToUpdate.wardrobe = wardrobePlayer.wardrobe;
-        }
+        playerToUpdate.wardrobe = wardrobePlayer.wardrobe;
+        console.log(playerToUpdate);
         this.emit('playerWardrobeChanged', playerToUpdate);
       } else {
         //TODO: It should not be possible to receive a playerWardrobeChange event for a player that is not already in the players array, right?
@@ -525,22 +523,22 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
      * which is assumed to be represented by a PlayerController that this TownController has.
      *
      */
-    this._socket.on('playerPulled', pullingPlayer => {
-      const playerToUpdate = this.players.find(eachPlayer => eachPlayer.id === pullingPlayer.id);
+    // this._socket.on('playerPulled', pullingPlayer => {
+    //   const playerToUpdate = this.players.find(eachPlayer => eachPlayer.id === pullingPlayer.id);
 
-      if (playerToUpdate) {
-        const retrievedItem = this._gachaRoller.pull(playerToUpdate);
+    //   if (playerToUpdate) {
+    //     const retrievedItem = this._gachaRoller.pull(playerToUpdate);
 
-        this.emit('playerPulled', playerToUpdate);
-      } else {
-        //TODO: It should not be possible to receive a playerWardrobeChange event for a player that is not already in the players array, right?
-        const newPlayer = PlayerController.fromPlayerModel(pullingPlayer);
-        const retrievedItem = this._gachaRoller.pull(newPlayer);
+    //     this.emit('playerPulled', playerToUpdate);
+    //   } else {
+    //     //TODO: It should not be possible to receive a playerWardrobeChange event for a player that is not already in the players array, right?
+    //     const newPlayer = PlayerController.fromPlayerModel(pullingPlayer);
+    //     const retrievedItem = this._gachaRoller.pull(newPlayer);
 
-        this._players = this.players.concat(newPlayer);
-        this.emit('playerPulled', newPlayer);
-      }
-    });
+    //     this._players = this.players.concat(newPlayer);
+    //     this.emit('playerPulled', newPlayer);
+    //   }
+    // });
   }
 
   /**
@@ -570,6 +568,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     const ourPlayer = this._ourPlayer;
     assert(ourPlayer);
     ourPlayer.wardrobe = newWardrobe;
+    console.log(ourPlayer);
     this.emit('playerWardrobeChanged', ourPlayer);
   }
 
@@ -578,12 +577,12 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
    * by notifying the townService that the player's current wardrobe has changed.
    * @param pulledItem the WardrobeItem that the player has pulled from the GachaPicker
    */
-  public emitGachaPull(wardrobeAfterPull: WardrobeModel) {
-    this._socket.emit('playerWardobeChange', wardrobeAfterPull);
-    const ourPlayer = this._ourPlayer;
-    assert(ourPlayer);
-    this.emit('playerPulled', ourPlayer);
-  }
+  // public emitGachaPull(wardrobeAfterPull: WardrobeModel) {
+  //   this._socket.emit('playerWardobeChange', wardrobeAfterPull);
+  //   const ourPlayer = this._ourPlayer;
+  //   assert(ourPlayer);
+  //   this.emit('playerPulled', ourPlayer);
+  // }
 
   /*
    * Emit a wardrobe change event for the current player, and updating the current wardrobe state
@@ -609,6 +608,8 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
    * @param message
    */
   public emitChatMessage(message: ChatMessage) {
+    console.log(this.ourPlayer.wardrobe);
+    // this.ourPlayer.wardrobe.currency += CURRENCY_GAIN_FROM_CHAT;
     this._socket.emit('chatMessage', message);
   }
 

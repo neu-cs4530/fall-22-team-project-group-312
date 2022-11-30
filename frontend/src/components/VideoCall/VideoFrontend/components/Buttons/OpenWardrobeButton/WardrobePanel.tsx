@@ -57,6 +57,7 @@ function WardrobePanel({
   const initalOutfit = coveyTownController.ourPlayer.wardrobe.currentOutfit;
   const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
   const initialCurrency = coveyTownController.ourPlayer.wardrobe.currency;
+  console.log(initialCurrency);
   const initialInventory = coveyTownController.ourPlayer.wardrobe.inventory;
   const classes = useStyles(makeStyles);
   const toast = useToast();
@@ -103,7 +104,7 @@ function WardrobePanel({
   async function switchSpriteItems(itemID: ItemID): Promise<void> {
     if (itemID.startsWith('skin')) {
       const newSpritePreview: WardrobeModel = {
-        currency: spritePreview.currency,
+        currency: coveyTownController.ourPlayer.wardrobe.currency,
         currentOutfit: spritePreview.currentOutfit,
         currentSkin: coveyTownController.ourPlayer.wardrobe.inventory.find(
           (item: WardrobeItem) => item.id === itemID,
@@ -113,7 +114,7 @@ function WardrobePanel({
       setSpritePreview(newSpritePreview);
     } else {
       const newSpritePreview: WardrobeModel = {
-        currency: spritePreview.currency,
+        currency: coveyTownController.ourPlayer.wardrobe.currency,
         currentOutfit: coveyTownController.ourPlayer.wardrobe.inventory.find(
           (item: WardrobeItem) => item.id === itemID,
         ) as WardrobeItem,

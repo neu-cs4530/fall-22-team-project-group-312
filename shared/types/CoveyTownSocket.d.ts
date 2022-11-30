@@ -77,6 +77,19 @@ export interface WardrobeModel {
   inventory: WardrobeItem[];
 }
 
+/**
+ * Representation of the result of pulling from a gacha picker
+ */
+export type PullResult = {
+  /** The item that was just retrieved */
+  item: WardrobeItem;
+  /** The updated Wardrobe containing the item and currency */
+  wardrobe: WardrobeModel;
+}
+
+/**
+ * Represents a way to select a random item from a set pool of items
+ */
 export interface GachaPicker {
   /** The pool of items that can be selected */
   itemPool: WardrobeItem[];

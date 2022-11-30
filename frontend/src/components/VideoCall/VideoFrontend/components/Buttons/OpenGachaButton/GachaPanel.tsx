@@ -17,7 +17,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import PlayerController from '../../../../../../classes/PlayerController';
 import TownController from '../../../../../../classes/TownController';
-import { WardrobeItem, WardrobeModel } from '../../../../../../types/CoveyTownSocket';
+import { PullResult, WardrobeItem, WardrobeModel } from '../../../../../../types/CoveyTownSocket';
 
 const useStyles = makeStyles({
   preview: {
@@ -45,7 +45,9 @@ function GachaPanel({
 }) {
   const classes = useStyles(makeStyles);
 
-  const singlePullCost = 10;
+  const [singlePullCost, setSinglePullCost] = useState<number>(
+    coveyTownController.gachaRoller.pullCost,
+  );
 
   const animPrefix = 'assets/gacha_anims/';
   const animSuffix = '.gif';
@@ -55,7 +57,6 @@ function GachaPanel({
 
   const floatingBoxGif = animPrefix + 'gift_bounce' + animSuffix;
   const burstBoxGif = animPrefix + 'gift_burst' + animSuffix;
-  coveyTownController.ourPlayer.wardrobe.currency = 100;
 
   const [animImage, setAnimImage] = useState<string>(floatingBoxGif);
   const [resultImage, setResultImage] = useState<string>('');
@@ -63,9 +64,17 @@ function GachaPanel({
   const [bounceVisible, setBounceVisible] = useState<boolean>(true);
   const [resultVisible, setResultVisible] = useState<boolean>(false);
 
-  const [currentWardrobe, setCurrentWardrobe] = useState<WardrobeModel>(
-    coveyTownController.ourPlayer.wardrobe,
-  );
+  const initalOutfit = coveyTownController.ourPlayer.wardrobe.currentOutfit;
+  const initialSkin = coveyTownController.ourPlayer.wardrobe.currentSkin;
+  const initialCurrency = coveyTownController.ourPlayer.wardrobe.currency;
+  const initialInventory = coveyTownController.ourPlayer.wardrobe.inventory;
+  const [currentWardrobe, setCurrentWardrobe] = useState<WardrobeModel>({
+    currency: initialCurrency,
+    currentSkin: initialSkin,
+    currentOutfit: initalOutfit,
+    inventory: initialInventory,
+  });
+
   const [playerHasEnoughCoins, setPlayerHasEnoughCoins] = useState<boolean>(
     currentWardrobe.currency >= singlePullCost,
   );
@@ -78,15 +87,17 @@ function GachaPanel({
     coveyTownController.unPause();
   }, [onClose, coveyTownController]);
 
-  useEffect(() => {
-    const updatePlayer = (pullingPlayer: PlayerController) => {
-      setCurrentWardrobe(pullingPlayer.wardrobe);
-      setCurrencyDisplay(pullingPlayer.wardrobe.currency);
-      setPlayerHasEnoughCoins(pullingPlayer.wardrobe.currency >= singlePullCost);
-    };
-    coveyTownController.addListener('playerPulled', updatePlayer);
-    coveyTownController.addListener('playerWardrobeChanged', updatePlayer);
-  }, [coveyTownController, setCurrentWardrobe, setPlayerHasEnoughCoins]);
+  // useEffect(() => {
+  //   const updatePlayer = (pullingPlayer: PlayerController) => {
+  //     setCurrentWardrobe(pullingPlayer.wardrobe);
+  //     setCurrencyDisplay(pullingPlayer.wardrobe.currency);
+  //     setPlayerHasEnoughCoins(pullingPlayer.wardrobe.currency >= singlePullCost);
+  //     console.log('MONEY: ' + pullingPlayer.wardrobe.currency);
+  //     console.log('reached useEffect');
+  //   };
+  //   // coveyTownController.addListener('playerPulled', updatePlayer);
+  //   coveyTownController.addListener('playerWardrobeChanged', updatePlayer);
+  // }, [coveyTownController, setCurrentWardrobe, setPlayerHasEnoughCoins, singlePullCost]);
 
   /**
    * Switches the sprite preview to one with the newly selected item and the
@@ -94,13 +105,27 @@ function GachaPanel({
    * @param itemID the id of the item(outfit or skin color) the player selected
    */
   async function doPull(): Promise<void> {
-    const retrievedItem: WardrobeItem = await coveyTownController.gachaRoller.pull(
+    const { item, wardrobe }: PullResult = coveyTownController.gachaRoller.pull(
       coveyTownController.ourPlayer,
     );
-    setResultImage(outfitPrefix + retrievedItem.id + outfitSuffix);
-    setPulledItem(retrievedItem);
+    console.log('Wardrobe from PullResult: ' + JSON.stringify(wardrobe));
+    // coveyTownController.ourPlayer.wardrobe = wardrobe;
+    // coveyTownController.emit('playerWardrobeChanged', coveyTownController.ourPlayer);
+    setCurrencyDisplay(wardrobe.currency);
+    setPlayerHasEnoughCoins(currencyDisplay >= singlePullCost);
+    setCurrentWardrobe(wardrobe);
+    setResultImage(outfitPrefix + item.id + outfitSuffix);
+    setPulledItem(item);
     setResultVisible(true);
-    console.log('Pulled: ' + retrievedItem.id);
+    console.log('Pulled: ' + item.id);
+    // console.log('Wardrobe on player: ' + JSON.stringify(coveyTownController.ourPlayer.wardrobe));
+
+    coveyTownController.emitWardobeChange({
+      currentOutfit: currentWardrobe.currentOutfit,
+      currentSkin: currentWardrobe.currentSkin,
+      inventory: wardrobe.inventory,
+      currency: wardrobe.currency,
+    });
   }
 
   const delay = (ms: number) => new Promise(res => setTimeout(res, ms));

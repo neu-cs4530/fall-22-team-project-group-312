@@ -1,8 +1,8 @@
 import EventEmitter from 'events';
-import { useEffect, useState } from 'react';
 import TypedEmitter from 'typed-emitter';
 import {
   GachaPicker as GachaModel,
+  PullResult,
   RarityMapping,
   WardrobeItem,
   WardrobeModel,
@@ -98,17 +98,19 @@ export default class GachaController extends (EventEmitter as new () => TypedEmi
    * @param player the player pulling from the gacha pool
    * @throws an error if the pull pool is empty
    */
-  public pull(player: PlayerController): WardrobeItem {
+  public pull(player: PlayerController): PullResult {
     let newCurrency = player.wardrobe.currency;
+    console.log('Pull cost: ' + this._pullCost);
+    console.log('Refund percent: ' + this._refundPercent);
+    console.log('Refund amount: ' + Math.round(this._pullCost * this._refundPercent));
+    console.log('Starting currency' + newCurrency);
     const newInventory = player.wardrobe.inventory;
     if (this._itemPool.length > 0) {
       newCurrency -= this._pullCost;
       const pulledItem: WardrobeItem = this._getOneItem();
-      const pulledItemIsNew = newInventory.find(item => {
-        item.id = pulledItem.id;
-      });
-
-      if (pulledItemIsNew) {
+      const pulledItemIsDupe = newInventory.find(item => item.id === pulledItem.id);
+      console.log('Currency after pull' + newCurrency);
+      if (pulledItemIsDupe) {
         // refund
         newCurrency += Math.round(this._pullCost * this._refundPercent);
       } else {
@@ -120,8 +122,12 @@ export default class GachaController extends (EventEmitter as new () => TypedEmi
         currentOutfit: player.wardrobe.currentOutfit,
         inventory: newInventory,
       };
-      player.emit('wardrobeChange', newWardrobeModel);
-      return pulledItem;
+      player.wardrobe = newWardrobeModel;
+      console.log('New wardrobe in controller: ' + JSON.stringify(newWardrobeModel));
+      // player.emit('wardrobeChange', newWardrobeModel); emitting to other players and not to backend
+
+      const result: PullResult = { item: pulledItem, wardrobe: newWardrobeModel };
+      return result;
     }
     throw new Error('No items in the pool.');
   }
@@ -159,36 +165,4 @@ export default class GachaController extends (EventEmitter as new () => TypedEmi
       modelGacha.id,
     );
   }
-}
-
-/**
- * A react hook to retrieve gacha data from a GachaController.
- *
- * This hook will re-render any components that use it when the topic changes.
- */
-export function useGachaPool(gachapon: GachaController): GachaModel {
-  const [gacha, setGacha] = useState(gachapon.toGachaModel());
-  useEffect(() => {
-    gachapon.addListener('gachaUpdate', setGacha);
-    return () => {
-      gachapon.removeListener('gachaUpdate', setGacha);
-    };
-  }, [gachapon]);
-  return gacha;
-}
-
-/**
- * A react hook to retrieve gacha data from a GachaController.
- *
- * This hook will re-render any components that use it when the topic changes.
- */
-export function useGachaResponse(gachapon: GachaController): GachaModel {
-  const [gacha, setGacha] = useState(gachapon.toGachaModel());
-  useEffect(() => {
-    gachapon.addListener('gachaUpdate', setGacha);
-    return () => {
-      gachapon.removeListener('gachaUpdate', setGacha);
-    };
-  }, [gachapon]);
-  return gacha;
 }

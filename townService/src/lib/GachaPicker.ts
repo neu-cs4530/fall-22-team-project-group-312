@@ -3,6 +3,8 @@ import {
   TownEmitter,
   WardrobeItem,
   GachaPicker as GachaModel,
+  WardrobeModel,
+  PullResult,
 } from '../types/CoveyTownSocket';
 import Player from './Player';
 
@@ -104,18 +106,32 @@ export default class GachaPicker {
    * @param player the player pulling from the gacha pool
    * @throws an error if the pull pool is empty
    */
-  public pull(player: Player): WardrobeItem {
+  public pull(player: Player): PullResult {
+    console.log(player.wardrobe.toModel());
+    let newCurrency = player.wardrobe.currency;
     if (this._itemPool.length > 0) {
-      player.wardrobe.currency -= this._pullCost;
+      newCurrency -= this._pullCost;
       const pulledItem: WardrobeItem = this._getOneItem();
       const pulledItemIsNew = player.wardrobe.addWardrobeItem(pulledItem);
       if (!pulledItemIsNew) {
         // player already has the item so refund, rounded to the nearest integer
-        player.wardrobe.currency += Math.round(this._pullCost * this._refundPercent);
+        newCurrency += Math.round(this._pullCost * this._refundPercent);
       }
+      console.log('AWOOGA IN THE SERVICE BABY');
       // emit
+      // const newWardrobe: WardrobeModel = {
+      //   currency: newCurrency,
+      //   currentOutfit: player.wardrobe.currentOutfit,
+      //   currentSkin: player.wardrobe.currentSkin,
+      //   inventory: player.wardrobe.inventory,
+      // };
+      // player.wardrobe.updateFromModel(newWardrobe);
+      player.wardrobe.currency = newCurrency;
+      console.log(player.wardrobe.toModel());
       this._townEmitter.emit('playerWardrobeChanged', player.toPlayerModel());
-      return pulledItem;
+
+      const result: PullResult = { item: pulledItem, wardrobe: player.wardrobe.toModel() };
+      return result;
     }
     throw new Error('No items in the pool.');
   }
