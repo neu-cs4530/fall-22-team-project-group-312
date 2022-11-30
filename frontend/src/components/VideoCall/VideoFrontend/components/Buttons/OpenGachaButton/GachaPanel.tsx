@@ -8,9 +8,6 @@ import {
   ModalHeader,
   ModalOverlay,
   StackDivider,
-  Tab,
-  TabList,
-  Tabs,
   VStack,
 } from '@chakra-ui/react';
 import { makeStyles } from '@material-ui/core/styles';
@@ -87,18 +84,6 @@ function GachaPanel({
     coveyTownController.unPause();
   }, [onClose, coveyTownController]);
 
-  // useEffect(() => {
-  //   const updatePlayer = (pullingPlayer: PlayerController) => {
-  //     setCurrentWardrobe(pullingPlayer.wardrobe);
-  //     setCurrencyDisplay(pullingPlayer.wardrobe.currency);
-  //     setPlayerHasEnoughCoins(pullingPlayer.wardrobe.currency >= singlePullCost);
-  //     console.log('MONEY: ' + pullingPlayer.wardrobe.currency);
-  //     console.log('reached useEffect');
-  //   };
-  //   // coveyTownController.addListener('playerPulled', updatePlayer);
-  //   coveyTownController.addListener('playerWardrobeChanged', updatePlayer);
-  // }, [coveyTownController, setCurrentWardrobe, setPlayerHasEnoughCoins, singlePullCost]);
-
   /**
    * Switches the sprite preview to one with the newly selected item and the
    * other currently selected item.
@@ -108,9 +93,6 @@ function GachaPanel({
     const { item, wardrobe }: PullResult = coveyTownController.gachaRoller.pull(
       coveyTownController.ourPlayer,
     );
-    console.log('Wardrobe from PullResult: ' + JSON.stringify(wardrobe));
-    // coveyTownController.ourPlayer.wardrobe = wardrobe;
-    // coveyTownController.emit('playerWardrobeChanged', coveyTownController.ourPlayer);
     setCurrencyDisplay(wardrobe.currency);
     setPlayerHasEnoughCoins(currencyDisplay >= singlePullCost);
     setCurrentWardrobe(wardrobe);
@@ -118,32 +100,22 @@ function GachaPanel({
     setPulledItem(item);
     setResultVisible(true);
     console.log('Pulled: ' + item.id);
-    // console.log('Wardrobe on player: ' + JSON.stringify(coveyTownController.ourPlayer.wardrobe));
 
     coveyTownController.emitWardobeChange({
-      currentOutfit: currentWardrobe.currentOutfit,
-      currentSkin: currentWardrobe.currentSkin,
+      currentOutfit: wardrobe.currentOutfit,
+      currentSkin: wardrobe.currentSkin,
       inventory: wardrobe.inventory,
       currency: wardrobe.currency,
     });
   }
 
   const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
-
-  /**
-   * modal
-   * Gift box animation
-   * 'pull' button -> on click, play explode animation, then swap out with obtained item
-   * have a toast that says 'item has been added to your inventory'
-   * display currency
-   * exit button
-   */
   return (
     <>
       <Modal isOpen={isOpen} onClose={closeGacha}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Pull for outfits</ModalHeader>
+          <ModalHeader>Gachapon</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <VStack divider={<StackDivider borderColor='gray.200' />} spacing={15} align='center'>
@@ -167,17 +139,9 @@ function GachaPanel({
                   disabled={!playerHasEnoughCoins}
                   onClick={async () => {
                     setAnimImage(burstBoxGif);
-                    // await onPullClick();
                     setResultVisible(false);
                     await delay(5000);
                     await doPull();
-                    // const newWardrobe: WardrobeModel = {
-                    //   currentOutfit: spritePreview[0],
-                    //   currentSkin: spritePreview[1],
-                    //   inventory: coveyTownController.ourPlayer.wardrobe.inventory,
-                    //   currency: coveyTownController.ourPlayer.wardrobe.currency,
-                    // };
-                    // coveyTownController.emitWardobeChange(newWardrobe);
                     setAnimImage(floatingBoxGif);
                     await delay(5000);
                   }}>

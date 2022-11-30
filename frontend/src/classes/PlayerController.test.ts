@@ -24,7 +24,6 @@ describe('PlayerController', () => {
       id: 'testoutfit',
       name: 'test outfit',
       category: 'outfit',
-      rarity: 'common',
     };
   });
 

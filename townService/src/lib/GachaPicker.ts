@@ -129,7 +129,6 @@ export default class GachaPicker {
       itemPool: this._itemPool,
       pullCost: this._pullCost,
       refundPercent: this._refundPercent,
-      rarityMapping: this._rarityMapping,
       id: this._id,
     };
   }

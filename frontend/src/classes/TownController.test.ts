@@ -44,7 +44,6 @@ const testWardrobeItem: WardrobeItem = {
   id: 'newItem',
   name: 'newItem',
   category: 'outfit',
-  rarity: 'common',
 };
 
 describe('TownController', () => {

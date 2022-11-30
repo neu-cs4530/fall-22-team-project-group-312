@@ -3,7 +3,6 @@ import TypedEmitter from 'typed-emitter';
 import {
   GachaPicker as GachaModel,
   PullResult,
-  RarityMapping,
   WardrobeItem,
   WardrobeModel,
 } from '../types/CoveyTownSocket';
@@ -21,22 +20,12 @@ export default class GachaController extends (EventEmitter as new () => TypedEmi
 
   private _refundPercent: number;
 
-  // The higher the number, the more likely you are to pull an item of this rarity from the pool
-  private _rarityMapping: RarityMapping;
-
-  constructor(
-    pool: WardrobeItem[],
-    pullCost: number,
-    refundPercent: number,
-    rarityMapping: RarityMapping,
-    id: string,
-  ) {
+  constructor(pool: WardrobeItem[], pullCost: number, refundPercent: number, id: string) {
     super();
     this._id = id;
     this._itemPool = pool;
     this._pullCost = pullCost;
     this._refundPercent = refundPercent;
-    this._rarityMapping = rarityMapping;
   }
 
   get id(): string {
@@ -66,10 +55,6 @@ export default class GachaController extends (EventEmitter as new () => TypedEmi
 
   public set refundPercent(newRefund: number) {
     this._refundPercent = newRefund;
-  }
-
-  public get rarityMapping(): RarityMapping {
-    return this._rarityMapping;
   }
 
   // returns a random item from the selection pool, disregarding rarity
@@ -132,26 +117,15 @@ export default class GachaController extends (EventEmitter as new () => TypedEmi
     throw new Error('No items in the pool.');
   }
 
-  toGachaModel(): GachaModel {
-    return {
-      id: this.id,
-      itemPool: this.itemPool,
-      pullCost: this.pullCost,
-      refundPercent: this.refundPercent,
-      rarityMapping: this.rarityMapping,
-    };
-  }
-
   /**
    * Return a representation of this GachaController that matches the
    * townService's representation and is suitable for transmitting over the network.
    */
-  toConversationAreaModel(): GachaModel {
+  toGachaModel(): GachaModel {
     return {
       itemPool: this.itemPool,
       pullCost: this.pullCost,
       refundPercent: this.refundPercent,
-      rarityMapping: this.rarityMapping,
       id: this.id,
     };
   }
@@ -161,7 +135,6 @@ export default class GachaController extends (EventEmitter as new () => TypedEmi
       modelGacha.itemPool,
       modelGacha.pullCost,
       modelGacha.refundPercent,
-      modelGacha.rarityMapping,
       modelGacha.id,
     );
   }

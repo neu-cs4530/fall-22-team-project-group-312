@@ -51,17 +51,16 @@ export type RarityMapping = {
   ultraRare: number;
 };
 
- export type ItemID = string;
+export type ItemID = string;
 
- /**
-  * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
-  */
- export type WardrobeItem = {
-   id: ItemID;
-   name: string;
-   category: ItemCategory;
-   rarity: Rarity;
- };
+/**
+ * Represents a single item in a Wardrobe, either a skin color, eye color, hairstyle, clothing, or accessory.
+ */
+export type WardrobeItem = {
+  id: ItemID;
+  name: string;
+  category: ItemCategory;
+};
 
 /**
  * Representation of a wardrobe that the TownGameScene can interact with.
@@ -85,7 +84,7 @@ export type PullResult = {
   item: WardrobeItem;
   /** The updated Wardrobe containing the item and currency */
   wardrobe: WardrobeModel;
-}
+};
 
 /**
  * Represents a way to select a random item from a set pool of items
@@ -97,8 +96,6 @@ export interface GachaPicker {
   pullCost: number;
   /** The percent of coins returned to the player after pulling a duplicate item */
   refundPercent: number;
-  /** A mapping of item rarities to numeric values (higher = more common) */
-  rarityMapping: RarityMapping;
   /** The id of this GachaPicker */
   id: string;
   // pull: (pullingPlayer: Player) => void;
